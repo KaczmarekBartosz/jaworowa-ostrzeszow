@@ -77,7 +77,8 @@ export function MainNav() {
           <Logo />
         </div>
         <div className="md:hidden flex items-center gap-1">
-          <ThemeToggle />
+          {/* ThemeToggle z rozmiarem jak hamburger (56/32) */}
+          <ThemeToggle size="lg" />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button
@@ -85,6 +86,7 @@ export function MainNav() {
                 className="h-14 w-14 p-0 text-foreground"
                 aria-label="Otwórz menu"
               >
+                {/* Hamburger 32px */}
                 <Menu className="size-8" />
               </Button>
             </SheetTrigger>
@@ -95,7 +97,7 @@ export function MainNav() {
               <div className="flex h-16 items-center justify-between">
                 <Logo />
                 <div className="flex items-center gap-1">
-                  <ThemeToggle />
+                  <ThemeToggle size="lg" />
                   <SheetClose asChild>
                     <Button
                       variant="ghost"
@@ -120,7 +122,6 @@ export function MainNav() {
                 ))}
               </nav>
               <div className="mt-auto pb-4">
-                {/* CTA zachowuje gradient, bo 'default' = gradient */}
                 <Button size="lg" className="w-full rounded-full" asChild>
                   <a
                     href="#kontakt"
@@ -150,8 +151,7 @@ export function MainNav() {
             ))}
           </nav>
           <div className="flex items-center gap-1">
-            <ThemeToggle />
-            {/* CTA zachowuje gradient */}
+            <ThemeToggle size="lg" />
             <Button className="rounded-full" asChild>
               <a
                 href="#kontakt"
