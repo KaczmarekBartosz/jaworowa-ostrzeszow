@@ -55,8 +55,10 @@ This is a binary file of the type: Binary
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* --- Dark variant helper (Tailwind v4) --- */
 @custom-variant dark (&:is(.dark *));
 
+/* --- Design tokens exposed to Tailwind --- */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -97,58 +99,101 @@ This is a binary file of the type: Binary
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* --- Light theme --- */
 :root {
   --radius: 0.625rem;
-  /* === LIGHT === */
-  --background: oklch(0.98 0.003 248);
-  --foreground: oklch(0.13 0.04 265);
+  --background: oklch(0.92 0.01 98); /* #E8EAE9 */
+  --foreground: oklch(0.06 0 0); /* #121212 */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.13 0.04 265);
+  --card-foreground: oklch(0.06 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.13 0.04 265);
-  --primary: oklch(0.704 0.17 64.9);
-  /* KLUCZOWA ZMIANA: wysoki kontrast na akcencie */
-  --primary-foreground: oklch(1 0 0); /* biała */
-  --secondary: oklch(0.95 0.01 256);
-  --secondary-foreground: oklch(0.21 0.04 266);
-  --muted: oklch(0.95 0.01 256);
-  --muted-foreground: oklch(0.45 0.04 257);
-  --accent: oklch(0.95 0.01 256);
-  --accent-foreground: oklch(0.21 0.04 266);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.9 0.01 256);
-  --input: oklch(0.9 0.01 256);
-  --ring: oklch(0.7 0.04 257);
+  --popover-foreground: oklch(0.06 0 0);
+  --primary: oklch(0.57 0.23 29); /* #F53F0F - fallback for gradient */
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.96 0.01 98);
+  --secondary-foreground: oklch(0.1 0 0);
+  --muted: oklch(0.96 0.01 98);
+  --muted-foreground: oklch(0.4 0 0);
+  --accent: oklch(0.96 0.01 98);
+  --accent-foreground: oklch(0.1 0 0);
+  --destructive: oklch(0.58 0.24 27);
+  --border: oklch(0.85 0.01 98);
+  --input: oklch(0.85 0.01 98);
+  --ring: oklch(0.57 0.23 29);
 }
 
+/* --- Dark theme --- */
 .dark {
-  --background: oklch(0.15 0.01 265);
-  --foreground: oklch(1 0 0);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.704 0.17 64.9);
-  /* Ujednolicenie: zawsze wysoki kontrast na akcencie */
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.78 0 0);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
+  --background: oklch(0.04 0 0); /* #0C0C0C */
+  --foreground: oklch(0.92 0.01 98); /* #E8EAE9 */
+  --card: oklch(0.13 0 0); /* #252525 */
+  --card-foreground: oklch(0.92 0.01 98);
+  --popover: oklch(0.13 0 0);
+  --popover-foreground: oklch(0.92 0.01 98);
+  --primary: oklch(0.57 0.23 29);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.15 0 0);
+  --secondary-foreground: oklch(0.92 0.01 98);
+  --muted: oklch(0.15 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.15 0 0);
+  --accent-foreground: oklch(0.92 0.01 98);
+  --destructive: oklch(0.58 0.24 27);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
+  --ring: oklch(0.57 0.23 29);
 }
 
+/* --- Base layer --- */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  html,
+  body {
+    overflow-x: clip;
+    height: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  :where(img, svg, video, canvas) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: oklch(var(--border) / 0.5);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: oklch(var(--muted-foreground) / 0.7);
+  }
+
+  @supports (scrollbar-color: auto) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: oklch(var(--muted-foreground) / 0.7) transparent;
+    }
   }
 }
 
@@ -214,12 +259,15 @@ import { InvestmentSection } from "@/components/sections/investment-section";
 const PlaceholderSection = ({ id, title }: { id: string; title: string }) => (
   <section
     id={id}
-    className="min-h-screen bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
+    className="min-h-dvh bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
   >
     <div className="mx-auto max-w-7xl px-6 md:px-8">
       <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
         {title}
       </h2>
+      <p className="mt-4 max-w-2xl text-muted-foreground">
+        Treść tej sekcji zostanie uzupełniona w kolejnych iteracjach.
+      </p>
     </div>
   </section>
 );
@@ -290,7 +338,7 @@ export function FeatureCard({
     rounded-3xl p-6 flex flex-col justify-between h-full transition-all duration-300
     ${
       isHighlighted
-        ? "bg-primary text-primary-foreground"
+        ? "bg-gradient-to-br from-[#F53F0F] to-[#F97318] text-primary-foreground"
         : "bg-card/50 border backdrop-blur-sm hover:bg-card/80"
     }
   `;
@@ -423,7 +471,6 @@ export function ThemeToggle() {
 ```tsx
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import {
   Sheet,
@@ -445,8 +492,6 @@ const navItems = [
 ];
 
 export function MainNav() {
-  const [open, setOpen] = React.useState(false);
-
   const Logo = () => (
     <Link
       href="/"
@@ -463,34 +508,6 @@ export function MainNav() {
     </Link>
   );
 
-  function smoothScroll(href: string) {
-    if (!href.startsWith("#")) return;
-    const id = href.slice(1);
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  }
-
-  function onDesktopNavClick(
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) {
-    if (href.startsWith("#")) {
-      e.preventDefault();
-      smoothScroll(href);
-    }
-  }
-
-  function onMobileNavClick(
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) {
-    if (href.startsWith("#")) {
-      e.preventDefault();
-      smoothScroll(href);
-      setOpen(false);
-    }
-  }
-
   return (
     <header className="fixed top-0 left-0 right-0 z-40 p-4 md:p-8">
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between">
@@ -500,7 +517,7 @@ export function MainNav() {
         </div>
 
         <div className="md:hidden">
-          <Sheet open={open} onOpenChange={setOpen}>
+          <Sheet>
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
@@ -528,40 +545,37 @@ export function MainNav() {
               </div>
               <nav className="mt-24 flex flex-1 flex-col items-center justify-center gap-y-8">
                 {navItems.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={(e) => onMobileNavClick(e, item.href)}
-                    className="text-3xl font-medium text-foreground/80 transition-colors hover:text-foreground"
-                  >
-                    {item.label}
-                  </a>
+                  // === OSTATECZNA, NAJPROSTSZA METODA ===
+                  <SheetClose asChild key={item.href}>
+                    <a
+                      href={item.href}
+                      className="text-3xl font-medium text-foreground/80 transition-colors hover:text-foreground"
+                    >
+                      {item.label}
+                    </a>
+                  </SheetClose>
                 ))}
               </nav>
               <div className="mt-auto text-center pb-4">
-                <Button size="lg" className="w-full" asChild>
-                  <a
-                    href="#kontakt"
-                    onClick={(e) => onMobileNavClick(e, "#kontakt")}
-                  >
-                    Kontakt
-                  </a>
-                </Button>
+                <SheetClose asChild>
+                  <Button size="lg" className="w-full rounded-full" asChild>
+                    <a href="#kontakt">Kontakt</a>
+                  </Button>
+                </SheetClose>
               </div>
             </SheetContent>
           </Sheet>
         </div>
 
         {/* Desktop navbar */}
-        <div className="hidden md:flex w-full items-center justify-between rounded-full bg-background/50 p-2 pl-8 border backdrop-blur-sm">
+        <div className="hidden md:flex w-full items-center justify-between rounded-full bg-white/10 p-2 pl-8 border border-white/20 backdrop-blur-sm">
           <Logo />
           <nav className="flex gap-x-8">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                onClick={(e) => onDesktopNavClick(e, item.href)}
-                className="text-foreground/80 transition-colors hover:text-foreground"
+                className="text-white/80 transition-colors hover:text-white"
               >
                 {item.label}
               </a>
@@ -570,12 +584,7 @@ export function MainNav() {
           <div className="flex items-center gap-x-2">
             <ThemeToggle />
             <Button variant="default" className="rounded-full" asChild>
-              <a
-                href="#kontakt"
-                onClick={(e) => onDesktopNavClick(e, "#kontakt")}
-              >
-                Kontakt
-              </a>
+              <a href="#kontakt">Kontakt</a>
             </Button>
           </div>
         </div>
@@ -596,7 +605,7 @@ import { ArrowDown, ChevronRight } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-screen flex-col">
+    <section className="relative flex h-[100dvh] flex-col overflow-hidden">
       <Image
         src="/hero.jpg"
         alt="Nowoczesny dom z przestronnym wnętrzem"
@@ -605,11 +614,10 @@ export function HeroSection() {
         className="z-0 object-cover"
       />
 
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/0 to-black/60" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/100 via-black/0 to-black/60" />
 
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
-          {/* Tekst w tej sekcji celowo pozostaje biały, ponieważ zawsze jest na ciemnym tle zdjęcia */}
           <h1 className="max-w-3xl text-6xl font-bold text-white md:text-8xl">
             Domy z przyszłością
           </h1>
@@ -632,7 +640,7 @@ export function HeroSection() {
             <span className="pl-6 text-lg font-medium text-white">
               Dowiedz się więcej
             </span>
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary transition-transform duration-300 group-hover:scale-110">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#F53F0F] to-[#F97318] transition-transform duration-300 group-hover:scale-110">
               <ChevronRight className="h-6 w-6 text-primary-foreground" />
             </div>
           </button>
@@ -744,11 +752,11 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 # components\ui\button.tsx
 
 ```tsx
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -756,7 +764,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
+          "bg-gradient-to-br from-[#F53F0F] to-[#F97318] text-primary-foreground shadow-xs hover:opacity-90",
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
@@ -779,7 +787,7 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
+);
 
 function Button({
   className,
@@ -789,9 +797,9 @@ function Button({
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
+    asChild?: boolean;
   }) {
-  const Comp = asChild ? Slot : "button"
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
@@ -799,10 +807,10 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
-  )
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };
 
 ```
 

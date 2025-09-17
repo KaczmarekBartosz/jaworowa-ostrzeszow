@@ -34,49 +34,50 @@ export function MainNav() {
         className="size-7 text-foreground flex-shrink-0"
         aria-hidden="true"
       />
-      <span className="text-xl font-bold text-foreground tracking-tight">
+      <span className="text-xl font-bold tracking-tight text-foreground">
         Jaworowa Ostrzeszów
       </span>
     </Link>
   );
 
-  function smoothScroll(href: string) {
+  const smoothScroll = (href: string) => {
     if (!href.startsWith("#")) return;
     const id = href.slice(1);
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  }
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-  function onDesktopNavClick(
+  const onDesktopNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string
-  ) {
+  ) => {
     if (href.startsWith("#")) {
       e.preventDefault();
       smoothScroll(href);
     }
-  }
+  };
 
-  function onMobileNavClick(
+  // Opóźniony scroll (iOS + Sheet body lock)
+  const onMobileNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string
-  ) {
+  ) => {
     if (href.startsWith("#")) {
       e.preventDefault();
-      smoothScroll(href);
       setOpen(false);
+      window.setTimeout(() => smoothScroll(href), 320);
     }
-  }
+  };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 p-4 md:p-8">
+    <header className="fixed inset-x-0 top-0 z-40 p-4 md:p-8">
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between">
-        {/* Mobile: logo + burger */}
+        {/* Mobile */}
         <div className="flex-1 md:hidden">
           <Logo />
         </div>
-
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-1">
+          <ThemeToggle />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button
@@ -89,19 +90,22 @@ export function MainNav() {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="w-full bg-background border-none p-4"
+              className="w-full border-none bg-background p-4"
             >
               <div className="flex h-16 items-center justify-between">
                 <Logo />
-                <SheetClose asChild>
-                  <Button
-                    variant="ghost"
-                    className="h-14 w-14 p-0 text-foreground"
-                    aria-label="Zamknij menu"
-                  >
-                    <X className="size-8" />
-                  </Button>
-                </SheetClose>
+                <div className="flex items-center gap-1">
+                  <ThemeToggle />
+                  <SheetClose asChild>
+                    <Button
+                      variant="ghost"
+                      className="h-14 w-14 p-0 text-foreground"
+                      aria-label="Zamknij menu"
+                    >
+                      <X className="size-8" />
+                    </Button>
+                  </SheetClose>
+                </div>
               </div>
               <nav className="mt-24 flex flex-1 flex-col items-center justify-center gap-y-8">
                 {navItems.map((item) => (
@@ -115,7 +119,8 @@ export function MainNav() {
                   </a>
                 ))}
               </nav>
-              <div className="mt-auto text-center pb-4">
+              <div className="mt-auto pb-4">
+                {/* CTA zachowuje gradient, bo 'default' = gradient */}
                 <Button size="lg" className="w-full rounded-full" asChild>
                   <a
                     href="#kontakt"
@@ -129,9 +134,8 @@ export function MainNav() {
           </Sheet>
         </div>
 
-        {/* Desktop navbar */}
-        {/* KLUCZOWA ZMIANA: Ujednolicenie stylu "glassmorphism" */}
-        <div className="hidden md:flex w-full items-center justify-between rounded-full bg-white/10 p-2 pl-8 border border-white/20 backdrop-blur-sm">
+        {/* Desktop */}
+        <div className="hidden w-full items-center justify-between rounded-full border bg-background/50 p-2 pl-8 backdrop-blur-sm md:flex">
           <Logo />
           <nav className="flex gap-x-8">
             {navItems.map((item) => (
@@ -139,15 +143,16 @@ export function MainNav() {
                 key={item.href}
                 href={item.href}
                 onClick={(e) => onDesktopNavClick(e, item.href)}
-                className="text-white/80 transition-colors hover:text-white"
+                className="text-foreground/80 transition-colors hover:text-foreground"
               >
                 {item.label}
               </a>
             ))}
           </nav>
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-1">
             <ThemeToggle />
-            <Button variant="default" className="rounded-full" asChild>
+            {/* CTA zachowuje gradient */}
+            <Button className="rounded-full" asChild>
               <a
                 href="#kontakt"
                 onClick={(e) => onDesktopNavClick(e, "#kontakt")}

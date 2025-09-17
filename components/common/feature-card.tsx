@@ -17,7 +17,7 @@ export function FeatureCard({
     rounded-3xl p-6 flex flex-col justify-between h-full transition-all duration-300
     ${
       isHighlighted
-        ? "bg-primary text-primary-foreground"
+        ? "bg-gradient-to-br from-[#F53F0F] to-[#F97318] text-primary-foreground"
         : "bg-card/50 border backdrop-blur-sm hover:bg-card/80"
     }
   `;
