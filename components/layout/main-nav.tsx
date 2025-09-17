@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu, Home, X } from "lucide-react";
+import { ThemeToggle } from "@/components/common/theme-toggle";
 
 const navItems = [
   { href: "#inwestycja", label: "Inwestycja" },
@@ -143,15 +144,17 @@ export function MainNav() {
               </a>
             ))}
           </nav>
-          {/* Ujednolicony CTA jak w hero: wypełniony akcentem */}
-          <Button variant="default" className="rounded-full" asChild>
-            <a
-              href="#kontakt"
-              onClick={(e) => onDesktopNavClick(e, "#kontakt")}
-            >
-              Kontakt
-            </a>
-          </Button>
+          <div className="flex items-center gap-x-2">
+            <ThemeToggle />
+            <Button variant="default" className="rounded-full" asChild>
+              <a
+                href="#kontakt"
+                onClick={(e) => onDesktopNavClick(e, "#kontakt")}
+              >
+                Kontakt
+              </a>
+            </Button>
+          </div>
         </div>
       </div>
     </header>
