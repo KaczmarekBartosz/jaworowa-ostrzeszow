@@ -5,7 +5,8 @@ import { ArrowDown, ChevronRight } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <section className="relative flex min-h-screen flex-col">
+    // POPRAWKA: Używamy dynamicznej wysokości ekranu (dvh) dla idealnego dopasowania na mobile
+    <section className="relative flex h-[100dvh] flex-col overflow-hidden">
       <Image
         src="/hero.jpg"
         alt="Nowoczesny dom z przestronnym wnętrzem"
@@ -16,9 +17,9 @@ export function HeroSection() {
 
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/0 to-black/60" />
 
+      {/* POPRAWKA: Dodajemy w-full, aby kontener zajął 100% szerokości */}
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
-          {/* Tekst w tej sekcji celowo pozostaje biały, ponieważ zawsze jest na ciemnym tle zdjęcia */}
           <h1 className="max-w-3xl text-6xl font-bold text-white md:text-8xl">
             Domy z przyszłością
           </h1>

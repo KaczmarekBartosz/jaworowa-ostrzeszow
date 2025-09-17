@@ -116,7 +116,7 @@ export function MainNav() {
                 ))}
               </nav>
               <div className="mt-auto text-center pb-4">
-                <Button size="lg" className="w-full" asChild>
+                <Button size="lg" className="w-full rounded-full" asChild>
                   <a
                     href="#kontakt"
                     onClick={(e) => onMobileNavClick(e, "#kontakt")}
@@ -130,7 +130,8 @@ export function MainNav() {
         </div>
 
         {/* Desktop navbar */}
-        <div className="hidden md:flex w-full items-center justify-between rounded-full bg-background/50 p-2 pl-8 border backdrop-blur-sm">
+        {/* KLUCZOWA ZMIANA: Ujednolicenie stylu "glassmorphism" */}
+        <div className="hidden md:flex w-full items-center justify-between rounded-full bg-white/10 p-2 pl-8 border border-white/20 backdrop-blur-sm">
           <Logo />
           <nav className="flex gap-x-8">
             {navItems.map((item) => (
@@ -138,7 +139,7 @@ export function MainNav() {
                 key={item.href}
                 href={item.href}
                 onClick={(e) => onDesktopNavClick(e, item.href)}
-                className="text-foreground/80 transition-colors hover:text-foreground"
+                className="text-white/80 transition-colors hover:text-white"
               >
                 {item.label}
               </a>

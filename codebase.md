@@ -190,7 +190,8 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          // KLUCZOWA ZMIANA: Ustawiamy Dark Mode jako domyślny
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
@@ -375,6 +376,48 @@ export function FeatureCarousel({ children }: FeatureCarouselProps) {
 
 ```
 
+# components\common\theme-toggle.tsx
+
+```tsx
+"use client";
+
+import * as React from "react";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
+
+export function ThemeToggle() {
+  const { setTheme, theme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  // Ten hook zapewnia, że komponent renderuje się w pełni dopiero po stronie klienta,
+  // co zapobiega błędom hydracji (niezgodności między serwerem a klientem).
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // Renderujemy placeholder, aby uniknąć "mrugania" interfejsu przy ładowaniu.
+    return <div className="h-10 w-10 rounded-full bg-background/50" />;
+  }
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      className="rounded-full text-foreground/80 hover:text-foreground hover:bg-foreground/10"
+      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      aria-label="Przełącz motyw"
+    >
+      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span className="sr-only">Przełącz motyw</span>
+    </Button>
+  );
+}
+
+```
+
 # components\layout\main-nav.tsx
 
 ```tsx
@@ -390,6 +433,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu, Home, X } from "lucide-react";
+import { ThemeToggle } from "@/components/common/theme-toggle";
 
 const navItems = [
   { href: "#inwestycja", label: "Inwestycja" },
@@ -523,15 +567,17 @@ export function MainNav() {
               </a>
             ))}
           </nav>
-          {/* Ujednolicony CTA jak w hero: wypełniony akcentem */}
-          <Button variant="default" className="rounded-full" asChild>
-            <a
-              href="#kontakt"
-              onClick={(e) => onDesktopNavClick(e, "#kontakt")}
-            >
-              Kontakt
-            </a>
-          </Button>
+          <div className="flex items-center gap-x-2">
+            <ThemeToggle />
+            <Button variant="default" className="rounded-full" asChild>
+              <a
+                href="#kontakt"
+                onClick={(e) => onDesktopNavClick(e, "#kontakt")}
+              >
+                Kontakt
+              </a>
+            </Button>
+          </div>
         </div>
       </div>
     </header>
