@@ -18,6 +18,7 @@ export function HeroSection() {
 
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
+          {/* Tekst w tej sekcji celowo pozostaje biały, ponieważ zawsze jest na ciemnym tle zdjęcia */}
           <h1 className="max-w-3xl text-6xl font-bold text-white md:text-8xl">
             Domy z przyszłością
           </h1>
@@ -47,7 +48,6 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* POPRAWKA: Użyto poprawnej klasy left-1/2 */}
       <div className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2">
         <ArrowDown className="h-6 w-6 animate-bounce text-white" />
       </div>

@@ -99,77 +99,48 @@ This is a binary file of the type: Binary
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  /* === LIGHT === */
+  --background: oklch(0.98 0.003 248);
+  --foreground: oklch(0.13 0.04 265);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
+  --card-foreground: oklch(0.13 0.04 265);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.13 0.04 265);
+  --primary: oklch(0.704 0.17 64.9);
+  /* KLUCZOWA ZMIANA: wysoki kontrast na akcencie */
+  --primary-foreground: oklch(1 0 0); /* biała */
+  --secondary: oklch(0.95 0.01 256);
+  --secondary-foreground: oklch(0.21 0.04 266);
+  --muted: oklch(0.95 0.01 256);
+  --muted-foreground: oklch(0.45 0.04 257);
+  --accent: oklch(0.95 0.01 256);
+  --accent-foreground: oklch(0.21 0.04 266);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --border: oklch(0.9 0.01 256);
+  --input: oklch(0.9 0.01 256);
+  --ring: oklch(0.7 0.04 257);
 }
 
 .dark {
-  --background: oklch(
-    0.15 0.01 265
-  ); /* ZMIANA: Ciemniejsze, niemal czarne tło */
-  --foreground: oklch(1 0 0); /* ZMIANA: Czysta biel dla tekstu */
+  --background: oklch(0.15 0.01 265);
+  --foreground: oklch(1 0 0);
   --card: oklch(0.208 0.042 265.755);
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
   --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.704 0.17 64.9); /* ZMIANA: Pomarańczowy akcent #F5A623 */
-  --primary-foreground: oklch(
-    0.189 0.002 264.7
-  ); /* ZMIANA: Ciemny tekst dla kontrastu na pomarańczowym */
+  --primary: oklch(0.704 0.17 64.9);
+  /* Ujednolicenie: zawsze wysoki kontrast na akcencie */
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.279 0.041 260.031);
   --secondary-foreground: oklch(0.984 0.003 247.858);
   --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(
-    0.704 0 0
-  ); /* ZMIANA: Jaśniejszy szary dla wyciszonego tekstu */
+  --muted-foreground: oklch(0.78 0 0);
   --accent: oklch(0.279 0.041 260.031);
   --accent-foreground: oklch(0.984 0.003 247.858);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
 @layer base {
@@ -239,14 +210,13 @@ export default function RootLayout({
 import { HeroSection } from "@/components/sections/hero-section";
 import { InvestmentSection } from "@/components/sections/investment-section";
 
-// Prosty komponent dla sekcji-placeholderów
 const PlaceholderSection = ({ id, title }: { id: string; title: string }) => (
   <section
     id={id}
-    className="min-h-screen bg-background py-20 md:py-32 scroll-mt-24"
+    className="min-h-screen bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
   >
     <div className="mx-auto max-w-7xl px-6 md:px-8">
-      <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+      <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
         {title}
       </h2>
     </div>
@@ -258,7 +228,6 @@ export default function HomePage() {
     <main>
       <HeroSection />
       <InvestmentSection />
-      {/* POPRAWKA: Dodajemy puste sekcje, aby linki miały gdzie nawigować */}
       <PlaceholderSection id="domy" title="Domy" />
       <PlaceholderSection id="plany" title="Plany" />
       <PlaceholderSection id="galeria" title="Galeria" />
@@ -321,7 +290,7 @@ export function FeatureCard({
     ${
       isHighlighted
         ? "bg-primary text-primary-foreground"
-        : "bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10"
+        : "bg-card/50 border backdrop-blur-sm hover:bg-card/80"
     }
   `;
 
@@ -329,24 +298,35 @@ export function FeatureCard({
     <div className={cardClasses}>
       <div
         className={`relative flex h-12 w-12 items-center justify-center rounded-full ${
-          isHighlighted ? "bg-white/10" : "bg-white/10"
+          isHighlighted ? "bg-white/10" : "bg-secondary"
         }`}
+        aria-hidden="true"
       >
         <Icon
           className={`h-6 w-6 ${
-            isHighlighted ? "text-primary-foreground" : "text-white"
+            isHighlighted
+              ? "text-primary-foreground"
+              : "text-secondary-foreground"
           }`}
         />
       </div>
       <div>
         <p
           className={`mt-4 text-sm ${
-            isHighlighted ? "text-primary-foreground/80" : "text-white/60"
+            isHighlighted
+              ? "text-primary-foreground/80"
+              : "text-muted-foreground"
           }`}
         >
           {title}
         </p>
-        <p className="text-xl font-bold">{description}</p>
+        <p
+          className={`text-xl font-bold ${
+            isHighlighted ? "" : "text-foreground"
+          }`}
+        >
+          {description}
+        </p>
       </div>
     </div>
   );
@@ -400,6 +380,7 @@ export function FeatureCarousel({ children }: FeatureCarouselProps) {
 ```tsx
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import {
   Sheet,
@@ -420,32 +401,69 @@ const navItems = [
 ];
 
 export function MainNav() {
+  const [open, setOpen] = React.useState(false);
+
   const Logo = () => (
-    // Używamy Link z Next.js tylko dla nawigacji do strony głównej
-    <Link href="/" className="flex items-center gap-2">
-      <Home className="size-7 text-white flex-shrink-0" />
-      <span className="text-xl font-bold text-white tracking-tight">
-        {/* Nazwa */}
+    <Link
+      href="/"
+      className="flex items-center gap-2"
+      aria-label="Strona główna"
+    >
+      <Home
+        className="size-7 text-foreground flex-shrink-0"
+        aria-hidden="true"
+      />
+      <span className="text-xl font-bold text-foreground tracking-tight">
+        Jaworowa Ostrzeszów
       </span>
     </Link>
   );
 
+  function smoothScroll(href: string) {
+    if (!href.startsWith("#")) return;
+    const id = href.slice(1);
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function onDesktopNavClick(
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      smoothScroll(href);
+    }
+  }
+
+  function onMobileNavClick(
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      smoothScroll(href);
+      setOpen(false);
+    }
+  }
+
   return (
     <header className="fixed top-0 left-0 right-0 z-40 p-4 md:p-8">
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between">
+        {/* Mobile: logo + burger */}
         <div className="flex-1 md:hidden">
           <Logo />
         </div>
 
         <div className="md:hidden">
-          <Sheet>
+          <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
-                className="h-14 w-14 p-0"
+                className="h-14 w-14 p-0 text-foreground"
                 aria-label="Otwórz menu"
               >
-                <Menu className="size-8 text-white" />
+                <Menu className="size-8" />
               </Button>
             </SheetTrigger>
             <SheetContent
@@ -457,52 +475,62 @@ export function MainNav() {
                 <SheetClose asChild>
                   <Button
                     variant="ghost"
-                    className="h-14 w-14 p-0"
+                    className="h-14 w-14 p-0 text-foreground"
                     aria-label="Zamknij menu"
                   >
-                    <X className="size-8 text-white" />
+                    <X className="size-8" />
                   </Button>
                 </SheetClose>
               </div>
               <nav className="mt-24 flex flex-1 flex-col items-center justify-center gap-y-8">
                 {navItems.map((item) => (
-                  // POPRAWKA: Używamy <a> i owijamy go w SheetClose asChild
-                  <SheetClose asChild key={item.href}>
-                    <a
-                      href={item.href}
-                      className="text-3xl font-medium text-white/80 transition-colors hover:text-white"
-                    >
-                      {item.label}
-                    </a>
-                  </SheetClose>
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={(e) => onMobileNavClick(e, item.href)}
+                    className="text-3xl font-medium text-foreground/80 transition-colors hover:text-foreground"
+                  >
+                    {item.label}
+                  </a>
                 ))}
               </nav>
               <div className="mt-auto text-center pb-4">
-                <Button size="lg" className="w-full">
-                  Skontaktuj się
+                <Button size="lg" className="w-full" asChild>
+                  <a
+                    href="#kontakt"
+                    onClick={(e) => onMobileNavClick(e, "#kontakt")}
+                  >
+                    Kontakt
+                  </a>
                 </Button>
               </div>
             </SheetContent>
           </Sheet>
         </div>
 
-        {/* WERSJA DESKTOP */}
-        <div className="hidden md:flex w-full items-center justify-between rounded-full bg-white/10 p-2 pl-8 border border-white/20 backdrop-blur-sm">
+        {/* Desktop navbar */}
+        <div className="hidden md:flex w-full items-center justify-between rounded-full bg-background/50 p-2 pl-8 border backdrop-blur-sm">
           <Logo />
           <nav className="flex gap-x-8">
             {navItems.map((item) => (
-              // POPRAWKA: Używamy <a> zamiast Link dla kotwic
               <a
                 key={item.href}
                 href={item.href}
-                className="text-white/80 transition-colors hover:text-white"
+                onClick={(e) => onDesktopNavClick(e, item.href)}
+                className="text-foreground/80 transition-colors hover:text-foreground"
               >
                 {item.label}
               </a>
             ))}
           </nav>
-          <Button className="rounded-full bg-white/10 text-white hover:bg-white/20">
-            Kontakt
+          {/* Ujednolicony CTA jak w hero: wypełniony akcentem */}
+          <Button variant="default" className="rounded-full" asChild>
+            <a
+              href="#kontakt"
+              onClick={(e) => onDesktopNavClick(e, "#kontakt")}
+            >
+              Kontakt
+            </a>
           </Button>
         </div>
       </div>
@@ -515,7 +543,7 @@ export function MainNav() {
 # components\sections\hero-section.tsx
 
 ```tsx
-"use client"; // Dodajemy "use client" ze względu na onClick
+"use client";
 
 import Image from "next/image";
 import { ArrowDown, ChevronRight } from "lucide-react";
@@ -528,7 +556,6 @@ export function HeroSection() {
         alt="Nowoczesny dom z przestronnym wnętrzem"
         fill
         priority
-        // POPRAWKA: Używamy klasy zamiast przestarzałego propa
         className="z-0 object-cover"
       />
 
@@ -536,6 +563,7 @@ export function HeroSection() {
 
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
+          {/* Tekst w tej sekcji celowo pozostaje biały, ponieważ zawsze jest na ciemnym tle zdjęcia */}
           <h1 className="max-w-3xl text-6xl font-bold text-white md:text-8xl">
             Domy z przyszłością
           </h1>
@@ -548,7 +576,6 @@ export function HeroSection() {
           </p>
 
           <button
-            // POPRAWKA: Dodajemy onClick do przewijania
             onClick={() =>
               document
                 .querySelector("#inwestycja")
@@ -590,38 +617,25 @@ const features = [
     description: "Ponad 103 m²",
     isHighlighted: true,
   },
-  {
-    icon: Building2,
-    title: "Liczba budynków",
-    description: "7-8 jednostek",
-  },
-  {
-    icon: Paintbrush,
-    title: "Architektura",
-    description: "Nowoczesna",
-  },
-  {
-    icon: Trees,
-    title: "Otoczenie",
-    description: "Bliskość zieleni",
-  },
+  { icon: Building2, title: "Liczba budynków", description: "7-8 jednostek" },
+  { icon: Paintbrush, title: "Architektura", description: "Nowoczesna" },
+  { icon: Trees, title: "Otoczenie", description: "Bliskość zieleni" },
 ];
 
 export function InvestmentSection() {
   return (
     <section
       id="inwestycja"
-      className="bg-background py-20 md:py-32 scroll-mt-24"
+      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-3xl">
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+          <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
             O Inwestycji
           </h2>
         </div>
       </div>
 
-      {/* === UKŁAD MOBILNY: KARUZELA (widoczna do breakpointu 'md') === */}
       <div className="mt-12 md:hidden">
         <FeatureCarousel>
           {features.map((feature, index) => (
@@ -630,35 +644,32 @@ export function InvestmentSection() {
         </FeatureCarousel>
       </div>
 
-      {/* === UKŁAD DESKTOP: SIATKA (widoczna od breakpointu 'md') === */}
       <div className="mx-auto mt-12 hidden max-w-7xl px-6 md:grid md:grid-cols-4 md:gap-8 md:px-8">
         {features.map((feature, index) => (
           <FeatureCard key={index} {...feature} />
         ))}
       </div>
 
-      {/* Tekst Opisowy i CTA */}
       <div className="mx-auto max-w-7xl px-6 md:px-8 mt-16">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div className="md:col-span-2">
-            <p className="text-lg leading-relaxed text-white/80">
+            <p className="text-lg leading-relaxed text-muted-foreground">
               Domy z Przyszłością to nowoczesna inwestycja deweloperska
               składająca się z domów w zabudowie bliźniaczej. Każdy budynek
               oferuje dwa poziomy komfortu: parter z przestronnym salonem i
-              aneksem kuchennym oraz poddasze z sypialniami i pokojami. Osiedle
+              aneksem kuchennym oraz poddasze z sypialniami. Osiedle
               zaprojektowano z myślą o harmonii z naturą, oferując zielone
               tereny, wewnętrzne drogi dojazdowe i indywidualne parkingi.
             </p>
-            <p className="mt-6 text-base text-white/60">
+            <p className="mt-6 text-base text-muted-foreground">
               Jeśli marzysz o własnym domu bliźniaczym w osiedlu z przyszłością,
-              nasza inwestycja deweloperska to idealny wybór. Domy na sprzedaż w
-              ramach tej inwestycji łączą funkcjonalność z estetyką, zapewniając
+              nasza inwestycja łączy funkcjonalność z estetyką, zapewniając
               idealną przestrzeń dla Twojej rodziny.
             </p>
           </div>
           <div className="flex items-start">
-            <Button size="lg" className="rounded-full w-full md:w-auto">
-              Zobacz plany
+            <Button size="lg" className="rounded-full w-full md:w-auto" asChild>
+              <a href="#plany">Zobacz plany</a>
             </Button>
           </div>
         </div>
@@ -981,6 +992,7 @@ export default nextConfig;
     "lucide-react": "^0.544.0",
     "next": "15.5.3",
     "next-themes": "^0.4.6",
+    "postcss": "^8.5.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.62.0",
@@ -1008,9 +1020,10 @@ export default nextConfig;
 
 ```mjs
 const config = {
-  plugins: ["@tailwindcss/postcss"],
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
 };
-
 export default config;
 
 ```

@@ -18,7 +18,7 @@ export function FeatureCard({
     ${
       isHighlighted
         ? "bg-primary text-primary-foreground"
-        : "bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10"
+        : "bg-card/50 border backdrop-blur-sm hover:bg-card/80"
     }
   `;
 
@@ -26,24 +26,35 @@ export function FeatureCard({
     <div className={cardClasses}>
       <div
         className={`relative flex h-12 w-12 items-center justify-center rounded-full ${
-          isHighlighted ? "bg-white/10" : "bg-white/10"
+          isHighlighted ? "bg-white/10" : "bg-secondary"
         }`}
+        aria-hidden="true"
       >
         <Icon
           className={`h-6 w-6 ${
-            isHighlighted ? "text-primary-foreground" : "text-white"
+            isHighlighted
+              ? "text-primary-foreground"
+              : "text-secondary-foreground"
           }`}
         />
       </div>
       <div>
         <p
           className={`mt-4 text-sm ${
-            isHighlighted ? "text-primary-foreground/80" : "text-white/60"
+            isHighlighted
+              ? "text-primary-foreground/80"
+              : "text-muted-foreground"
           }`}
         >
           {title}
         </p>
-        <p className="text-xl font-bold">{description}</p>
+        <p
+          className={`text-xl font-bold ${
+            isHighlighted ? "" : "text-foreground"
+          }`}
+        >
+          {description}
+        </p>
       </div>
     </div>
   );
