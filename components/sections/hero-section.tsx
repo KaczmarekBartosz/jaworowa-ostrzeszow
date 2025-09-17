@@ -1,40 +1,42 @@
+"use client";
+
 import Image from "next/image";
 import { ArrowDown, ChevronRight } from "lucide-react";
 
 export function HeroSection() {
   return (
     <section className="relative flex min-h-screen flex-col">
-      {/* 1. Obraz tła */}
       <Image
         src="/hero.jpg"
         alt="Nowoczesny dom z przestronnym wnętrzem"
         fill
-        objectFit="cover"
         priority
-        className="z-0"
+        className="z-0 object-cover"
       />
 
-      {/* 2. Zaktualizowana gradientowa nakładka */}
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/0 to-black/60" />
 
-      {/* 3. Kontener na treść */}
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
-        {/* === GÓRNA CZĘŚĆ: Zaktualizowana typografia === */}
         <div>
           <h1 className="max-w-3xl text-6xl font-bold text-white md:text-8xl">
             Domy z przyszłością
           </h1>
         </div>
 
-        {/* === DOLNA CZĘŚĆ: Zaktualizowany podtytuł i CTA === */}
         <div className="w-full max-w-md">
           <p className="text-xl text-white/80 md:text-2xl">
             Poznaj wyjątkowe miejsce dla Ciebie oraz Twojej rodziny i zamieszkaj
             mądrzej.
           </p>
 
-          {/* Zaktualizowany, niestandardowy komponent CTA z marginesem */}
-          <button className="group mb-14 mt-8 flex w-full items-center justify-between rounded-full bg-white/10 p-2 text-left transition-all duration-300 hover:bg-white/20 border border-white/20 backdrop-blur-sm">
+          <button
+            onClick={() =>
+              document
+                .querySelector("#inwestycja")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="group mb-14 mt-8 flex w-full items-center justify-between rounded-full bg-white/10 p-2 text-left transition-all duration-300 hover:bg-white/20 border border-white/20 backdrop-blur-sm"
+          >
             <span className="pl-6 text-lg font-medium text-white">
               Dowiedz się więcej
             </span>
@@ -45,7 +47,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* 4. Animowana strzałka scroll-down */}
+      {/* POPRAWKA: Użyto poprawnej klasy left-1/2 */}
       <div className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2">
         <ArrowDown className="h-6 w-6 animate-bounce text-white" />
       </div>
