@@ -81,11 +81,6 @@ export function InvestmentSection() {
               className="transition-transform duration-300 hover:scale-105"
             />
           </div>
-          <div className="flex items-start pt-4">
-            <Button size="lg" className="w-full rounded-full" asChild>
-              <a href="#plany">Zobacz plany</a>
-            </Button>
-          </div>
         </div>
       </div>
 
@@ -129,12 +124,6 @@ export function InvestmentSection() {
               przestrzeń dla Twojej rodziny.
             </p>
           </div>
-        </div>
-        {/* Wyśrodkowany przycisk CTA na dole */}
-        <div className="mt-16 flex justify-center">
-          <Button size="lg" className="rounded-full w-full md:w-auto" asChild>
-            <a href="#plany">Zobacz plany</a>
-          </Button>
         </div>
       </div>
     </section>

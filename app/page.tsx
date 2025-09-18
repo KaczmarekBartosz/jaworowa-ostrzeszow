@@ -1,5 +1,6 @@
 import { HeroSection } from "@/components/sections/hero-section";
 import { InvestmentSection } from "@/components/sections/investment-section";
+import { PlansSection } from "@/components/sections/plans-section";
 
 const PlaceholderSection = ({ id, title }: { id: string; title: string }) => (
   <section
@@ -22,8 +23,9 @@ export default function HomePage() {
     <main>
       <HeroSection />
       <InvestmentSection />
-      <PlaceholderSection id="domy" title="Domy" />
-      <PlaceholderSection id="plany" title="Plany" />
+      <PlansSection /> {/* 2. Zastępujemy placeholder */}
+      {/* <PlaceholderSection id="domy" title="Domy" /> - Już niepotrzebne */}
+      {/* <PlaceholderSection id="plany" title="Plany" /> - Już niepotrzebne */}
       <PlaceholderSection id="galeria" title="Galeria" />
       <PlaceholderSection id="lokalizacja" title="Lokalizacja" />
       <PlaceholderSection id="kontakt" title="Kontakt" />
