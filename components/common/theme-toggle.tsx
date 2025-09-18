@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
  * więc faktycznie wypełniają cały box – nie tylko „otoczka”.
  */
 export function ThemeToggle({
-  size = "lg" as const,
+  size = "md" as const,
 }: {
   size?: "sm" | "md" | "lg";
 }) {

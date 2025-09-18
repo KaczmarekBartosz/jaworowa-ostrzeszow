@@ -35,7 +35,7 @@ export function MainNav() {
         aria-hidden="true"
       />
       <span className="text-xl font-bold tracking-tight text-foreground">
-        Jaworowa Ostrzeszów
+        {/*Nazwa_firmy*/}
       </span>
     </Link>
   );
@@ -47,25 +47,18 @@ export function MainNav() {
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const onDesktopNavClick = (
+  const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
+    href: string,
+    isMobile = false
   ) => {
-    if (href.startsWith("#")) {
-      e.preventDefault();
-      smoothScroll(href);
-    }
-  };
-
-  // Opóźniony scroll (iOS + Sheet body lock)
-  const onMobileNavClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) => {
-    if (href.startsWith("#")) {
-      e.preventDefault();
+    e.preventDefault();
+    if (isMobile) {
       setOpen(false);
-      window.setTimeout(() => smoothScroll(href), 320);
+      // Opóźnienie jest kluczowe, aby animacja zamykania panelu nie blokowała przewijania
+      setTimeout(() => smoothScroll(href), 300);
+    } else {
+      smoothScroll(href);
     }
   };
 
@@ -77,16 +70,15 @@ export function MainNav() {
           <Logo />
         </div>
         <div className="md:hidden flex items-center gap-1">
-          {/* ThemeToggle z rozmiarem jak hamburger (56/32) */}
-          <ThemeToggle size="lg" />
+          <ThemeToggle />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
+              {/* POPRAWKA: Używamy składni arbitralnej wartości */}
               <Button
                 variant="ghost"
-                className="h-14 w-14 p-0 text-foreground"
+                className="h-[48px] w-[48px] p-0 text-foreground" // 13 * 4px = 52px
                 aria-label="Otwórz menu"
               >
-                {/* Hamburger 32px */}
                 <Menu className="size-8" />
               </Button>
             </SheetTrigger>
@@ -97,11 +89,12 @@ export function MainNav() {
               <div className="flex h-16 items-center justify-between">
                 <Logo />
                 <div className="flex items-center gap-1">
-                  <ThemeToggle size="lg" />
+                  <ThemeToggle />
                   <SheetClose asChild>
+                    {/* POPRAWKA: Używamy składni arbitralnej wartości */}
                     <Button
                       variant="ghost"
-                      className="h-14 w-14 p-0 text-foreground"
+                      className="h-[48px] w-[48px] p-0 text-foreground"
                       aria-label="Zamknij menu"
                     >
                       <X className="size-8" />
@@ -114,7 +107,7 @@ export function MainNav() {
                   <a
                     key={item.href}
                     href={item.href}
-                    onClick={(e) => onMobileNavClick(e, item.href)}
+                    onClick={(e) => handleNavClick(e, item.href, true)}
                     className="text-3xl font-medium text-foreground/80 transition-colors hover:text-foreground"
                   >
                     {item.label}
@@ -125,7 +118,7 @@ export function MainNav() {
                 <Button size="lg" className="w-full rounded-full" asChild>
                   <a
                     href="#kontakt"
-                    onClick={(e) => onMobileNavClick(e, "#kontakt")}
+                    onClick={(e) => handleNavClick(e, "#kontakt", true)}
                   >
                     Kontakt
                   </a>
@@ -143,7 +136,7 @@ export function MainNav() {
               <a
                 key={item.href}
                 href={item.href}
-                onClick={(e) => onDesktopNavClick(e, item.href)}
+                onClick={(e) => handleNavClick(e, item.href)}
                 className="text-foreground/80 transition-colors hover:text-foreground"
               >
                 {item.label}
@@ -151,12 +144,9 @@ export function MainNav() {
             ))}
           </nav>
           <div className="flex items-center gap-1">
-            <ThemeToggle size="lg" />
+            <ThemeToggle />
             <Button className="rounded-full" asChild>
-              <a
-                href="#kontakt"
-                onClick={(e) => onDesktopNavClick(e, "#kontakt")}
-              >
+              <a href="#kontakt" onClick={(e) => handleNavClick(e, "#kontakt")}>
                 Kontakt
               </a>
             </Button>
