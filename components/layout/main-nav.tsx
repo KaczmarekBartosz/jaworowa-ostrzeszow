@@ -31,7 +31,7 @@ export function MainNav() {
       aria-label="Strona główna"
     >
       <Home
-        className="size-7 text-foreground flex-shrink-0"
+        className="size-6 text-foreground flex-shrink-0"
         aria-hidden="true"
       />
       <span className="text-xl font-bold tracking-tight text-foreground">
