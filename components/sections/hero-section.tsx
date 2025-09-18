@@ -18,13 +18,13 @@ export function HeroSection() {
 
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
-          <h1 className="max-w-3xl text-6xl font-bold text-white md:text-8xl">
+          <h1 className="max-w-3xl mt-10 text-5xl font-bold text-white md:text-8xl">
             Domy z przyszłością
           </h1>
         </div>
 
         <div className="w-full max-w-md">
-          <p className="text-xl text-white/80 md:text-2xl">
+          <p className="text-lg text-white/80 md:text-2xl">
             Poznaj wyjątkowe miejsce dla Ciebie oraz Twojej rodziny i zamieszkaj
             mądrzej.
           </p>
@@ -37,7 +37,7 @@ export function HeroSection() {
                 ?.scrollIntoView({ behavior: "smooth" })
             }
             // Tło "glass" dla całego przycisku
-            className="group mb-14 mt-8 flex w-full items-center justify-between rounded-full bg-white/10 p-2 text-left transition-all duration-300 hover:bg-white/20 border border-white/20 backdrop-blur-sm"
+            className="group mb-24 mt-8 flex w-full items-center justify-between rounded-full bg-white/10 p-2 text-left transition-all duration-300 hover:bg-white/20 border border-white/20 backdrop-blur-sm"
           >
             <span className="pl-6 text-lg font-medium text-white">
               Dowiedz się więcej
