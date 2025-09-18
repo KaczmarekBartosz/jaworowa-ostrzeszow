@@ -7,18 +7,18 @@ export function HeroSection() {
   return (
     <section className="relative flex h-[100dvh] flex-col overflow-hidden">
       <Image
-        src="/hero.jpg"
+        src="/hero_4.png"
         alt="Nowoczesny dom z przestronnym wnętrzem"
         fill
         priority
-        className="z-0 object-cover"
+        className="z-0 object-cover transition-transform duration-300"
       />
 
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/0 to-black/60" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-black/0 to-black/60" />
 
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
-          <h1 className="max-w-3xl mt-10 text-5xl font-bold text-white md:text-8xl">
+          <h1 className="max-w-3xl mt-6 p-6 text-5xl font-bold text-white md:text-8xl">
             Domy z{" "}
             <span className="relative inline-block">
               {/* === KLUCZOWA ZMIANA: Dodatkowy span dla tekstu === */}
@@ -29,7 +29,7 @@ export function HeroSection() {
                 alt="" // Pusty alt, ponieważ to element dekoracyjny
                 width={246}
                 height={23}
-                className="absolute -bottom-2 left-0 w-full md:-bottom-4"
+                className="absolute -bottom-3 left-0 w-full md:-bottom-4"
                 aria-hidden="true"
               />
             </span>
