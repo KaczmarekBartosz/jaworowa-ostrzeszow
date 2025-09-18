@@ -26,7 +26,7 @@ export function ThemeToggle({
   const btnDim =
     size === "lg" ? "h-14 w-14" : size === "md" ? "h-12 w-12" : "h-10 w-10";
   const iconBox =
-    size === "lg" ? "h-8 w-8" : size === "md" ? "h-6 w-6" : "h-5 w-5";
+    size === "lg" ? "h-6 w-6" : size === "md" ? "h-6 w-6" : "h-5 w-5";
 
   if (!mounted)
     return <div className={`${btnDim} rounded-full bg-background/50`} />;
