@@ -19,7 +19,20 @@ export function HeroSection() {
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
           <h1 className="max-w-3xl mt-10 text-5xl font-bold text-white md:text-8xl">
-            Domy z przyszłością
+            Domy z{" "}
+            <span className="relative inline-block">
+              {/* === KLUCZOWA ZMIANA: Dodatkowy span dla tekstu === */}
+              <span className="relative z-10">przyszłością</span>
+              {/* DODAJEMY NASZE PODKREŚLENIE SVG */}
+              <Image
+                src="/underline.svg"
+                alt="" // Pusty alt, ponieważ to element dekoracyjny
+                width={246}
+                height={23}
+                className="absolute -bottom-2 left-0 w-full md:-bottom-4"
+                aria-hidden="true"
+              />
+            </span>
           </h1>
         </div>
 
