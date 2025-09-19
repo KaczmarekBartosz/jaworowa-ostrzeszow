@@ -51,10 +51,13 @@ export function InvestmentSection() {
       <div className="mx-auto mt-16 max-w-7xl px-6 md:px-8 md:hidden">
         <div className="space-y-8">
           <p className="text-lg leading-relaxed text-muted-foreground">
-            Domy z Przyszłością to nowoczesna inwestycja deweloperska składająca
-            się z domów w zabudowie bliźniaczej. Każdy budynek oferuje dwa
-            poziomy komfortu: parter z przestronnym salonem i aneksem kuchennym
-            oraz poddasze z sypialniami.
+            <span className="font-bold text-foreground">
+              Domy z Przyszłością
+            </span>{" "}
+            to nowoczesna inwestycja deweloperska składająca się z domów w
+            zabudowie bliźniaczej. Każdy budynek oferuje dwa poziomy komfortu:
+            parter z przestronnym salonem i aneksem kuchennym oraz poddasze z
+            sypialniami.
           </p>
           <div className="overflow-hidden rounded-3xl">
             <Image
@@ -90,10 +93,13 @@ export function InvestmentSection() {
           {/* Lewa kolumna: Tekst + Obraz */}
           <div className="space-y-8 flex flex-col">
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Domy z Przyszłością to nowoczesna inwestycja deweloperska
-              składająca się z domów w zabudowie bliźniaczej. Każdy budynek
-              oferuje dwa poziomy komfortu: parter z przestronnym salonem i
-              aneksem kuchennym oraz poddasze z sypialniami.
+              <span className="font-bold text-foreground">
+                Domy z Przyszłością
+              </span>{" "}
+              to nowoczesna inwestycja deweloperska składająca się z domów w
+              zabudowie bliźniaczej. Każdy budynek oferuje dwa poziomy komfortu:
+              parter z przestronnym salonem i aneksem kuchennym oraz poddasze z
+              sypialniami.
             </p>
             <div className="overflow-hidden rounded-3xl mt-auto">
               <Image
