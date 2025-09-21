@@ -5,42 +5,42 @@ const galleryImages = [
   {
     imageUrl: "/jaworowa-wizualizacja-1.png",
     title: "Dom dla całej rodziny",
-    span: "row-span-2", // Średnia wysokość
+    span: "row-span-1", // Średnia wysokość
   },
   {
     imageUrl: "/jaworowa-wizualizacja-salon.jpeg",
     title: "Wnętrze salonu",
-    span: "row-span-3", // Karta wysoka
+    span: "row-span-2", // Karta wysoka
   },
   {
     imageUrl: "/jaworowa-wizualizacja-3.png",
     title: "Harmonia domu z otaczającą zielenią",
-    span: "row-span-3", // Karta wysoka
+    span: "row-span-2", // Karta wysoka
   },
   {
     imageUrl: "/jaworowa-wizualizacja-4.png",
     title: "Nowoczesna bryła budynku",
-    span: "row-span-2", // Średnia wysokość
+    span: "row-span-1", // Średnia wysokość
   },
   {
     imageUrl: "/jaworowa-wizualizacja-5.jpg",
     title: "Przestronny podjazd z garażem",
-    span: "row-span-2", // Średnia wysokość
+    span: "row-span-1", // Średnia wysokość
   },
   {
     imageUrl: "/jaworowa-wizualizacja-6.jpg",
     title: "Wewnętrzna droga osiedlowa",
-    span: "row-span-3", // Karta wysoka
+    span: "row-span-2", // Karta wysoka
   },
   {
     imageUrl: "/jaworowa-wizualizacja-7.png",
     title: "Eleganckie wejście do domu",
-    span: "row-span-3", // Karta wysoka
+    span: "row-span-2", // Karta wysoka
   },
   {
     imageUrl: "/jaworowa-wizualizacja-2.jpg",
     title: "Widok na całe osiedle z lotu ptaka",
-    span: "row-span-2", // Średnia wysokość
+    span: "row-span-1", // Średnia wysokość
   },
 ];
 
