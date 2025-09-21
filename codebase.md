@@ -99,49 +99,65 @@ This is a binary file of the type: Binary
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* --- Light theme --- */
+/* --- Light theme (neutralny OFF‑WHITE + gradient tokens) --- */
 :root {
   --radius: 0.625rem;
-  --background: oklch(0.92 0.01 98); /* #E8EAE9 */
-  --foreground: oklch(0.06 0 0); /* #121212 */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.06 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.06 0 0);
-  --primary: oklch(0.57 0.23 29); /* #F53F0F - fallback for gradient */
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.96 0.01 98);
-  --secondary-foreground: oklch(0.1 0 0);
-  --muted: oklch(0.96 0.01 98);
-  --muted-foreground: oklch(0.4 0 0);
-  --accent: oklch(0.96 0.01 98);
-  --accent-foreground: oklch(0.1 0 0);
-  --destructive: oklch(0.58 0.24 27);
-  --border: oklch(0.85 0.01 98);
-  --input: oklch(0.85 0.01 98);
-  --ring: oklch(0.57 0.23 29);
+
+  /* Neutralny off‑white (bez beżowego zafarbu) */
+  --background: oklch(0.985 0.004 250);
+  --foreground: oklch(0.12 0.02 250);
+
+  --card: oklch(0.995 0 0); /* czysta biel */
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+
+  /* Akcent + fallback dla gradientu */
+  --primary: oklch(0.7 0.17 64.9);
+  --primary-foreground: oklch(1 0 0);
+  /* Gradient CTA */
+  --accent-from: oklch(0.76 0.16 64.9);
+  --accent-to: oklch(0.64 0.19 64.9);
+
+  --secondary: oklch(0.96 0.01 250);
+  --secondary-foreground: oklch(0.25 0.02 250);
+  --muted: oklch(0.96 0.005 250);
+  --muted-foreground: oklch(0.48 0.02 250);
+  --accent: var(--secondary);
+  --accent-foreground: var(--secondary-foreground);
+  --destructive: oklch(0.6 0.23 27);
+  --border: oklch(0.9 0.01 250);
+  --input: var(--border);
+  --ring: oklch(0.7 0.05 250);
 }
 
 /* --- Dark theme --- */
 .dark {
-  --background: oklch(0.04 0 0); /* #0C0C0C */
-  --foreground: oklch(0.92 0.01 98); /* #E8EAE9 */
-  --card: oklch(0.13 0 0); /* #252525 */
-  --card-foreground: oklch(0.92 0.01 98);
-  --popover: oklch(0.13 0 0);
-  --popover-foreground: oklch(0.92 0.01 98);
-  --primary: oklch(0.57 0.23 29);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.15 0 0);
-  --secondary-foreground: oklch(0.92 0.01 98);
-  --muted: oklch(0.15 0 0);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.15 0 0);
-  --accent-foreground: oklch(0.92 0.01 98);
-  --destructive: oklch(0.58 0.24 27);
+  --background: oklch(0.15 0.01 250);
+  --foreground: oklch(0.98 0.002 250);
+
+  --card: oklch(0.2 0.01 250);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+
+  --primary: oklch(0.7 0.17 64.9);
+  --primary-foreground: oklch(1 0 0);
+  /* Gradient CTA (ciemny wariant) */
+  --accent-from: oklch(0.75 0.16 64.9);
+  --accent-to: oklch(0.62 0.2 64.9);
+
+  --secondary: oklch(0.25 0.015 250);
+  --secondary-foreground: oklch(0.94 0.002 250);
+  --muted: oklch(0.24 0.01 250);
+  --muted-foreground: oklch(0.72 0.01 250);
+  --accent: var(--secondary);
+  --accent-foreground: var(--secondary-foreground);
+
+  --destructive: oklch(0.6 0.23 27);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.57 0.23 29);
+  --ring: oklch(0.55 0.03 250);
 }
 
 /* --- Base layer --- */
@@ -152,12 +168,12 @@ This is a binary file of the type: Binary
 
   html {
     -webkit-text-size-adjust: 100%;
-    scrollbar-gutter: stable;
+    scrollbar-gutter: stable; /* ZOSTAWIONE: Twoje ustawienie na desktop */
   }
 
   html,
   body {
-    overflow-x: clip;
+    overflow-x: clip; /* blokada poziomego scrolla */
     height: 100%;
   }
 
@@ -170,29 +186,37 @@ This is a binary file of the type: Binary
     max-width: 100%;
     height: auto;
   }
+
+  /* Scrollbary — ZOSTAWIONE dokładnie jak u Ciebie */
   ::-webkit-scrollbar {
     width: 8px;
   }
-
   ::-webkit-scrollbar-track {
     background: transparent;
   }
-
   ::-webkit-scrollbar-thumb {
     background-color: oklch(var(--border) / 0.5);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: content-box;
   }
-
   ::-webkit-scrollbar-thumb:hover {
     background-color: oklch(var(--muted-foreground) / 0.7);
   }
-
   @supports (scrollbar-color: auto) {
     * {
       scrollbar-width: thin;
       scrollbar-color: oklch(var(--muted-foreground) / 0.7) transparent;
+    }
+  }
+
+  /* Offset pod fixed header przy skoku do #kotwic */
+  section[id] {
+    scroll-margin-top: theme(spacing.24);
+  }
+  @media (min-width: 768px) {
+    section[id] {
+      scroll-margin-top: theme(spacing.32);
     }
   }
 }
@@ -255,6 +279,11 @@ export default function RootLayout({
 ```tsx
 import { HeroSection } from "@/components/sections/hero-section";
 import { InvestmentSection } from "@/components/sections/investment-section";
+import { PlansSection } from "@/components/sections/plans-section";
+import { GallerySection } from "@/components/sections/gallery-section";
+import { LocationSection } from "@/components/sections/location-section"; // Import
+import { ContactSection } from "@/components/sections/contact-section"; // Import
+import { Footer } from "@/components/sections/footer";
 
 const PlaceholderSection = ({ id, title }: { id: string; title: string }) => (
   <section
@@ -277,11 +306,11 @@ export default function HomePage() {
     <main>
       <HeroSection />
       <InvestmentSection />
-      <PlaceholderSection id="domy" title="Domy" />
-      <PlaceholderSection id="plany" title="Plany" />
-      <PlaceholderSection id="galeria" title="Galeria" />
-      <PlaceholderSection id="lokalizacja" title="Lokalizacja" />
-      <PlaceholderSection id="kontakt" title="Kontakt" />
+      <PlansSection />
+      <GallerySection />
+      <LocationSection />
+      <ContactSection />
+      <Footer />
     </main>
   );
 }
@@ -388,37 +417,150 @@ export function FeatureCard({
 ```tsx
 "use client";
 
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+// KLUCZOWA ZMIANA: Importujemy typ bezpośrednio z pakietu-rdzenia
+import type { EmblaCarouselType } from "embla-carousel";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-// Definiujemy typy dla propsów, aby komponent mógł przyjąć dowolne dzieci
 type FeatureCarouselProps = {
   children: React.ReactNode;
 };
 
 export function FeatureCarousel({ children }: FeatureCarouselProps) {
-  // Hook z Embla Carousel. 'align: "start"' zapewnia, że slajdy doklejają się do lewej krawędzi.
-  const [emblaRef] = useEmblaCarousel({
+  const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
   });
 
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  // Używamy poprawnego typu EmblaCarouselType
+  const onSelect = useCallback((api: EmblaCarouselType) => {
+    setPrevBtnDisabled(!api.canScrollPrev());
+    setNextBtnDisabled(!api.canScrollNext());
+  }, []);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    onSelect(emblaApi);
+    emblaApi.on("reInit", onSelect);
+    emblaApi.on("select", onSelect);
+
+    return () => {
+      emblaApi.off("reInit", onSelect);
+      emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
   return (
-    // Główny kontener karuzeli. `overflow-hidden` jest kluczowe.
-    <div className="overflow-hidden md:overflow-visible" ref={emblaRef}>
-      {/* Kontener na slajdy. Na mobile jest to flex, na desktop nie ma specjalnych stylów. */}
-      <div className="flex md:contents">
-        {React.Children.map(children, (child, index) => (
-          // Każdy slajd. `flex: 0 0 80%` to serce efektu "peek-a-boo" na mobile.
-          <div
-            key={index}
-            className="flex-shrink-0 flex-grow-0 basis-4/5 pl-4 md:basis-auto md:p-0"
-          >
-            {child}
-          </div>
-        ))}
+    <div>
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">
+          {React.Children.map(children, (child, index) => (
+            <div
+              key={index}
+              className="flex-shrink-0 flex-grow-0 basis-4/5 pl-4 first:pl-6 last:pr-6 md:basis-auto md:p-0"
+            >
+              {child}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mx-auto mt-6 flex max-w-7xl justify-end gap-2 px-6">
+        <Button
+          size="icon"
+          className="rounded-full h-12 w-12"
+          onClick={scrollPrev}
+          disabled={prevBtnDisabled}
+        >
+          <ChevronLeft className="size-6" />
+          <span className="sr-only">Poprzedni slajd</span>
+        </Button>
+        <Button
+          size="icon"
+          className="rounded-full h-12 w-12"
+          onClick={scrollNext}
+          disabled={nextBtnDisabled}
+        >
+          <ChevronRight className="size-6" />
+          <span className="sr-only">Następny slajd</span>
+        </Button>
       </div>
     </div>
+  );
+}
+
+```
+
+# components\common\gallery-card.tsx
+
+```tsx
+"use client";
+
+import Image from "next/image";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Maximize } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface GalleryCardProps {
+  imageUrl: string;
+  title: string;
+  className?: string;
+}
+
+export function GalleryCard({ imageUrl, title, className }: GalleryCardProps) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        {/* Usunęliśmy sztywny 'aspect-[3/4]'. Wysokość będzie teraz kontrolowana z zewnątrz. */}
+        <button
+          className={cn(
+            "group relative block w-full overflow-hidden rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+            className
+          )}
+        >
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+
+          <div className="absolute bottom-0 left-0 p-6 text-left">
+            <h3 className="text-xl font-bold text-white">{title}</h3>
+          </div>
+
+          <div className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
+            <Maximize className="size-5" />
+          </div>
+        </button>
+      </DialogTrigger>
+
+      <DialogContent className="max-w-7xl w-full bg-transparent border-none p-4">
+        <Image
+          src={imageUrl}
+          alt={title}
+          width={1920}
+          height={1080}
+          className="w-full h-auto object-contain rounded-2xl"
+        />
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -434,31 +576,56 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
-export function ThemeToggle() {
-  const { setTheme, theme } = useTheme();
+/**
+ * Ikona = dokładnie tyle samo co hamburger:
+ * - size="lg"  -> przycisk 56x56 (h-14 w-14), ikona 32x32 (h-8 w-8)
+ * - size="md"  -> przycisk 48x48 (h-12 w-12), ikona 24x24 (h-6 w-6)
+ * - size="sm"  -> przycisk 40x40 (h-10 w-10), ikona 20x20 (h-5 w-5)
+ *
+ * Ważne: ikony są osadzone w relatywnym kontenerze i mają size-full,
+ * więc faktycznie wypełniają cały box – nie tylko „otoczka”.
+ */
+export function ThemeToggle({
+  size = "md" as const,
+}: {
+  size?: "sm" | "md" | "lg";
+}) {
+  const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
 
-  // Ten hook zapewnia, że komponent renderuje się w pełni dopiero po stronie klienta,
-  // co zapobiega błędom hydracji (niezgodności między serwerem a klientem).
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  const btnDim =
+    size === "lg" ? "h-14 w-14" : size === "md" ? "h-12 w-12" : "h-10 w-10";
+  const iconBox =
+    size === "lg" ? "h-6 w-6" : size === "md" ? "h-6 w-6" : "h-5 w-5";
 
-  if (!mounted) {
-    // Renderujemy placeholder, aby uniknąć "mrugania" interfejsu przy ładowaniu.
-    return <div className="h-10 w-10 rounded-full bg-background/50" />;
-  }
+  if (!mounted)
+    return <div className={`${btnDim} rounded-full bg-background/50`} />;
+
+  const next = resolvedTheme === "light" ? "dark" : "light";
 
   return (
     <Button
+      type="button"
       variant="ghost"
       size="icon"
-      className="rounded-full text-foreground/80 hover:text-foreground hover:bg-foreground/10"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      className={`${btnDim} p-0 rounded-full text-foreground/80 hover:bg-foreground/10 hover:text-foreground`}
+      onClick={() => setTheme(next)}
       aria-label="Przełącz motyw"
+      title={next === "dark" ? "Włącz ciemny motyw" : "Włącz jasny motyw"}
     >
-      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      {/* Kontener o stałym boxie ikony */}
+      <span className={`relative inline-block ${iconBox}`} aria-hidden>
+        {/* Obie ikony wypełniają kontener 1:1 */}
+        <Sun
+          className="absolute inset-0 size-full rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+          strokeWidth={2.25}
+        />
+        <Moon
+          className="absolute inset-0 size-full rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+          strokeWidth={2.25}
+        />
+      </span>
       <span className="sr-only">Przełącz motyw</span>
     </Button>
   );
@@ -471,6 +638,7 @@ export function ThemeToggle() {
 ```tsx
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Sheet,
@@ -481,17 +649,30 @@ import {
 import { Button } from "@/components/ui/button";
 import { Menu, Home, X } from "lucide-react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
+import { cn } from "@/lib/utils";
 
+// === OSTATECZNA, POPRAWNA LISTA SEKCJI ===
 const navItems = [
-  { href: "#inwestycja", label: "Inwestycja" },
-  { href: "#domy", label: "Domy" },
-  { href: "#plany", label: "Plany" },
+  { href: "#inwestycja", label: "O Inwestycji" },
+  { href: "#domy", label: "Domy i Plany" }, // Sekcja "Domy" i "Plany" jest teraz jedną o id="domy"
   { href: "#galeria", label: "Galeria" },
   { href: "#lokalizacja", label: "Lokalizacja" },
   { href: "#kontakt", label: "Kontakt" },
 ];
 
 export function MainNav() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const Logo = () => (
     <Link
       href="/"
@@ -499,97 +680,324 @@ export function MainNav() {
       aria-label="Strona główna"
     >
       <Home
-        className="size-7 text-foreground flex-shrink-0"
+        className="size-6 ml-2 text-foreground flex-shrink-0"
         aria-hidden="true"
       />
-      <span className="text-xl font-bold text-foreground tracking-tight">
-        Jaworowa Ostrzeszów
+      <span className="text-xl font-bold tracking-tight text-foreground">
+        {/*Nazwa_firmy*/}
       </span>
     </Link>
   );
 
-  return (
-    <header className="fixed top-0 left-0 right-0 z-40 p-4 md:p-8">
-      <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between">
-        {/* Mobile: logo + burger */}
-        <div className="flex-1 md:hidden">
-          <Logo />
-        </div>
+  const smoothScroll = (href: string) => {
+    if (!href.startsWith("#")) return;
+    const id = href.slice(1);
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-        <div className="md:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                className="h-14 w-14 p-0 text-foreground"
-                aria-label="Otwórz menu"
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+    isMobile = false
+  ) => {
+    e.preventDefault();
+    if (isMobile) {
+      setOpen(false);
+      setTimeout(() => smoothScroll(href), 300);
+    } else {
+      smoothScroll(href);
+    }
+  };
+
+  return (
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-40 transition-all duration-300",
+        scrolled ? "p-4" : "p-4 md:p-8"
+      )}
+    >
+      <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between">
+        <div
+          className={cn(
+            "flex w-full items-center justify-between transition-all duration-300 md:hidden",
+            scrolled &&
+              "rounded-full border bg-background/50 p-2 backdrop-blur-sm"
+          )}
+        >
+          <div className={cn("flex-1", scrolled && "pl-2")}>
+            <Logo />
+          </div>
+          <div className="flex items-center gap-1">
+            <ThemeToggle size="lg" />
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="h-[48px] w-[48px] p-0 text-foreground"
+                  aria-label="Otwórz menu"
+                >
+                  <Menu className="size-8" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-full border-none bg-background p-4"
               >
-                <Menu className="size-8" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-full bg-background border-none p-4"
-            >
-              <div className="flex h-16 items-center justify-between">
-                <Logo />
-                <SheetClose asChild>
-                  <Button
-                    variant="ghost"
-                    className="h-14 w-14 p-0 text-foreground"
-                    aria-label="Zamknij menu"
-                  >
-                    <X className="size-8" />
-                  </Button>
-                </SheetClose>
-              </div>
-              <nav className="mt-24 flex flex-1 flex-col items-center justify-center gap-y-8">
-                {navItems.map((item) => (
-                  // === OSTATECZNA, NAJPROSTSZA METODA ===
-                  <SheetClose asChild key={item.href}>
+                <div className="flex h-16 items-center justify-between">
+                  <Logo />
+                  <div className="flex items-center gap-1">
+                    <ThemeToggle size="lg" />
+                    <SheetClose asChild>
+                      <Button
+                        variant="ghost"
+                        className="h-[48px] w-[48px] p-0 text-foreground"
+                        aria-label="Zamknij menu"
+                      >
+                        <X className="size-8" />
+                      </Button>
+                    </SheetClose>
+                  </div>
+                </div>
+                <nav className="mt-24 flex flex-1 flex-col items-center justify-center gap-y-8">
+                  {navItems.map((item) => (
                     <a
+                      key={item.href}
                       href={item.href}
+                      onClick={(e) => handleNavClick(e, item.href, true)}
                       className="text-3xl font-medium text-foreground/80 transition-colors hover:text-foreground"
                     >
                       {item.label}
                     </a>
-                  </SheetClose>
-                ))}
-              </nav>
-              <div className="mt-auto text-center pb-4">
-                <SheetClose asChild>
+                  ))}
+                </nav>
+                <div className="mt-auto pb-4">
                   <Button size="lg" className="w-full rounded-full" asChild>
-                    <a href="#kontakt">Kontakt</a>
+                    <a
+                      href="#kontakt"
+                      onClick={(e) => handleNavClick(e, "#kontakt", true)}
+                    >
+                      Kontakt
+                    </a>
                   </Button>
-                </SheetClose>
-              </div>
-            </SheetContent>
-          </Sheet>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
 
-        {/* Desktop navbar */}
-        <div className="hidden md:flex w-full items-center justify-between rounded-full bg-white/10 p-2 pl-8 border border-white/20 backdrop-blur-sm">
+        <div className="hidden w-full items-center justify-between rounded-full border bg-background/50 p-2 pl-8 backdrop-blur-sm md:flex">
           <Logo />
           <nav className="flex gap-x-8">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="text-white/80 transition-colors hover:text-white"
+                onClick={(e) => handleNavClick(e, item.href)}
+                className="text-foreground/80 transition-colors hover:text-foreground"
               >
                 {item.label}
               </a>
             ))}
           </nav>
-          <div className="flex items-center gap-x-2">
-            <ThemeToggle />
-            <Button variant="default" className="rounded-full" asChild>
-              <a href="#kontakt">Kontakt</a>
+          <div className="flex items-center gap-1">
+            <ThemeToggle size="lg" />
+            <Button className="rounded-full" asChild>
+              <a href="#kontakt" onClick={(e) => handleNavClick(e, "#kontakt")}>
+                Kontakt
+              </a>
             </Button>
           </div>
         </div>
       </div>
     </header>
+  );
+}
+
+```
+
+# components\sections\contact-section.tsx
+
+```tsx
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+export function ContactSection() {
+  return (
+    <section
+      id="kontakt"
+      className="bg-card/50 py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
+    >
+      <div className="mx-auto max-w-3xl text-center px-6 md:px-8">
+        <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+          Skontaktuj się z nami
+        </h2>
+        <p className="mt-4 text-lg text-muted-foreground">
+          Masz pytania? Chcesz dowiedzieć się więcej? Wypełnij formularz, a my
+          odezwiemy się do Ciebie tak szybko, jak to możliwe.
+        </p>
+      </div>
+
+      <div className="mx-auto mt-12 max-w-3xl px-6 md:px-8">
+        <form className="space-y-6">
+          <div>
+            <label htmlFor="name" className="sr-only">
+              Imię
+            </label>
+            <Input id="name" type="text" placeholder="Imię" required />
+          </div>
+          <div>
+            <label htmlFor="email" className="sr-only">
+              E-mail
+            </label>
+            <Input id="email" type="email" placeholder="E-mail" required />
+          </div>
+          <div>
+            <label htmlFor="message" className="sr-only">
+              Wiadomość
+            </label>
+            <Textarea
+              id="message"
+              placeholder="Twoja wiadomość..."
+              rows={6}
+              required
+            />
+          </div>
+          <div className="text-center">
+            <Button
+              type="submit"
+              size="lg"
+              className="rounded-full w-full md:w-auto"
+            >
+              Wyślij wiadomość
+            </Button>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+```
+
+# components\sections\footer.tsx
+
+```tsx
+import { Home } from "lucide-react";
+import Link from "next/link";
+
+export function Footer() {
+  return (
+    <footer className="bg-card py-12">
+      <div className="mx-auto max-w-7xl px-6 md:px-8 text-center">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2"
+          aria-label="Strona główna"
+        >
+          <Home
+            className="size-7 text-foreground flex-shrink-0"
+            aria-hidden="true"
+          />
+          <span className="text-xl font-bold tracking-tight text-foreground">
+            Jaworowa Ostrzeszów
+          </span>
+        </Link>
+        <p className="mt-4 text-muted-foreground">
+          Perfekcja w prostocie — każdy piksel ma znaczenie.
+        </p>
+        <div className="mt-8 text-sm text-muted-foreground">
+          © {new Date().getFullYear()} Jaworowa Ostrzeszów. Wszelkie prawa
+          zastrzeżone.
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+```
+
+# components\sections\gallery-section.tsx
+
+```tsx
+import { GalleryCard } from "@/components/common/gallery-card";
+
+// POPRAWKA: Zaktualizowano wartości 'span' dla uzyskania nieregularnego układu
+const galleryImages = [
+  {
+    imageUrl: "/jaworowa-wizualizacja-1.png",
+    title: "Dom dla całej rodziny",
+    span: "row-span-2", // Średnia wysokość
+  },
+  {
+    imageUrl: "/jaworowa-wizualizacja-salon.jpeg",
+    title: "Wnętrze salonu",
+    span: "row-span-3", // Karta wysoka
+  },
+  {
+    imageUrl: "/jaworowa-wizualizacja-3.png",
+    title: "Harmonia domu z otaczającą zielenią",
+    span: "row-span-3", // Karta wysoka
+  },
+  {
+    imageUrl: "/jaworowa-wizualizacja-4.png",
+    title: "Nowoczesna bryła budynku",
+    span: "row-span-2", // Średnia wysokość
+  },
+  {
+    imageUrl: "/jaworowa-wizualizacja-5.jpg",
+    title: "Przestronny podjazd z garażem",
+    span: "row-span-2", // Średnia wysokość
+  },
+  {
+    imageUrl: "/jaworowa-wizualizacja-6.jpg",
+    title: "Wewnętrzna droga osiedlowa",
+    span: "row-span-3", // Karta wysoka
+  },
+  {
+    imageUrl: "/jaworowa-wizualizacja-7.png",
+    title: "Eleganckie wejście do domu",
+    span: "row-span-3", // Karta wysoka
+  },
+  {
+    imageUrl: "/jaworowa-wizualizacja-2.jpg",
+    title: "Widok na całe osiedle z lotu ptaka",
+    span: "row-span-2", // Średnia wysokość
+  },
+];
+
+export function GallerySection() {
+  return (
+    <section
+      id="galeria"
+      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mat-32"
+    >
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div className="max-w-3xl">
+          <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+            Galeria
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Każda wizualizacja przedstawia nie tylko architekturę, ale i
+            atmosferę miejsca, w którym możesz zamieszkać wraz ze swoją rodziną.
+          </p>
+        </div>
+
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 grid-flow-dense [grid-auto-rows:150px]">
+          {galleryImages.map((image, index) => (
+            <GalleryCard
+              key={index}
+              imageUrl={image.imageUrl}
+              title={image.title}
+              className={image.span}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -607,37 +1015,53 @@ export function HeroSection() {
   return (
     <section className="relative flex h-[100dvh] flex-col overflow-hidden">
       <Image
-        src="/hero.jpg"
+        src="/hero_4.png"
         alt="Nowoczesny dom z przestronnym wnętrzem"
         fill
         priority
-        className="z-0 object-cover"
+        className="z-0 object-cover transition-transform duration-300"
       />
 
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/100 via-black/0 to-black/60" />
+      {/* Gradient używa teraz 'from-background', aby adaptować się do motywu */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-transparent to-black/60" />
 
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
-          <h1 className="max-w-3xl text-6xl font-bold text-white md:text-8xl">
-            Domy z przyszłością
+          {/* H1 ZAWSZE pozostaje biały */}
+          <h1 className="max-w-3xl mt-4 p-6 text-5xl font-bold text-white md:text-8xl">
+            Domy z{" "}
+            <span className="relative inline-block">
+              <span className="relative z-10">przyszłością</span>
+              <Image
+                src="/underline_3.svg"
+                alt=""
+                width={246}
+                height={23}
+                className="absolute -bottom-3 left-0 w-full md:-bottom-4"
+                aria-hidden="true"
+              />
+            </span>
           </h1>
         </div>
 
         <div className="w-full max-w-md">
-          <p className="text-xl text-white/80 md:text-2xl">
+          {/* POPRAWKA: Paragraf używa teraz 'text-foreground', aby adaptować kolor */}
+          <p className="text-lg text-foreground/80 md:text-2xl">
             Poznaj wyjątkowe miejsce dla Ciebie oraz Twojej rodziny i zamieszkaj
             mądrzej.
           </p>
 
+          {/* POPRAWKA: Przycisk używa teraz adaptacyjnych kolorów */}
           <button
             onClick={() =>
               document
                 .querySelector("#inwestycja")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="group mb-14 mt-8 flex w-full items-center justify-between rounded-full bg-white/10 p-2 text-left transition-all duration-300 hover:bg-white/20 border border-white/20 backdrop-blur-sm"
+            // Zmieniono tło na adaptacyjne, zachowując efekt "glass"
+            className="group mb-24 mt-8 flex w-full items-center justify-between rounded-full bg-secondary/50 p-2 text-left transition-all duration-300 hover:bg-secondary/80 border backdrop-blur-sm"
           >
-            <span className="pl-6 text-lg font-medium text-white">
+            <span className="pl-6 text-lg font-medium text-foreground">
               Dowiedz się więcej
             </span>
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#F53F0F] to-[#F97318] transition-transform duration-300 group-hover:scale-110">
@@ -648,7 +1072,8 @@ export function HeroSection() {
       </div>
 
       <div className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2">
-        <ArrowDown className="h-6 w-6 animate-bounce text-white" />
+        {/* POPRAWKA: Ikona używa teraz 'text-foreground' */}
+        <ArrowDown className="h-6 w-6 animate-bounce text-foreground" />
       </div>
     </section>
   );
@@ -659,6 +1084,7 @@ export function HeroSection() {
 # components\sections\investment-section.tsx
 
 ```tsx
+import Image from "next/image";
 import { FeatureCard } from "@/components/common/feature-card";
 import { FeatureCarousel } from "@/components/common/feature-carousel";
 import { Button } from "@/components/ui/button";
@@ -671,9 +1097,9 @@ const features = [
     description: "Ponad 103 m²",
     isHighlighted: true,
   },
-  { icon: Building2, title: "Liczba budynków", description: "7-8 jednostek" },
+  { icon: Building2, title: "Rozmiar inwestycji", description: "8 budynków" },
   { icon: Paintbrush, title: "Architektura", description: "Nowoczesna" },
-  { icon: Trees, title: "Otoczenie", description: "Bliskość zieleni" },
+  { icon: Trees, title: "Otoczenie", description: "Pełne zieleni" },
 ];
 
 export function InvestmentSection() {
@@ -683,6 +1109,7 @@ export function InvestmentSection() {
       className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-8">
+        {/* Nagłówek wyrównany do lewej */}
         <div className="max-w-3xl">
           <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
             O Inwestycji
@@ -690,6 +1117,7 @@ export function InvestmentSection() {
         </div>
       </div>
 
+      {/* WERSJA MOBILNA: Karuzela (bez zmian) */}
       <div className="mt-12 md:hidden">
         <FeatureCarousel>
           {features.map((feature, index) => (
@@ -698,33 +1126,409 @@ export function InvestmentSection() {
         </FeatureCarousel>
       </div>
 
+      {/* WERSJA DESKTOP: Centralna siatka z kartami */}
       <div className="mx-auto mt-12 hidden max-w-7xl px-6 md:grid md:grid-cols-4 md:gap-8 md:px-8">
         {features.map((feature, index) => (
           <FeatureCard key={index} {...feature} />
         ))}
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 md:px-8 mt-16">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
-          <div className="md:col-span-2">
+      {/* WERSJA MOBILNA: Treść w jednej kolumnie (bez zmian) */}
+      <div className="mx-auto mt-16 max-w-7xl px-6 md:px-8 md:hidden">
+        <div className="space-y-8">
+          <p className="text-lg leading-relaxed text-muted-foreground">
+            <span className="font-bold text-foreground">
+              Domy z Przyszłością
+            </span>{" "}
+            to nowoczesna inwestycja deweloperska składająca się z domów w
+            zabudowie bliźniaczej. Każdy budynek oferuje dwa poziomy komfortu:
+            parter z przestronnym salonem i aneksem kuchennym oraz poddasze z
+            sypialniami.
+          </p>
+          <div className="overflow-hidden rounded-3xl">
+            <Image
+              src="/investment-image.png"
+              alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
+              width={1200}
+              height={800}
+              className="transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+          <p className="text-lg leading-relaxed text-muted-foreground">
+            Osiedle zaprojektowano z myślą o harmonii z naturą, oferując zielone
+            tereny, wewnętrzne drogi dojazdowe i indywidualne parkingi. Jeśli
+            marzysz o własnym domu bliźniaczym, nasza inwestycja łączy
+            funkcjonalność z estetyką, zapewniając idealną przestrzeń dla Twojej
+            rodziny.
+          </p>
+          <div className="overflow-hidden rounded-3xl">
+            <Image
+              src="/investment-image-green.jpg"
+              alt="Wizualizacja osiedla Domy z Przyszłością z dużą ilością zieleni"
+              width={1200}
+              height={800}
+              className="transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* WERSJA DESKTOP: Nowy, asymetryczny układ dwukolumnowy */}
+      <div className="mx-auto max-w-7xl px-6 md:px-8 mt-16 hidden md:block">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16">
+          {/* Lewa kolumna: Tekst + Obraz */}
+          <div className="space-y-8 flex flex-col">
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Domy z Przyszłością to nowoczesna inwestycja deweloperska
-              składająca się z domów w zabudowie bliźniaczej. Każdy budynek
-              oferuje dwa poziomy komfortu: parter z przestronnym salonem i
-              aneksem kuchennym oraz poddasze z sypialniami. Osiedle
-              zaprojektowano z myślą o harmonii z naturą, oferując zielone
-              tereny, wewnętrzne drogi dojazdowe i indywidualne parkingi.
+              <span className="font-bold text-foreground">
+                Domy z Przyszłością
+              </span>{" "}
+              to nowoczesna inwestycja deweloperska składająca się z domów w
+              zabudowie bliźniaczej. Każdy budynek oferuje dwa poziomy komfortu:
+              parter z przestronnym salonem i aneksem kuchennym oraz poddasze z
+              sypialniami.
             </p>
-            <p className="mt-6 text-base text-muted-foreground">
-              Jeśli marzysz o własnym domu bliźniaczym w osiedlu z przyszłością,
-              nasza inwestycja łączy funkcjonalność z estetyką, zapewniając
-              idealną przestrzeń dla Twojej rodziny.
+            <div className="overflow-hidden rounded-3xl mt-auto">
+              <Image
+                src="/investment-image.png"
+                alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
+                width={1200}
+                height={800}
+                className="transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+          </div>
+          {/* Prawa kolumna: Obraz + Tekst */}
+          <div className="space-y-8 flex flex-col">
+            <div className="overflow-hidden rounded-3xl">
+              <Image
+                src="/investment-image-green.jpg"
+                alt="Wizualizacja osiedla Domy z Przyszłością z dużą ilością zieleni"
+                width={1200}
+                height={800}
+                className="transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+            <p className="text-lg leading-relaxed text-muted-foreground">
+              Osiedle zaprojektowano z myślą o harmonii z naturą, oferując
+              zielone tereny, wewnętrzne drogi dojazdowe i indywidualne
+              parkingi. Jeśli marzysz o własnym domu bliźniaczym, nasza
+              inwestycja łączy funkcjonalność z estetyką, zapewniając idealną
+              przestrzeń dla Twojej rodziny.
             </p>
           </div>
-          <div className="flex items-start">
-            <Button size="lg" className="rounded-full w-full md:w-auto" asChild>
-              <a href="#plany">Zobacz plany</a>
-            </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+```
+
+# components\sections\location-section.tsx
+
+```tsx
+import { MapPin, School, ShoppingCart, Trees } from "lucide-react";
+
+const locationFeatures = [
+  { icon: ShoppingCart, text: "Sklepy i usługi w zasięgu spaceru" },
+  { icon: School, text: "Bliskość szkół i przedszkoli" },
+  { icon: Trees, text: "Tereny zielone i rekreacyjne w okolicy" },
+];
+
+export function LocationSection() {
+  return (
+    <section
+      id="lokalizacja"
+      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
+    >
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16">
+          {/* LEWA KOLUMNA: Informacje */}
+          <div className="flex flex-col justify-center">
+            <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+              Podmiejska cisza w sercu Ostrzeszowa
+            </h2>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+              Inwestycja przy ulicy Jaworowej w Ostrzeszowie to miejsce, gdzie
+              nowoczesne osiedle spotyka się z naturą. Zyskujesz spokój i
+              prywatność, a jednocześnie szybki dostęp do szkół, sklepów,
+              punktów usługowych i centrum miasta.
+            </p>
+            <ul className="mt-8 space-y-4">
+              {locationFeatures.map((feature, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <feature.icon className="h-6 w-6 text-primary flex-shrink-0" />
+                  <span className="text-foreground/80">{feature.text}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8 flex items-center gap-3 rounded-2xl bg-card/50 p-4 border">
+              <MapPin className="h-8 w-8 text-foreground/80 flex-shrink-0" />
+              <div>
+                <p className="font-bold">Adres inwestycji:</p>
+                <p className="text-muted-foreground">
+                  ul. Jaworowa, 63-500 Ostrzeszów
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* PRAWA KOLUMNA: Mapa Google */}
+          <div className="w-full h-[30rem] md:h-full overflow-hidden rounded-3xl">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.77000570884!2d17.93988067710376!3d51.48110591322285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ab63738128e09%3A0x1d5f1348ca433291!2sJaworowa%2C%2063-500%20Ostrzesz%C3%B3w!5e0!3m2!1spl!2spl!4v1727289650085!5m2!1spl!2spl&styles=roadmap|element:geometry|stylers:color=0x242f3e&styles=roadmap|element:labels.text.fill|stylers:color=0x746855&styles=roadmap|element:labels.text.stroke|stylers:color=0x242f3e&styles=water|element:geometry|stylers:color=0x17263c&styles=water|element:labels.text.fill|stylers:color=0x515c6d&styles=water|element:labels.text.stroke|stylers:color=0x17263c"
+              width="100%"
+              height="100%"
+              style={{
+                border: 0,
+                filter: "grayscale(1) invert(1) contrast(1.1)",
+              }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Mapa lokalizacji inwestycji"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+```
+
+# components\sections\plans-section.tsx
+
+```tsx
+"use client";
+
+import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHeader,
+  TableHead,
+} from "@/components/ui/table";
+import { Home, Zap, Shield } from "lucide-react";
+import { FeatureCard } from "@/components/common/feature-card";
+import { FeatureCarousel } from "@/components/common/feature-carousel";
+
+const parterRooms = [
+  { name: "Przedsionek", area: "4,86 m²" },
+  { name: "Łazienka", area: "4,81 m²" },
+  { name: "Garderoba", area: "4,68 m²" },
+  { name: "Kuchnia", area: "6,59 m²" },
+  { name: "Korytarz", area: "5,98 m²" },
+  { name: "Salon z jadalnią", area: "24,06 m²" },
+];
+
+const pietroRooms = [
+  { name: "Klatka schodowa", area: "7,95 m²" },
+  { name: "Sypialnia", area: "12,80 m²" },
+  { name: "Garderoba", area: "4,83 m²" },
+  { name: "Łazienka", area: "6,26 m²" },
+  { name: "Pokój 1", area: "10,24 m²" },
+  { name: "Pokój 2", area: "10,24 m²" },
+];
+
+const keyFeatures = [
+  { icon: Home, title: "Układ", description: "Funkcjonalny" },
+  {
+    icon: Zap,
+    title: "Rozwiązania",
+    description: "Smart Home",
+    isHighlighted: true,
+  },
+  { icon: Shield, title: "Okolica", description: "Bezpieczna" },
+];
+
+export function PlansSection() {
+  return (
+    <section
+      id="domy"
+      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
+    >
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        {/* === WERSJA MOBILNA === */}
+        <div className="md:hidden">
+          <div className="w-full">
+            <h2 className="text-4xl font-bold tracking-tight text-foreground">
+              Idealny układ dla Ciebie i Twojej rodziny
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+              Każdy segment oferuje ok.{" "}
+              <span className="font-bold text-foreground">103,30 m²</span>{" "}
+              powierzchni użytkowej, zoptymalizowanej do codziennego życia.
+            </p>
+          </div>
+
+          <div className="mt-12 -mx-6">
+            <FeatureCarousel>
+              {keyFeatures.map((feature, index) => (
+                <FeatureCard key={index} {...feature} />
+              ))}
+            </FeatureCarousel>
+          </div>
+
+          <div className="w-full mt-12">
+            <Tabs defaultValue="parter" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="parter">Parter</TabsTrigger>
+                <TabsTrigger value="pietro">Piętro</TabsTrigger>
+              </TabsList>
+              <TabsContent value="parter" className="mt-6">
+                <div className="overflow-hidden rounded-3xl border bg-card/50">
+                  <Image
+                    src="/plan-parter.png"
+                    alt="Rzut architektoniczny parteru domu"
+                    width={800}
+                    height={800}
+                  />
+                </div>
+              </TabsContent>
+              <TabsContent value="pietro" className="mt-6">
+                <div className="overflow-hidden rounded-3xl border bg-card/50">
+                  <Image
+                    src="/plan-pietro.png"
+                    alt="Rzut architektoniczny piętra domu"
+                    width={800}
+                    height={800}
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+
+          <div className="mt-12">
+            <h3 className="text-2xl font-semibold">Szczegółowy metraż</h3>
+            <Table className="mt-4">
+              <TableBody>
+                <TableRow className="bg-secondary/50 font-bold">
+                  <TableCell colSpan={2}>Parter (50,98 m²)</TableCell>
+                </TableRow>
+                {parterRooms.map((room) => (
+                  <TableRow key={room.name}>
+                    <TableCell>{room.name}</TableCell>
+                    <TableCell className="text-right font-medium">
+                      {room.area}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                <TableRow className="bg-secondary/50 font-bold">
+                  <TableCell colSpan={2}>Piętro (52,32 m²)</TableCell>
+                </TableRow>
+                {pietroRooms.map((room) => (
+                  <TableRow key={room.name}>
+                    <TableCell>{room.name}</TableCell>
+                    <TableCell className="text-right font-medium">
+                      {room.area}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        {/* === WERSJA DESKTOP === */}
+        <div className="hidden md:block">
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16 lg:gap-x-24">
+            <div className="w-full">
+              <Tabs defaultValue="parter" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="parter">Parter</TabsTrigger>
+                  <TabsTrigger value="pietro">Piętro</TabsTrigger>
+                </TabsList>
+                <TabsContent value="parter" className="mt-6">
+                  <div className="overflow-hidden rounded-3xl border bg-card/50">
+                    <Image
+                      src="/plan-parter.png"
+                      alt="Rzut architektoniczny parteru domu"
+                      width={800}
+                      height={800}
+                    />
+                  </div>
+                </TabsContent>
+                <TabsContent value="pietro" className="mt-6">
+                  <div className="overflow-hidden rounded-3xl border bg-card/50">
+                    <Image
+                      src="/plan-pietro.png"
+                      alt="Rzut architektoniczny piętra domu"
+                      width={800}
+                      height={800}
+                    />
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+            <div className="flex flex-col justify-center">
+              <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+                Idealny układ dla Ciebie i Twojej rodziny
+              </h2>
+              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+                Każdy segment oferuje ok.{" "}
+                <span className="font-bold text-foreground">103,30 m²</span>{" "}
+                powierzchni użytkowej, zoptymalizowanej do codziennego życia:
+                przestronny parter dla wspólnego spędzania czasu i wygodne
+                piętro zapewniające prywatność.
+              </p>
+              <div className="mt-8 grid grid-cols-3 gap-4">
+                {keyFeatures.map((feature, index) => (
+                  <FeatureCard key={index} {...feature} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-24">
+            <h3 className="text-3xl font-semibold text-center">
+              Szczegółowy metraż
+            </h3>
+            <div className="mt-8 grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="font-bold">
+                      Parter (50,98 m²)
+                    </TableHead>
+                    <TableHead className="text-right"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {parterRooms.map((room) => (
+                    <TableRow key={room.name}>
+                      <TableCell>{room.name}</TableCell>
+                      <TableCell className="text-right font-medium">
+                        {room.area}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="font-bold">
+                      Piętro (52,32 m²)
+                    </TableHead>
+                    <TableHead className="text-right"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {pietroRooms.map((room) => (
+                    <TableRow key={room.name}>
+                      <TableCell>{room.name}</TableCell>
+                      <TableCell className="text-right font-medium">
+                        {room.area}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </div>
@@ -768,12 +1572,14 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // === NOWY, DEDYKOWANY WARIANT ===
+        glass:
+          "bg-white/10 text-white border border-white/20 backdrop-blur-sm hover:bg-white/20",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -811,6 +1617,182 @@ function Button({
 }
 
 export { Button, buttonVariants };
+
+```
+
+# components\ui\dialog.tsx
+
+```tsx
+"use client"
+
+import * as React from "react"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { XIcon } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+
+function Dialog({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+  return <DialogPrimitive.Root data-slot="dialog" {...props} />
+}
+
+function DialogTrigger({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
+}
+
+function DialogPortal({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
+}
+
+function DialogClose({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Close>) {
+  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
+}
+
+function DialogOverlay({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+  return (
+    <DialogPrimitive.Overlay
+      data-slot="dialog-overlay"
+      className={cn(
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function DialogContent({
+  className,
+  children,
+  showCloseButton = true,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+  showCloseButton?: boolean
+}) {
+  return (
+    <DialogPortal data-slot="dialog-portal">
+      <DialogOverlay />
+      <DialogPrimitive.Content
+        data-slot="dialog-content"
+        className={cn(
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg",
+          className
+        )}
+        {...props}
+      >
+        {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close
+            data-slot="dialog-close"
+            className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+          >
+            <XIcon />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  )
+}
+
+function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-header"
+      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+      {...props}
+    />
+  )
+}
+
+function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-footer"
+      className={cn(
+        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function DialogTitle({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Title>) {
+  return (
+    <DialogPrimitive.Title
+      data-slot="dialog-title"
+      className={cn("text-lg leading-none font-semibold", className)}
+      {...props}
+    />
+  )
+}
+
+function DialogDescription({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Description>) {
+  return (
+    <DialogPrimitive.Description
+      data-slot="dialog-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
+  )
+}
+
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+}
+
+```
+
+# components\ui\input.tsx
+
+```tsx
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+  return (
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(
+        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Input }
 
 ```
 
@@ -955,6 +1937,224 @@ export {
 
 ```
 
+# components\ui\table.tsx
+
+```tsx
+"use client"
+
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Table({ className, ...props }: React.ComponentProps<"table">) {
+  return (
+    <div
+      data-slot="table-container"
+      className="relative w-full overflow-x-auto"
+    >
+      <table
+        data-slot="table"
+        className={cn("w-full caption-bottom text-sm", className)}
+        {...props}
+      />
+    </div>
+  )
+}
+
+function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
+  return (
+    <thead
+      data-slot="table-header"
+      className={cn("[&_tr]:border-b", className)}
+      {...props}
+    />
+  )
+}
+
+function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
+  return (
+    <tbody
+      data-slot="table-body"
+      className={cn("[&_tr:last-child]:border-0", className)}
+      {...props}
+    />
+  )
+}
+
+function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
+  return (
+    <tfoot
+      data-slot="table-footer"
+      className={cn(
+        "bg-muted/50 border-t font-medium [&>tr]:last:border-b-0",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
+  return (
+    <tr
+      data-slot="table-row"
+      className={cn(
+        "hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function TableHead({ className, ...props }: React.ComponentProps<"th">) {
+  return (
+    <th
+      data-slot="table-head"
+      className={cn(
+        "text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function TableCell({ className, ...props }: React.ComponentProps<"td">) {
+  return (
+    <td
+      data-slot="table-cell"
+      className={cn(
+        "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function TableCaption({
+  className,
+  ...props
+}: React.ComponentProps<"caption">) {
+  return (
+    <caption
+      data-slot="table-caption"
+      className={cn("text-muted-foreground mt-4 text-sm", className)}
+      {...props}
+    />
+  )
+}
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+}
+
+```
+
+# components\ui\tabs.tsx
+
+```tsx
+"use client"
+
+import * as React from "react"
+import * as TabsPrimitive from "@radix-ui/react-tabs"
+
+import { cn } from "@/lib/utils"
+
+function Tabs({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Root>) {
+  return (
+    <TabsPrimitive.Root
+      data-slot="tabs"
+      className={cn("flex flex-col gap-2", className)}
+      {...props}
+    />
+  )
+}
+
+function TabsList({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.List>) {
+  return (
+    <TabsPrimitive.List
+      data-slot="tabs-list"
+      className={cn(
+        "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function TabsTrigger({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
+  return (
+    <TabsPrimitive.Trigger
+      data-slot="tabs-trigger"
+      className={cn(
+        "data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function TabsContent({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Content>) {
+  return (
+    <TabsPrimitive.Content
+      data-slot="tabs-content"
+      className={cn("flex-1 outline-none", className)}
+      {...props}
+    />
+  )
+}
+
+export { Tabs, TabsList, TabsTrigger, TabsContent }
+
+```
+
+# components\ui\textarea.tsx
+
+```tsx
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+  return (
+    <textarea
+      data-slot="textarea"
+      className={cn(
+        "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Textarea }
+
+```
+
 # eslint.config.mjs
 
 ```mjs
@@ -1040,6 +2240,7 @@ export default nextConfig;
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-tabs": "^1.1.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
@@ -1090,11 +2291,95 @@ This is a file of the type: SVG Image
 
 This is a file of the type: SVG Image
 
+# public\hero_1.png
+
+This is a binary file of the type: Image
+
+# public\hero_2.png
+
+This is a binary file of the type: Image
+
+# public\hero_3.png
+
+This is a binary file of the type: Image
+
+# public\hero_4.png
+
+This is a binary file of the type: Image
+
 # public\hero.jpg
 
 This is a binary file of the type: Image
 
+# public\investment-image-green.jpg
+
+This is a binary file of the type: Image
+
+# public\investment-image.png
+
+This is a binary file of the type: Image
+
+# public\jaworowa-wizualizacja-1.png
+
+This is a binary file of the type: Image
+
+# public\jaworowa-wizualizacja-2.jpg
+
+This is a binary file of the type: Image
+
+# public\jaworowa-wizualizacja-3.png
+
+This is a binary file of the type: Image
+
+# public\jaworowa-wizualizacja-4.png
+
+This is a binary file of the type: Image
+
+# public\jaworowa-wizualizacja-5.jpg
+
+This is a binary file of the type: Image
+
+# public\jaworowa-wizualizacja-6.jpg
+
+This is a binary file of the type: Image
+
+# public\jaworowa-wizualizacja-7.png
+
+This is a binary file of the type: Image
+
+# public\jaworowa-wizualizacja-salon.jpeg
+
+This is a binary file of the type: Image
+
 # public\next.svg
+
+This is a file of the type: SVG Image
+
+# public\plan-parter.png
+
+This is a binary file of the type: Image
+
+# public\plan-pietro.png
+
+This is a binary file of the type: Image
+
+# public\underline_2.svg
+
+This is a file of the type: SVG Image
+
+# public\underline_3.svg
+
+This is a file of the type: SVG Image
+
+# public\underline_4.svg
+
+This is a file of the type: SVG Image
+
+# public\underline_5.svg
+
+This is a file of the type: SVG Image
+
+# public\underline.svg
 
 This is a file of the type: SVG Image
 

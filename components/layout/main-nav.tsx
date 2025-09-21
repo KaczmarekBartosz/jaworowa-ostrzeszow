@@ -13,10 +13,10 @@ import { Menu, Home, X } from "lucide-react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { cn } from "@/lib/utils";
 
+// === OSTATECZNA, POPRAWNA LISTA SEKCJI ===
 const navItems = [
-  { href: "#inwestycja", label: "Inwestycja" },
-  { href: "#domy", label: "Domy" },
-  { href: "#plany", label: "Plany" },
+  { href: "#inwestycja", label: "O Inwestycji" },
+  { href: "#domy", label: "Domy i Plany" }, // Sekcja "Domy" i "Plany" jest teraz jedną o id="domy"
   { href: "#galeria", label: "Galeria" },
   { href: "#lokalizacja", label: "Lokalizacja" },
   { href: "#kontakt", label: "Kontakt" },
@@ -80,7 +80,6 @@ export function MainNav() {
       )}
     >
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between">
-        {/* KONTENER MOBILNY */}
         <div
           className={cn(
             "flex w-full items-center justify-between transition-all duration-300 md:hidden",
@@ -88,7 +87,7 @@ export function MainNav() {
               "rounded-full border bg-background/50 p-2 backdrop-blur-sm"
           )}
         >
-          <div className="flex-1">
+          <div className={cn("flex-1", scrolled && "pl-2")}>
             <Logo />
           </div>
           <div className="flex items-center gap-1">
@@ -149,7 +148,6 @@ export function MainNav() {
           </div>
         </div>
 
-        {/* KONTENER DESKTOPOWY */}
         <div className="hidden w-full items-center justify-between rounded-full border bg-background/50 p-2 pl-8 backdrop-blur-sm md:flex">
           <Logo />
           <nav className="flex gap-x-8">

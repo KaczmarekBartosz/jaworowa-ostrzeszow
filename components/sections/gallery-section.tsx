@@ -53,11 +53,11 @@ export function GallerySection() {
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-3xl">
           <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            Galeria Inwestycji
+            Galeria
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Zobacz, jak może wyglądać Twój nowy dom. Każde zdjęcie to
-            zaproszenie do przyszłości, którą możesz tu stworzyć.
+            Każda wizualizacja przedstawia nie tylko architekturę, ale i
+            atmosferę miejsca, w którym możesz zamieszkać wraz ze swoją rodziną.
           </p>
         </div>
 

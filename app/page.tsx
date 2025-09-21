@@ -2,6 +2,9 @@ import { HeroSection } from "@/components/sections/hero-section";
 import { InvestmentSection } from "@/components/sections/investment-section";
 import { PlansSection } from "@/components/sections/plans-section";
 import { GallerySection } from "@/components/sections/gallery-section";
+import { LocationSection } from "@/components/sections/location-section"; // Import
+import { ContactSection } from "@/components/sections/contact-section"; // Import
+import { Footer } from "@/components/sections/footer";
 
 const PlaceholderSection = ({ id, title }: { id: string; title: string }) => (
   <section
@@ -25,10 +28,10 @@ export default function HomePage() {
       <HeroSection />
       <InvestmentSection />
       <PlansSection />
-      {/* POPRAWKA: Usunięto niepotrzebne propsy 'id' i 'title' */}
       <GallerySection />
-      <PlaceholderSection id="lokalizacja" title="Lokalizacja" />
-      <PlaceholderSection id="kontakt" title="Kontakt" />
+      <LocationSection />
+      <ContactSection />
+      <Footer />
     </main>
   );
 }
