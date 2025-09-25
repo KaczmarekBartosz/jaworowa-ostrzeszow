@@ -76,8 +76,8 @@
   /* === ZIELONY AKCENT W DARK MODE === */
   --primary: oklch(0.55 0.15 150);
   --primary-foreground: oklch(1 0 0);
-  --gradient-from: #34d399; /* emerald-400 */
-  --gradient-to: #065f46; /* emerald-800 */
+  --gradient-from: #1b855e; /* emerald-400 */
+  --gradient-to: #034d38; /* emerald-800 */
 
   --secondary: oklch(0.2 0.015 120);
   --secondary-foreground: oklch(0.95 0.005 120);
