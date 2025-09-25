@@ -149,4 +149,15 @@
       scroll-margin-top: theme(spacing.32);
     }
   }
+  .hero-gradient-overlay {
+    background-image: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.4) 5%,
+      transparent 10%,
+      transparent 70%,
+      rgba(0, 0, 0, 0.4) 85%,
+      rgba(0, 0, 0, 0.8) 100%
+    );
+  }
 }

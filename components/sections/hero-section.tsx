@@ -1,27 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowDown, ChevronRight, Trees } from "lucide-react";
+import { ChevronsDown, ChevronRight, Trees } from "lucide-react";
 
 export function HeroSection() {
   return (
     <section className="relative flex h-[100dvh] flex-col overflow-hidden">
       <Image
-        src="/9s2.jpg"
+        src="/Artboard_2.jpg"
         alt="Nowoczesny dom z przestronnym wnętrzem - Osiedle Dębowy Park"
         fill
         priority
-        className="z-0 object-cover"
+        className="z-0 object-cover object-bottom"
       />
 
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-transparent to-black/60" />
+      <div className="absolute inset-0 z-10 hero-gradient-overlay" />
 
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
-          <h1 className="max-w-3xl mt- p-6 text-3xl font-bold text-white md:text-8xl">
+          <h1 className="max-w-3xl mt-4 p-0 text-3xl text-center font-bold text-white md:text-8xl">
             Osiedle{" "}
             <span className="relative inline-flex">
-              <span className="relative z-10 text-4xl md:text-8xl">
+              <span className="relative z-10 text-5xl text-center md:text-8xl">
                 Dębowy Park
               </span>
               <Image
@@ -36,8 +36,8 @@ export function HeroSection() {
           </h1>
         </div>
 
-        <div className="w-full max-w-md">
-          <p className="text-xl text-foreground md:text-2xl">
+        <div className="w-full p-8 max-w-md mb-80">
+          <p className="text-lg text-center text-foreground md:text-2xl">
             Poznaj wyjątkowe miejsce dla Ciebie i Twojej rodziny.
           </p>
 
@@ -59,8 +59,8 @@ export function HeroSection() {
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2">
-        <ArrowDown className="h-6 w-6 animate-bounce text-foreground" />
+      <div className="absolute bottom-2 left-1/2 z-20 -translate-x-1/2">
+        <ChevronsDown className="h-10 w-10 animate-bounce text-foreground" />
       </div>
     </section>
   );
