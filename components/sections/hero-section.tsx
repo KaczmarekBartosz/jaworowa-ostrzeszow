@@ -7,7 +7,7 @@ export function HeroSection() {
   return (
     <section className="relative flex h-[100dvh] flex-col overflow-hidden">
       <Image
-        src="/2a3.jpg"
+        src="/9s2.jpg"
         alt="Nowoczesny dom z przestronnym wnętrzem - Osiedle Dębowy Park"
         fill
         priority
