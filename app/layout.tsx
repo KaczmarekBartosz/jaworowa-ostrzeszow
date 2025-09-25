@@ -14,9 +14,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// === NOWE, POPRAWNE METADANE ===
 export const metadata = {
-  title: "Jaworowa Ostrzeszów",
-  description: "Perfekcja w prostocie — każdy piksel ma znaczenie.",
+  title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
+  description:
+    "Nowoczesne, kameralne osiedle w Ostrzeszowie. Domy z ogrodem, blisko natury i miasta. Idealna przestrzeń dla Ciebie i Twojej rodziny.",
 };
 
 export default function RootLayout({
@@ -31,7 +33,6 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          // KLUCZOWA ZMIANA: Ustawiamy Dark Mode jako domyślny
           defaultTheme="dark"
           enableSystem
           disableTransitionOnChange

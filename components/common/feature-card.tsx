@@ -1,26 +1,26 @@
-import type { LucideIcon } from "lucide-react";
+"use client";
+
+import { cn } from "@/lib/utils";
 
 interface FeatureCardProps {
-  icon: LucideIcon;
+  children: React.ReactNode; // Prop `icon` został zastąpiony przez `children`
   title: string;
   description: string;
   isHighlighted?: boolean;
 }
 
 export function FeatureCard({
-  icon: Icon,
+  children,
   title,
   description,
   isHighlighted = false,
 }: FeatureCardProps) {
-  const cardClasses = `
-    rounded-3xl p-6 flex flex-col justify-between h-full transition-all duration-300
-    ${
-      isHighlighted
-        ? "bg-gradient-to-br from-[#F53F0F] to-[#F97318] text-primary-foreground"
-        : "bg-card/50 border backdrop-blur-sm hover:bg-card/80"
-    }
-  `;
+  const cardClasses = cn(
+    "rounded-3xl p-6 flex flex-col justify-between h-full transition-all duration-300",
+    isHighlighted
+      ? "bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground"
+      : "bg-card/50 border backdrop-blur-sm hover:bg-card/80"
+  );
 
   return (
     <div className={cardClasses}>
@@ -30,13 +30,8 @@ export function FeatureCard({
         }`}
         aria-hidden="true"
       >
-        <Icon
-          className={`h-6 w-6 ${
-            isHighlighted
-              ? "text-primary-foreground"
-              : "text-secondary-foreground"
-          }`}
-        />
+        {/* Renderujemy przekazaną ikonę */}
+        {children}
       </div>
       <div>
         <p

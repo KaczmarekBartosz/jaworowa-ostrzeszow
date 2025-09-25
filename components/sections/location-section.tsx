@@ -27,8 +27,8 @@ export function LocationSection() {
             <ul className="mt-8 space-y-4">
               {locationFeatures.map((feature, index) => (
                 <li key={index} className="flex items-center gap-3">
-                  {/* POPRAWKA: Ikona jest teraz w gradientowym, okrągłym kontenerze */}
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#F53F0F] to-[#F97318] flex-shrink-0">
+                  {/* === OSTATECZNA POPRAWKA: Używamy zmiennych CSS dla gradientu === */}
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] flex-shrink-0">
                     <feature.icon className="h-5 w-5 text-primary-foreground" />
                   </div>
                   <span className="text-foreground/80">{feature.text}</span>

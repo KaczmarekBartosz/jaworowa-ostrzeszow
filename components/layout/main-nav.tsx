@@ -9,14 +9,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, Home, X } from "lucide-react";
+import { Menu, Trees, X } from "lucide-react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { cn } from "@/lib/utils";
 
 // === OSTATECZNA, POPRAWNA LISTA SEKCJI ===
 const navItems = [
-  { href: "#inwestycja", label: "O Inwestycji" },
-  { href: "#domy", label: "Domy i Plany" }, // Sekcja "Domy" i "Plany" jest teraz jedną o id="domy"
+  { href: "#dlaczego-warto", label: "Dlaczego Warto?" },
+  { href: "#domy", label: "Domy i Plany" },
   { href: "#galeria", label: "Galeria" },
   { href: "#lokalizacja", label: "Lokalizacja" },
   { href: "#kontakt", label: "Kontakt" },
@@ -41,7 +41,7 @@ export function MainNav() {
       className="flex items-center gap-2"
       aria-label="Strona główna"
     >
-      <Home
+      <Trees
         className="size-6 ml-2 text-foreground flex-shrink-0"
         aria-hidden="true"
       />

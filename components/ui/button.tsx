@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -9,17 +8,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // POPRAWKA: Używamy zmiennych CSS dla gradientu
         default:
-          "bg-gradient-to-br from-[#F53F0F] to-[#F97318] text-primary-foreground shadow-xs hover:opacity-90",
+          "bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground shadow-xs hover:opacity-90",
         destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-destructive text-white shadow-xs hover:bg-destructive/90",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
+          "border bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // === NOWY, DEDYKOWANY WARIANT ===
         glass:
           "bg-white/10 text-white border border-white/20 backdrop-blur-sm hover:bg-white/20",
       },

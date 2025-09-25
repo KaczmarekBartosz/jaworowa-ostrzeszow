@@ -10,9 +10,7 @@ import {
   TableHeader,
   TableHead,
 } from "@/components/ui/table";
-import { Home, Zap, Shield } from "lucide-react";
-import { FeatureCard } from "@/components/common/feature-card";
-import { FeatureCarousel } from "@/components/common/feature-carousel";
+import { Maximize, Sofa, BedDouble, CheckCircle2 } from "lucide-react";
 
 const parterRooms = [
   { name: "Przedsionek", area: "4,86 m²" },
@@ -32,15 +30,32 @@ const pietroRooms = [
   { name: "Pokój 2", area: "10,24 m²" },
 ];
 
+// Zmieniamy strukturę, aby łatwiej było stylizować tekst
 const keyFeatures = [
-  { icon: Home, title: "Układ", description: "Funkcjonalny" },
   {
-    icon: Zap,
-    title: "Rozwiązania",
-    description: "Smart Home",
-    isHighlighted: true,
+    icon: Maximize,
+    textStart: "Ponad",
+    textBold: "103 m²",
+    textEnd: "przestrzeni dla Ciebie",
   },
-  { icon: Shield, title: "Okolica", description: "Bezpieczna" },
+  {
+    icon: Sofa,
+    textStart: "Przestronny salon z jadalnią i kuchnią",
+    textBold: "",
+    textEnd: "",
+  },
+  {
+    icon: BedDouble,
+    textStart: "Trzy wygodne sypialnie na piętrze",
+    textBold: "",
+    textEnd: "",
+  },
+  {
+    icon: CheckCircle2,
+    textStart: "Dwie łazienki i dwie garderoby",
+    textBold: "",
+    textEnd: "",
+  },
 ];
 
 export function PlansSection() {
@@ -54,23 +69,29 @@ export function PlansSection() {
         <div className="md:hidden">
           <div className="w-full">
             <h2 className="text-4xl font-bold tracking-tight text-foreground">
-              Idealny układ dla Ciebie i Twojej rodziny
+              Dom zaprojektowany dla Ciebie.
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Każdy segment oferuje ok.{" "}
-              <span className="font-bold text-foreground">103,30 m²</span>{" "}
-              powierzchni użytkowej, zoptymalizowanej do codziennego życia.
+              Odkryj przemyślany układ, który łączy otwartą przestrzeń dzienną z
+              komfortową i prywatną strefą na piętrze.
             </p>
-          </div>
-
-          <div className="mt-12 -mx-6">
-            <FeatureCarousel>
+            <ul className="mt-8 space-y-4">
               {keyFeatures.map((feature, index) => (
-                <FeatureCard key={index} {...feature} />
+                <li key={index} className="flex items-center gap-3">
+                  <feature.icon className="h-6 w-6 text-primary flex-shrink-0" />
+                  <span className="text-foreground/80">
+                    {feature.textStart}{" "}
+                    {feature.textBold && (
+                      <span className="font-bold text-foreground">
+                        {feature.textBold}
+                      </span>
+                    )}{" "}
+                    {feature.textEnd}
+                  </span>
+                </li>
               ))}
-            </FeatureCarousel>
+            </ul>
           </div>
-
           <div className="w-full mt-12">
             <Tabs defaultValue="parter" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
@@ -99,7 +120,6 @@ export function PlansSection() {
               </TabsContent>
             </Tabs>
           </div>
-
           <div className="mt-12">
             <h3 className="text-2xl font-semibold">Szczegółowy metraż</h3>
             <Table className="mt-4">
@@ -164,7 +184,7 @@ export function PlansSection() {
             </div>
             <div className="flex flex-col justify-center">
               <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-                Idealny układ dla Ciebie i Twojej rodziny
+                Dom zaprojektowany dla Ciebie.
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 Każdy segment oferuje ok.{" "}
@@ -173,14 +193,24 @@ export function PlansSection() {
                 przestronny parter dla wspólnego spędzania czasu i wygodne
                 piętro zapewniające prywatność.
               </p>
-              <div className="mt-8 grid grid-cols-3 gap-4">
+              <ul className="mt-8 space-y-4">
                 {keyFeatures.map((feature, index) => (
-                  <FeatureCard key={index} {...feature} />
+                  <li key={index} className="flex items-center gap-3">
+                    <feature.icon className="h-6 w-6 text-primary flex-shrink-0" />
+                    <span className="text-foreground/80">
+                      {feature.textStart}{" "}
+                      {feature.textBold && (
+                        <span className="font-bold text-foreground">
+                          {feature.textBold}
+                        </span>
+                      )}{" "}
+                      {feature.textEnd}
+                    </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
-
           <div className="mt-24">
             <h3 className="text-3xl font-semibold text-center">
               Szczegółowy metraż

@@ -542,7 +542,7 @@ export function GalleryCard({ imageUrl, title, className }: GalleryCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 
           <div className="absolute bottom-0 left-0 p-6 text-left">
-            <h3 className="text-xl font-bold text-white">{title}</h3>
+            <h3 className="text-base font-bold text-white">{title}</h3>
           </div>
 
           <div className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
@@ -827,9 +827,10 @@ import { Textarea } from "@/components/ui/textarea";
 
 export function ContactSection() {
   return (
+    // POPRAWKA: Zmieniono tło na bg-background dla spójności
     <section
       id="kontakt"
-      className="bg-card/50 py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
+      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
     >
       <div className="mx-auto max-w-3xl text-center px-6 md:px-8">
         <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
@@ -886,30 +887,108 @@ export function ContactSection() {
 # components\sections\footer.tsx
 
 ```tsx
-import { Home } from "lucide-react";
+import { Home, Mail, Phone, Instagram, Facebook } from "lucide-react";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 export function Footer() {
   return (
-    <footer className="bg-card py-12">
-      <div className="mx-auto max-w-7xl px-6 md:px-8 text-center">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2"
-          aria-label="Strona główna"
-        >
-          <Home
-            className="size-7 text-foreground flex-shrink-0"
-            aria-hidden="true"
-          />
-          <span className="text-xl font-bold tracking-tight text-foreground">
-            Jaworowa Ostrzeszów
-          </span>
-        </Link>
-        <p className="mt-4 text-muted-foreground">
-          Perfekcja w prostocie — każdy piksel ma znaczenie.
-        </p>
-        <div className="mt-8 text-sm text-muted-foreground">
+    <footer className="bg-card border-t border-border/50">
+      <div className="mx-auto max-w-7xl px-6 py-12 md:px-8 md:py-16">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
+          {/* Kolumna 1: Logo i opis */}
+          <div className="lg:col-span-1">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2"
+              aria-label="Strona główna"
+            >
+              <Home
+                className="size-7 text-foreground flex-shrink-0"
+                aria-hidden="true"
+              />
+              <span className="text-xl font-bold tracking-tight text-foreground">
+                Jaworowa Ostrzeszów
+              </span>
+            </Link>
+            <p className="mt-4 text-muted-foreground max-w-xs">
+              Nowoczesne osiedle domów w zabudowie bliźniaczej, zaprojektowane z
+              myślą o komforcie i harmonii z naturą.
+            </p>
+          </div>
+
+          {/* Kolumna 2 i 3: Linki i kontakt */}
+          <div className="grid grid-cols-2 gap-8 lg:col-span-2 md:grid-cols-3">
+            <div>
+              <h3 className="font-semibold text-foreground">Nawigacja</h3>
+              <ul className="mt-4 space-y-2">
+                <li>
+                  <a
+                    href="#inwestycja"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    O Inwestycji
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#domy"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Domy i Plany
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#galeria"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Galeria
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#lokalizacja"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Lokalizacja
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Kontakt</h3>
+              <ul className="mt-4 space-y-2">
+                <li className="flex items-center gap-2">
+                  <Mail className="size-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">
+                    email@przykład.pl
+                  </span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Phone className="size-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">+48 123 456 789</span>
+                </li>
+              </ul>
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <h3 className="font-semibold text-foreground">Social Media</h3>
+              <div className="mt-4 flex gap-2">
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Instagram className="size-5" />
+                  <span className="sr-only">Instagram</span>
+                </Button>
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Facebook className="size-5" />
+                  <span className="sr-only">Facebook</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Dolna część stopki */}
+        <div className="mt-12 border-t border-border/50 pt-8 text-center text-sm text-muted-foreground">
           © {new Date().getFullYear()} Jaworowa Ostrzeszów. Wszelkie prawa
           zastrzeżone.
         </div>
@@ -930,42 +1009,42 @@ const galleryImages = [
   {
     imageUrl: "/jaworowa-wizualizacja-1.png",
     title: "Dom dla całej rodziny",
-    span: "row-span-2", // Średnia wysokość
+    span: "row-span-1", // Średnia wysokość
   },
   {
     imageUrl: "/jaworowa-wizualizacja-salon.jpeg",
     title: "Wnętrze salonu",
-    span: "row-span-3", // Karta wysoka
+    span: "row-span-2", // Karta wysoka
   },
   {
     imageUrl: "/jaworowa-wizualizacja-3.png",
     title: "Harmonia domu z otaczającą zielenią",
-    span: "row-span-3", // Karta wysoka
+    span: "row-span-2", // Karta wysoka
   },
   {
     imageUrl: "/jaworowa-wizualizacja-4.png",
     title: "Nowoczesna bryła budynku",
-    span: "row-span-2", // Średnia wysokość
+    span: "row-span-1", // Średnia wysokość
   },
   {
     imageUrl: "/jaworowa-wizualizacja-5.jpg",
     title: "Przestronny podjazd z garażem",
-    span: "row-span-2", // Średnia wysokość
+    span: "row-span-1", // Średnia wysokość
   },
   {
     imageUrl: "/jaworowa-wizualizacja-6.jpg",
     title: "Wewnętrzna droga osiedlowa",
-    span: "row-span-3", // Karta wysoka
+    span: "row-span-2", // Karta wysoka
   },
   {
     imageUrl: "/jaworowa-wizualizacja-7.png",
     title: "Eleganckie wejście do domu",
-    span: "row-span-3", // Karta wysoka
+    span: "row-span-2", // Karta wysoka
   },
   {
     imageUrl: "/jaworowa-wizualizacja-2.jpg",
     title: "Widok na całe osiedle z lotu ptaka",
-    span: "row-span-2", // Średnia wysokość
+    span: "row-span-1", // Średnia wysokość
   },
 ];
 
@@ -1243,7 +1322,6 @@ export function LocationSection() {
     >
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16">
-          {/* LEWA KOLUMNA: Informacje */}
           <div className="flex flex-col justify-center">
             <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
               Podmiejska cisza w sercu Ostrzeszowa
@@ -1257,7 +1335,10 @@ export function LocationSection() {
             <ul className="mt-8 space-y-4">
               {locationFeatures.map((feature, index) => (
                 <li key={index} className="flex items-center gap-3">
-                  <feature.icon className="h-6 w-6 text-primary flex-shrink-0" />
+                  {/* POPRAWKA: Ikona jest teraz w gradientowym, okrągłym kontenerze */}
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#F53F0F] to-[#F97318] flex-shrink-0">
+                    <feature.icon className="h-5 w-5 text-primary-foreground" />
+                  </div>
                   <span className="text-foreground/80">{feature.text}</span>
                 </li>
               ))}
@@ -1272,8 +1353,6 @@ export function LocationSection() {
               </div>
             </div>
           </div>
-
-          {/* PRAWA KOLUMNA: Mapa Google */}
           <div className="w-full h-[30rem] md:h-full overflow-hidden rounded-3xl">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.77000570884!2d17.93988067710376!3d51.48110591322285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ab63738128e09%3A0x1d5f1348ca433291!2sJaworowa%2C%2063-500%20Ostrzesz%C3%B3w!5e0!3m2!1spl!2spl!4v1727289650085!5m2!1spl!2spl&styles=roadmap|element:geometry|stylers:color=0x242f3e&styles=roadmap|element:labels.text.fill|stylers:color=0x746855&styles=roadmap|element:labels.text.stroke|stylers:color=0x242f3e&styles=water|element:geometry|stylers:color=0x17263c&styles=water|element:labels.text.fill|stylers:color=0x515c6d&styles=water|element:labels.text.stroke|stylers:color=0x17263c"

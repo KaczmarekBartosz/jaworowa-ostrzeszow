@@ -32,7 +32,7 @@ export function GalleryCard({ imageUrl, title, className }: GalleryCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 
           <div className="absolute bottom-0 left-0 p-6 text-left">
-            <h3 className="text-base font-bold text-white">{title}</h3>
+            <h3 className="text-sm font-bold text-white">{title}</h3>
           </div>
 
           <div className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">

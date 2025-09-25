@@ -1,4 +1,4 @@
-import { Home, Mail, Phone, Instagram, Facebook } from "lucide-react";
+import { Trees, Mail, Phone, Instagram, Facebook } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
@@ -14,12 +14,12 @@ export function Footer() {
               className="inline-flex items-center gap-2"
               aria-label="Strona główna"
             >
-              <Home
+              <Trees
                 className="size-7 text-foreground flex-shrink-0"
                 aria-hidden="true"
               />
               <span className="text-xl font-bold tracking-tight text-foreground">
-                Jaworowa Ostrzeszów
+                Osiedle Dębowy Park
               </span>
             </Link>
             <p className="mt-4 text-muted-foreground max-w-xs">
