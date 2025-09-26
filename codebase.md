@@ -332,13 +332,18 @@ export default function HomePage() {
 ```tsx
 "use client";
 
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface FeatureCardProps {
-  children: React.ReactNode; // Prop `icon` został zastąpiony przez `children`
+  children: React.ReactNode;
   title: string;
   description: string;
   isHighlighted?: boolean;
+  /** NOWE (opcjonalne): ścieżka do PNG z /public */
+  bgSrc?: string;
+  /** NOWE (opcjonalne): dostrajanie klasy PNG */
+  bgClassName?: string;
 }
 
 export function FeatureCard({
@@ -346,39 +351,73 @@ export function FeatureCard({
   title,
   description,
   isHighlighted = false,
+  bgSrc,
+  bgClassName,
 }: FeatureCardProps) {
   const cardClasses = cn(
-    "rounded-3xl p-6 flex flex-col justify-between h-full transition-all duration-300",
+    "relative overflow-hidden rounded-3xl p-6 flex flex-col justify-between h-full transition-all duration-300",
     isHighlighted
       ? "bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground"
       : "bg-card/50 border backdrop-blur-sm hover:bg-card/80"
   );
 
+  // jeśli mamy overlay po prawej, dołóż oddech z prawej strony pod tekst
+  const contentClasses = cn(
+    "relative z-10",
+    bgSrc ? "pr-16 md:pr-20" : "" // zapobiega 'zjadaniu' tekstu przez PNG
+  );
+
   return (
     <div className={cardClasses}>
+      {/* OVERLAY PNG po prawej (dekoracja) */}
+      {bgSrc && (
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 flex items-center justify-end pr-3 md:pr-4"
+          aria-hidden="true"
+        >
+          {/* 96x96 ~ h-24; możesz podnieść na md */}
+          <Image
+            src={bgSrc}
+            alt=""
+            width={96}
+            height={96}
+            loading="lazy"
+            className={cn(
+              "opacity-25 md:opacity-30 drop-shadow-sm object-contain",
+              isHighlighted && "opacity-35",
+              bgClassName
+            )}
+          />
+        </div>
+      )}
+
+      {/* Ikona-lekko w tle jak u Ciebie */}
       <div
-        className={`relative flex h-12 w-12 items-center justify-center rounded-full ${
+        className={cn(
+          "relative flex h-12 w-12 items-center justify-center rounded-full",
           isHighlighted ? "bg-white/10" : "bg-secondary"
-        }`}
+        )}
         aria-hidden="true"
       >
-        {/* Renderujemy przekazaną ikonę */}
         {children}
       </div>
-      <div>
+
+      <div className={contentClasses}>
         <p
-          className={`mt-4 text-sm ${
+          className={cn(
+            "mt-4 text-sm",
             isHighlighted
               ? "text-primary-foreground/80"
               : "text-muted-foreground"
-          }`}
+          )}
         >
           {title}
         </p>
         <p
-          className={`text-xl font-bold ${
+          className={cn(
+            "text-xl font-bold",
             isHighlighted ? "" : "text-foreground"
-          }`}
+          )}
         >
           {description}
         </p>
@@ -1092,72 +1131,303 @@ export function GallerySection() {
 
 ```
 
+# components\sections\hero-section copy.tsx
+
+```tsx
+"use client";
+
+import Image from "next/image";
+import { ChevronRight, ChevronsDown } from "lucide-react";
+import * as React from "react";
+
+/**
+ * Alt Hero v2
+ * - MOBILE: odtwarza układ ze screena (centrowanie, duże CTA-pill, ten sam rytm pionowy)
+ * - DESKTOP: pełnoekranowe tło + pływający panel "glass" wyrównany do lewej krawędzi kontenera (jak nawigacja)
+ * - "Dębowy Park" w jednej linii na md+
+ */
+export function HeroSection() {
+  const onScroll = React.useCallback((id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    el.scrollIntoView({
+      behavior: reduced ? ("auto" as ScrollBehavior) : "smooth",
+      block: "start",
+    });
+  }, []);
+
+  return (
+    <section
+      id="hero"
+      className="relative isolate flex min-h-[100svh] w-full items-stretch overflow-hidden"
+    >
+      {/* FULL-BLEED BG */}
+      <Image
+        src="/Artboard_2.jpg"
+        alt="Nowoczesny dom w otoczeniu zieleni – Osiedle Dębowy Park"
+        fill
+        priority
+        className="-z-10 object-cover object-bottom"
+        sizes="100vw"
+        quality={80}
+      />
+      {/* Readability helpers */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(0,0,0,0.45),transparent_55%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
+        aria-hidden
+      />
+
+      {/* CONTENT CONTAINER — aligns with site nav */}
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center">
+        <div className="container mx-auto grid w-full grid-cols-1 px-4 sm:px-6 md:px-8 lg:px-12 md:grid-cols-12 md:gap-8">
+          {/* FLOATING GLASS PANEL (desktop), mobile stays transparent */}
+          <div className="md:col-span-7 lg:col-span-6">
+            <div className="mb-50 rounded-[2rem] bg-black/0 p-[clamp(2.5rem,3vw,1.5rem)] backdrop-blur-0 md:bg-black/35 md:p-8 md:shadow-[0_20px_70px_rgba(0,0,0,0.45)] md:backdrop-blur-md">
+              {/* Heading */}
+              <h1 className="text-center font-extrabold text-white md:text-left">
+                <span className="block text-[clamp(1.375rem,2.5vw,1.875rem)] tracking-tight text-white/90">
+                  Osiedle
+                </span>
+                <span className="relative inline-block md:whitespace-nowrap">
+                  <span className="relative z-10 block text-[clamp(2.5rem,6vw,4rem)] leading-[0.95] tracking-tight">
+                    Dębowy Park
+                  </span>
+                  <Image
+                    src="/underline-gradient-green.svg"
+                    alt=""
+                    width={760}
+                    height={40}
+                    className="pointer-events-none absolute -bottom-2 left-0 w-full select-none md:-bottom-3"
+                    aria-hidden
+                  />
+                </span>
+              </h1>
+
+              {/* Lead */}
+              <p className="mx-auto mt-6 max-w-prose text-center text-[clamp(1rem,1.6vw,1.25rem)] leading-relaxed text-white/90 md:text-left">
+                Poznaj wyjątkowe miejsce dla Ciebie i Twojej rodziny.
+              </p>
+
+              {/* CTA pill (faithful to mobile look) */}
+              <div className="mx-auto mt-8 max-w-[32rem] md:mx-0">
+                <button
+                  type="button"
+                  onClick={() => onScroll("dlaczego-warto")}
+                  className="group flex w-full items-center justify-between rounded-full border border-white/15 bg-white/10 px-2 py-2 backdrop-blur-sm transition-all duration-300 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                >
+                  <span className="pl-6 text-[clamp(1.05rem,1.6vw,1.25rem)] font-medium text-white">
+                    Dowiedz się więcej
+                  </span>
+                  <span className="mr-1 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] transition-transform duration-300 group-hover:scale-110">
+                    <ChevronRight className="h-6 w-6 text-white" aria-hidden />
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden md:col-span-5 lg:col-span-6 md:block" />
+        </div>
+      </div>
+
+      {/* Mobile-only extra spacer to keep dolna część zdjęcia widoczna jak na screenie */}
+      <div className="h-[12vh] md:hidden" aria-hidden />
+
+      {/* Scroll cue */}
+      <div
+        className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2"
+        aria-hidden
+      >
+        <ChevronsDown className="h-10 w-10 animate-bounce text-white/90" />
+      </div>
+    </section>
+  );
+}
+
+```
+
 # components\sections\hero-section.tsx
 
 ```tsx
 "use client";
 
 import Image from "next/image";
-import { ChevronsDown, ChevronRight, Trees } from "lucide-react";
+import { ChevronRight, ChevronsDown } from "lucide-react";
+import * as React from "react";
 
+/**
+ * Alt Hero v7 — HIGH on mobile, LOWER on desktop
+ * - MOBILE (<= md-1): content pushed UP via 3-row grid (1.7fr / auto / 0.8fr)
+ * - DESKTOP (md+): content panel lowered using a page-high grid (1fr / auto / 1.6fr)
+ *   Panel stays left-aligned with nav/container; "Dębowy Park" stays on one line.
+ */
 export function HeroSection() {
+  const onScroll = React.useCallback((id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    el.scrollIntoView({
+      behavior: reduced ? ("auto" as ScrollBehavior) : "smooth",
+      block: "start",
+    });
+  }, []);
+
   return (
-    <section className="relative flex h-[100dvh] flex-col overflow-hidden">
+    <section
+      id="hero"
+      className="relative isolate min-h-[100svh] w-full overflow-hidden"
+    >
+      {/* FULL-BLEED BG */}
       <Image
         src="/Artboard_2.jpg"
-        alt="Nowoczesny dom z przestronnym wnętrzem - Osiedle Dębowy Park"
+        alt="Nowoczesny dom w otoczeniu zieleni – Osiedle Dębowy Park"
         fill
         priority
-        className="z-0 object-cover object-bottom"
+        className="-z-10 object-cover object-bottom"
+        sizes="100vw"
+        quality={80}
       />
 
-      <div className="absolute inset-0 z-10 hero-gradient-overlay" />
+      {/* Contrast helpers */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-2/5 bg-gradient-to-b from-background/80 via-background/20 to-transparent"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/5 bg-gradient-to-t from-background via-background/20 to-transparent"
+        aria-hidden
+      />
 
-      <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
-        <div>
-          <h1 className="max-w-3xl mt-4 p-0 text-3xl text-center font-bold text-white md:text-8xl">
-            Osiedle{" "}
-            <span className="relative inline-flex">
-              <span className="relative z-10 text-5xl text-center md:text-8xl">
-                Dębowy Park
-              </span>
-              <Image
-                src="/underline-gradient-green.svg"
-                alt=""
-                width={250}
-                height={20}
-                className="absolute -bottom-2 left-0 w-full md:-bottom-3"
-                aria-hidden="true"
-              />
-            </span>
-          </h1>
-        </div>
+      {/* ================= MOBILE (HIGH) ================= */}
+      <div className="relative z-10 block md:hidden">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
+          {/* Push content up: bigger top spring */}
+          <div className="grid h-[100svh] grid-rows-[0.3fr_auto_0.8fr]">
+            <div />
 
-        <div className="w-full p-8 max-w-md mb-80">
-          <p className="text-lg text-center text-foreground md:text-2xl">
-            Poznaj wyjątkowe miejsce dla Ciebie i Twojej rodziny.
-          </p>
+            <div className="rounded-[2rem] bg-black/0 p-6 backdrop-blur-0">
+              <h1 className="text-center font-extrabold text-white">
+                <span className="block text-[1.375rem] tracking-tight text-white/90">
+                  Osiedle
+                </span>
+                <span className="relative inline-block">
+                  <span className="relative z-10 block text-[2.5rem] leading-[0.95] tracking-tight">
+                    Dębowy Park
+                  </span>
+                  <Image
+                    src="/underline-gradient-green.svg"
+                    alt=""
+                    width={760}
+                    height={40}
+                    className="pointer-events-none absolute -bottom-2 left-0 w-full select-none"
+                    aria-hidden
+                  />
+                </span>
+              </h1>
 
-          <button
-            onClick={() =>
-              document
-                .querySelector("#dlaczego-warto")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="group mb-24 mt-8 flex w-full items-center justify-between rounded-full bg-secondary/50 p-2 text-left transition-all duration-300 hover:bg-secondary/80 border backdrop-blur-sm"
-          >
-            <span className="pl-6 text-lg font-medium text-foreground">
-              Dowiedz się więcej
-            </span>
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] transition-transform duration-300 group-hover:scale-110">
-              <ChevronRight className="h-6 w-6 text-primary-foreground" />
+              <p className="mx-auto mt-6 max-w-prose text-center text-[1rem] leading-relaxed text-white/90">
+                Poznaj wyjątkowe miejsce dla Ciebie i Twojej rodziny.
+              </p>
+
+              <div className="mx-auto mt-8 max-w-[32rem]">
+                <button
+                  type="button"
+                  onClick={() => onScroll("dlaczego-warto")}
+                  className="group flex w-full items-center justify-between rounded-full border border-white/15 bg-white/10 px-2 py-2 backdrop-blur-sm transition-all duration-300 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                >
+                  <span className="pl-6 text-[1.05rem] font-medium text-white">
+                    Dowiedz się więcej
+                  </span>
+                  <span className="mr-1 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] transition-transform duration-300 group-hover:scale-110">
+                    <ChevronRight className="h-6 w-6 text-white" aria-hidden />
+                  </span>
+                </button>
+              </div>
             </div>
-          </button>
+
+            <div />
+          </div>
         </div>
       </div>
 
-      <div className="absolute bottom-2 left-1/2 z-20 -translate-x-1/2">
-        <ChevronsDown className="h-10 w-10 animate-bounce text-foreground" />
+      {/* ================= DESKTOP (LOW) ================= */}
+      <div className="relative z-10 hidden md:block">
+        <div className="mx-auto w-full max-w-7xl">
+          {/* Full-height grid lowers the panel */}
+          <div className="container mx-auto grid h-[100svh] grid-rows-[1fr_auto_1.6fr] grid-cols-12 gap-8 px-8 lg:px-12">
+            {/* row 1 spacer across all cols */}
+            <div className="col-span-12" />
+
+            {/* row 2 content */}
+            <div className="col-span-7 lg:col-span-6">
+              <div className="rounded-[2rem] bg-black/35 p-8 shadow-[0_20px_70px_rgba(0,0,0,0.45)] backdrop-blur-md">
+                <h1 className="text-left font-extrabold text-white">
+                  <span className="block text-3xl tracking-tight text-white/90">
+                    Osiedle
+                  </span>
+                  <span className="relative mt-1 inline-block whitespace-wrap">
+                    <span className="relative z-10 block text-[clamp(3rem,6vw,4rem)] leading-[0.95] tracking-tight">
+                      Dębowy Park
+                    </span>
+                    <Image
+                      src="/underline-gradient-green.svg"
+                      alt=""
+                      width={760}
+                      height={40}
+                      className="pointer-events-none absolute -bottom-3 left-0 w-full select-none"
+                      aria-hidden
+                    />
+                  </span>
+                </h1>
+
+                <p className="mt-6 max-w-prose text-left text-xl leading-relaxed text-white/90">
+                  Poznaj wyjątkowe miejsce dla Ciebie i Twojej rodziny.
+                </p>
+
+                <div className="mt-8 max-w-[32rem]">
+                  <button
+                    type="button"
+                    onClick={() => onScroll("dlaczego-warto")}
+                    className="group inline-flex w-full items-center justify-between rounded-full border border-white/15 bg-white/10 px-2 py-2 backdrop-blur-sm transition-all duration-300 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+                  >
+                    <span className="pl-6 text-lg font-medium text-white">
+                      Dowiedz się więcej
+                    </span>
+                    <span className="mr-1 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] transition-transform duration-300 group-hover:scale-110">
+                      <ChevronRight
+                        className="h-6 w-6 text-white"
+                        aria-hidden
+                      />
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* row 2 empty right area for alignment */}
+            <div className="col-span-5 lg:col-span-6" />
+
+            {/* row 3 spacer */}
+            <div className="col-span-12" />
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll cue (shared) */}
+      <div
+        className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2"
+        aria-hidden
+      >
+        <ChevronsDown className="h-10 w-10 animate-bounce text-foreground/90" />
       </div>
     </section>
   );
@@ -1180,21 +1450,25 @@ const features = [
     title: "Harmonia z naturą",
     description: "Prywatny ogród i dużo zieleni",
     isHighlighted: true,
+    bgSrc: "/icons/ogrod.png",
   },
   {
     icon: <Home className="size-6 text-secondary-foreground" />,
     title: "Dla Twojej wygody",
     description: "Przemyślany układ",
+    bgSrc: "/icons/uklad.png",
   },
   {
     icon: <Shield className="size-6 text-secondary-foreground" />,
     title: "Dla Twojego spokoju",
     description: "Kameralne i bezpieczne osiedle",
+    bgSrc: "/icons/bezpieczenstwo.png",
   },
   {
     icon: <MapPin className="size-6 text-secondary-foreground" />,
     title: "Dla oszczędności Twojego czasu",
     description: "Blisko miasta",
+    bgSrc: "/icons/bliskosc.png",
   },
 ];
 
@@ -1221,6 +1495,7 @@ export function InvestmentSection() {
               title={feature.title}
               description={feature.description}
               isHighlighted={feature.isHighlighted}
+              bgSrc={feature.bgSrc}
             >
               {feature.icon}
             </FeatureCard>
@@ -1236,6 +1511,7 @@ export function InvestmentSection() {
             title={feature.title}
             description={feature.description}
             isHighlighted={feature.isHighlighted}
+            bgSrc={feature.bgSrc}
           >
             {feature.icon}
           </FeatureCard>
@@ -1254,9 +1530,10 @@ export function InvestmentSection() {
             <Image
               src="/investment-image.png"
               alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
-              width={1200}
-              height={800}
-              className="transition-transform duration-300 hover:scale-105"
+              fill
+              sizes="100vw"
+              loading="lazy"
+              className="object-cover transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
             />
           </div>
           <p className="text-lg leading-relaxed text-muted-foreground">
@@ -1266,11 +1543,12 @@ export function InvestmentSection() {
           </p>
           <div className="overflow-hidden rounded-3xl">
             <Image
-              src="/investment-image-green.jpg"
-              alt="Wizualizacja osiedla Domy z Przyszłością z dużą ilością zieleni"
-              width={1200}
-              height={800}
-              className="transition-transform duration-300 hover:scale-105"
+              src="/3s2.jpg"
+              alt="Wizualizacja osiedla w otoczeniu zieleni"
+              fill
+              sizes="100vw"
+              loading="lazy"
+              className="object-cover transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
             />
           </div>
         </div>
@@ -1288,7 +1566,7 @@ export function InvestmentSection() {
             </p>
             <div className="overflow-hidden rounded-3xl mt-auto">
               <Image
-                src="/investment-image.png"
+                src="/jaworowa-wizualizacja-4.png"
                 alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
                 width={1200}
                 height={800}
@@ -1299,7 +1577,7 @@ export function InvestmentSection() {
           <div className="space-y-8 flex flex-col">
             <div className="overflow-hidden rounded-3xl">
               <Image
-                src="/investment-image-green.jpg"
+                src="/3s2.jpg"
                 alt="Wizualizacja osiedla Domy z Przyszłością z dużą ilością zieleni"
                 width={1200}
                 height={800}
@@ -2589,6 +2867,22 @@ This is a binary file of the type: Image
 This is a binary file of the type: Image
 
 # public\hero.jpg
+
+This is a binary file of the type: Image
+
+# public\icons\bezpieczenstwo.png
+
+This is a binary file of the type: Image
+
+# public\icons\bliskosc.png
+
+This is a binary file of the type: Image
+
+# public\icons\ogrod.png
+
+This is a binary file of the type: Image
+
+# public\icons\uklad.png
 
 This is a binary file of the type: Image
 

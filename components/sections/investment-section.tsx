@@ -10,21 +10,25 @@ const features = [
     title: "Harmonia z naturą",
     description: "Prywatny ogród i dużo zieleni",
     isHighlighted: true,
+    bgSrc: "/icons/ogrod.png",
   },
   {
     icon: <Home className="size-6 text-secondary-foreground" />,
     title: "Dla Twojej wygody",
     description: "Przemyślany układ",
+    bgSrc: "/icons/uklad.png",
   },
   {
     icon: <Shield className="size-6 text-secondary-foreground" />,
     title: "Dla Twojego spokoju",
     description: "Kameralne i bezpieczne osiedle",
+    bgSrc: "/icons/bezpieczenstwo.png",
   },
   {
     icon: <MapPin className="size-6 text-secondary-foreground" />,
-    title: "Dla oszczędności Twojego czasu",
+    title: "Dla oszczędności czasu",
     description: "Blisko miasta",
+    bgSrc: "/icons/bliskosc.png",
   },
 ];
 
@@ -51,6 +55,7 @@ export function InvestmentSection() {
               title={feature.title}
               description={feature.description}
               isHighlighted={feature.isHighlighted}
+              bgSrc={feature.bgSrc}
             >
               {feature.icon}
             </FeatureCard>
@@ -66,6 +71,7 @@ export function InvestmentSection() {
             title={feature.title}
             description={feature.description}
             isHighlighted={feature.isHighlighted}
+            bgSrc={feature.bgSrc}
           >
             {feature.icon}
           </FeatureCard>
@@ -81,13 +87,16 @@ export function InvestmentSection() {
             budownictwa, tworząc solidne fundamenty dla Ciebie i Twojej rodziny.
           </p>
           <div className="overflow-hidden rounded-3xl">
-            <Image
-              src="/investment-image.png"
-              alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
-              width={1200}
-              height={800}
-              className="transition-transform duration-300 hover:scale-105"
-            />
+            <div className="relative w-full aspect-[3/2]">
+              <Image
+                src="/investment-image.png"
+                alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
+                fill
+                sizes="100vw"
+                loading="lazy"
+                className="object-cover transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
+              />
+            </div>
           </div>
           <p className="text-lg leading-relaxed text-muted-foreground">
             Naszą ambicją było stworzenie osiedla, które nie tylko zachwyca
@@ -95,13 +104,16 @@ export function InvestmentSection() {
             komfort w codziennym życiu.
           </p>
           <div className="overflow-hidden rounded-3xl">
-            <Image
-              src="/investment-image-green.jpg"
-              alt="Wizualizacja osiedla Domy z Przyszłością z dużą ilością zieleni"
-              width={1200}
-              height={800}
-              className="transition-transform duration-300 hover:scale-105"
-            />
+            <div className="relative w-full aspect-[3/2]">
+              <Image
+                src="/3s2.jpg"
+                alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
+                fill
+                sizes="100vw"
+                loading="lazy"
+                className="object-cover transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -118,7 +130,7 @@ export function InvestmentSection() {
             </p>
             <div className="overflow-hidden rounded-3xl mt-auto">
               <Image
-                src="/investment-image.png"
+                src="/jaworowa-wizualizacja-4.png"
                 alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
                 width={1200}
                 height={800}
@@ -129,7 +141,7 @@ export function InvestmentSection() {
           <div className="space-y-8 flex flex-col">
             <div className="overflow-hidden rounded-3xl">
               <Image
-                src="/investment-image-green.jpg"
+                src="/3s2.jpg"
                 alt="Wizualizacja osiedla Domy z Przyszłością z dużą ilością zieleni"
                 width={1200}
                 height={800}
