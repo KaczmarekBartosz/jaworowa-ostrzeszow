@@ -6,9 +6,9 @@ import * as React from "react";
 
 /**
  * Alt Hero v7 — HIGH on mobile, LOWER on desktop
- * - MOBILE (<= md-1): content pushed UP via 3-row grid (1.7fr / auto / 0.8fr)
- * - DESKTOP (md+): content panel lowered using a page-high grid (1fr / auto / 1.6fr)
- *   Panel stays left-aligned with nav/container; "Dębowy Park" stays on one line.
+ * - MOBILE (<= md-1): 0.3fr / auto / 0.8fr (treść wyżej)
+ * - DESKTOP (md+): 1fr / auto / 1.6fr (panel niżej)
+ * - OSOBNE TŁA: full-bleed na poziomie sekcji (bez max-w ograniczeń)
  */
 export function HeroSection() {
   const onScroll = React.useCallback((id: string) => {
@@ -28,31 +28,45 @@ export function HeroSection() {
       id="hero"
       className="relative isolate min-h-[100svh] w-full overflow-hidden"
     >
-      {/* FULL-BLEED BG */}
-      <Image
-        src="/Artboard_2.jpg"
-        alt="Nowoczesny dom w otoczeniu zieleni – Osiedle Dębowy Park"
-        fill
-        priority
-        className="-z-10 object-cover object-bottom"
-        sizes="100vw"
-        quality={80}
-      />
+      {/* ====== TŁA FULL-BLEED (poziom sekcji) ====== */}
+      {/* MOBILE BG */}
+      <div className="absolute inset-0 -z-20 md:hidden">
+        <Image
+          src="/Artboard_2.jpg"
+          alt="Nowoczesny dom – mobile"
+          fill
+          priority
+          className="object-cover object-bottom"
+          sizes="100vw"
+          quality={80}
+        />
+      </div>
 
-      {/* Contrast helpers */}
+      {/* DESKTOP BG */}
+      <div className="absolute inset-0 -z-20 hidden md:block">
+        <Image
+          src="/Hero.jpg" // Twój obraz desktop
+          alt="Nowoczesny dom – desktop"
+          fill
+          className="object-cover object-bottom"
+          sizes="100vw"
+          quality={100}
+        />
+      </div>
+
+      {/* OVERLAYE (wspólne, też względem sekcji) */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-2/5 bg-gradient-to-b from-background/80 via-background/20 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-2/5 bg-gradient-to-b from-background/80 via-background/20 to-transparent"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/5 bg-gradient-to-t from-background via-background/20 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/5 bg-gradient-to-t from-background via-background/20 to-transparent"
         aria-hidden
       />
 
       {/* ================= MOBILE (HIGH) ================= */}
       <div className="relative z-10 block md:hidden">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-          {/* Push content up: bigger top spring */}
           <div className="grid h-[100svh] grid-rows-[0.3fr_auto_0.8fr]">
             <div />
 
@@ -104,19 +118,16 @@ export function HeroSection() {
       {/* ================= DESKTOP (LOW) ================= */}
       <div className="relative z-10 hidden md:block">
         <div className="mx-auto w-full max-w-7xl">
-          {/* Full-height grid lowers the panel */}
           <div className="container mx-auto grid h-[100svh] grid-rows-[1fr_auto_1.6fr] grid-cols-12 gap-8 px-8 lg:px-12">
-            {/* row 1 spacer across all cols */}
             <div className="col-span-12" />
 
-            {/* row 2 content */}
             <div className="col-span-7 lg:col-span-6">
               <div className="rounded-[2rem] bg-black/35 p-8 shadow-[0_20px_70px_rgba(0,0,0,0.45)] backdrop-blur-md">
                 <h1 className="text-left font-extrabold text-white">
                   <span className="block text-3xl tracking-tight text-white/90">
                     Osiedle
                   </span>
-                  <span className="relative mt-1 inline-block whitespace-wrap">
+                  <span className="relative mt-1 inline-block whitespace-nowrap">
                     <span className="relative z-10 block text-[clamp(3rem,6vw,4rem)] leading-[0.95] tracking-tight">
                       Dębowy Park
                     </span>
@@ -155,10 +166,9 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* row 2 empty right area for alignment */}
+            {/* prawa kolumna pusta dla alignmentu */}
             <div className="col-span-5 lg:col-span-6" />
 
-            {/* row 3 spacer */}
             <div className="col-span-12" />
           </div>
         </div>
