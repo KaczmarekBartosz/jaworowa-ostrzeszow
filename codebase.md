@@ -364,7 +364,7 @@ export function FeatureCard({
   // jeśli mamy overlay po prawej, dołóż oddech z prawej strony pod tekst
   const contentClasses = cn(
     "relative z-10",
-    bgSrc ? "pr-16 md:pr-20" : "" // zapobiega 'zjadaniu' tekstu przez PNG
+    bgSrc ? "pr-12 md:pr-18" : "" // zapobiega 'zjadaniu' tekstu przez PNG
   );
 
   return (
@@ -372,19 +372,19 @@ export function FeatureCard({
       {/* OVERLAY PNG po prawej (dekoracja) */}
       {bgSrc && (
         <div
-          className="pointer-events-none absolute inset-y-0 right-0 flex items-center justify-end pr-3 md:pr-4"
+          className="pointer-events-none absolute top-0 right-0 pr-3 md:pr-4 pt-3 md:pt-4"
           aria-hidden="true"
         >
           {/* 96x96 ~ h-24; możesz podnieść na md */}
           <Image
             src={bgSrc}
             alt=""
-            width={96}
-            height={96}
+            width={120}
+            height={120}
             loading="lazy"
             className={cn(
-              "opacity-25 md:opacity-30 drop-shadow-sm object-contain",
-              isHighlighted && "opacity-35",
+              "opacity-100 md:opacity-100 drop-shadow-xl object-contain",
+              isHighlighted && "opacity-100",
               bgClassName
             )}
           />
@@ -577,6 +577,260 @@ export function GalleryCard({ imageUrl, title, className }: GalleryCardProps) {
         />
       </DialogContent>
     </Dialog>
+  );
+}
+
+```
+
+# components\common\gallery-stack-mobile.tsx
+
+```tsx
+"use client";
+
+import * as React from "react";
+import Image from "next/image";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useReducedMotion,
+} from "framer-motion";
+import { X, ChevronRight, Pointer } from "lucide-react";
+
+type Item = { imageUrl: string; title: string };
+
+export function GalleryStackMobile({ items }: { items: Item[] }) {
+  const [queue, setQueue] = React.useState(items);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  const x = useMotionValue(0);
+  const prefersReduced = useReducedMotion();
+  const threshold = 120;
+
+  // Twoje warstwy z „peekiem”
+  const layers = [
+    { scale: 1, y: 0, x: 0, rot: 0, z: 30, opacity: 1 }, // TOP
+    { scale: 0.97, y: -5, x: 15, rot: 5, z: 20, opacity: 0.95 }, // MID (w prawo)
+    { scale: 0.94, y: 10, x: -10, rot: -8, z: 10, opacity: 0.9 }, // BACK (w lewo)
+  ] as const;
+
+  const onDragEnd = (
+    _: any,
+    info: { offset: { x: number }; velocity: { x: number } }
+  ) => {
+    const power = Math.abs(info.offset.x) + Math.abs(info.velocity.x) * 0.2;
+    if (power > threshold) {
+      setQueue((q) => {
+        const [first, ...rest] = q;
+        return [...rest, first];
+      });
+      x.set(0);
+    }
+  };
+
+  const visible = queue.slice(0, 3);
+
+  const openLightbox = () => {
+    setActiveIndex(0);
+    setIsOpen(true);
+  };
+  const closeLightbox = () => setIsOpen(false);
+
+  const next = () => {
+    setQueue((q) => {
+      const [first, ...rest] = q;
+      return [...rest, first];
+    });
+    setActiveIndex(0);
+  };
+  const prev = () => {
+    setQueue((q) => {
+      const last = q[q.length - 1];
+      const rest = q.slice(0, -1);
+      return [last, ...rest];
+    });
+    setActiveIndex(0);
+  };
+
+  // ---- Hint animowany: eliptyczny tor + fade in/out w pętli ----
+  // Sekwencje x/y tworzą delikatną elipsę (prawo-góra-prawo-dół-powrót)
+  const hintX = [0, 12, 24, 36, 50, 62, 50, 36, 24, 12, 0];
+  const hintY = [0, -6, -10, -12, -10, 0, 8, 12, 8, 2, 0];
+
+  // Gdy włączony lightbox – nie pokazujemy hinta
+  const showHint = !isOpen && !prefersReduced;
+
+  return (
+    <>
+      {/* STOS KART */}
+      <div className="relative mx-auto w-full max-w-md">
+        <div className="relative h-[64vh] min-h-[420px] w-full">
+          <AnimatePresence initial={false}>
+            {visible.map((item, i) => {
+              const isTop = i === 0;
+              const L = layers[i];
+              return (
+                <motion.div
+                  key={item.imageUrl + i}
+                  className="absolute inset-0"
+                  style={{ zIndex: L.z }}
+                  initial={{ scale: 0.92, opacity: 0, y: -10 }}
+                  animate={{
+                    scale: L.scale,
+                    y: L.y,
+                    x: L.x,
+                    rotate: L.rot,
+                    opacity: L.opacity,
+                  }}
+                  exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 28 }}
+                >
+                  <motion.div
+                    drag={isTop ? "x" : false}
+                    dragElastic={0.15}
+                    dragConstraints={{ left: 0, right: 0 }}
+                    style={isTop ? { x } : undefined}
+                    onDragEnd={isTop ? onDragEnd : undefined}
+                    whileTap={isTop ? { cursor: "grabbing" } : {}}
+                    className="relative h-full w-full select-none"
+                  >
+                    <button
+                      type="button"
+                      onClick={openLightbox}
+                      className="absolute inset-0 overflow-hidden rounded-3xl shadow-xl"
+                      aria-label={`Otwórz „${item.title}” w pełnym ekranie`}
+                    >
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.title}
+                        fill
+                        sizes="100vw"
+                        className="object-cover"
+                        priority={isTop}
+                      />
+                      {/* winieta + tytuł */}
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-4">
+                        <div className="rounded-2xl bg-black/45 px-4 py-3 backdrop-blur">
+                          <p className="text-base font-medium text-white">
+                            {item.title}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+
+          {/* ANIMOWANY HINT „SWIPE” – pętla: fade in → ruch po elipsie → fade out → powrót */}
+          <AnimatePresence>
+            {showHint && (
+              <motion.div
+                className="pointer-events-none absolute -bottom-10 left-1/2 -translate-x-1/2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 1, 1, 0] }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  duration: 3.6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  times: [0, 0.08, 0.85, 1],
+                }}
+              >
+                <div className="relative h-10 w-28">
+                  {/* tor ruchu */}
+                  <motion.div
+                    className="absolute top-1/2 left-6 -translate-y-1/2"
+                    animate={{ x: hintX, y: hintY }}
+                    transition={{
+                      duration: 2.8,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Pointer className="h-5 w-5 text-muted-foreground" />
+                      <ChevronRight className="h-4 w-4 text-muted-foreground/80" />
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* LIGHTBOX (pełny ekran) */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            aria-modal="true"
+            role="dialog"
+            onClick={closeLightbox}
+          >
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center p-4"
+              initial={{ scale: 0.96 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.98 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative aspect-[3/2] w-full max-w-[92vw] max-h-[80vh]">
+                <Image
+                  src={queue[activeIndex].imageUrl}
+                  alt={queue[activeIndex].title}
+                  fill
+                  sizes="100vw"
+                  className="object-contain"
+                  priority
+                />
+              </div>
+
+              {/* Sterowanie w lightboxie */}
+              <div className="pointer-events-none absolute inset-x-0 bottom-4 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prev();
+                  }}
+                  className="pointer-events-auto rounded-full bg-white/10 px-3 py-2 text-white backdrop-blur hover:bg-white/15"
+                >
+                  Poprzednie
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    next();
+                  }}
+                  className="pointer-events-auto rounded-full bg-white/10 px-3 py-2 text-white backdrop-blur hover:bg-white/15"
+                >
+                  Następne
+                </button>
+              </div>
+
+              {/* Zamknij */}
+              <button
+                type="button"
+                onClick={closeLightbox}
+                className="absolute right-3 top-3 rounded-full bg-white/10 p-2 text-white backdrop-blur hover:bg-white/20"
+                aria-label="Zamknij podgląd"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -1051,49 +1305,51 @@ export function ContactSection() {
 # components\sections\gallery-section.tsx
 
 ```tsx
-import { GalleryCard } from "@/components/common/gallery-card";
+"use client";
 
-// POPRAWKA: Zaktualizowano wartości 'span' dla uzyskania nieregularnego układu
+import { GalleryCard } from "@/components/common/gallery-card";
+import { GalleryStackMobile } from "@/components/common/gallery-stack-mobile";
+
 const galleryImages = [
   {
     imageUrl: "/jaworowa-wizualizacja-1.png",
     title: "Dom dla całej rodziny",
-    span: "row-span-1", // Średnia wysokość
+    span: "row-span-1",
   },
   {
     imageUrl: "/jaworowa-wizualizacja-salon.jpeg",
     title: "Wnętrze salonu",
-    span: "row-span-2", // Karta wysoka
+    span: "row-span-2",
   },
   {
     imageUrl: "/jaworowa-wizualizacja-3.png",
     title: "Harmonia domu z otaczającą zielenią",
-    span: "row-span-2", // Karta wysoka
+    span: "row-span-2",
   },
   {
     imageUrl: "/jaworowa-wizualizacja-4.png",
     title: "Nowoczesna bryła budynku",
-    span: "row-span-1", // Średnia wysokość
+    span: "row-span-1",
   },
   {
     imageUrl: "/jaworowa-wizualizacja-5.jpg",
     title: "Przestronny podjazd z garażem",
-    span: "row-span-1", // Średnia wysokość
+    span: "row-span-1",
   },
   {
     imageUrl: "/jaworowa-wizualizacja-6.jpg",
     title: "Wewnętrzna droga osiedlowa",
-    span: "row-span-2", // Karta wysoka
+    span: "row-span-2",
   },
   {
     imageUrl: "/jaworowa-wizualizacja-7.png",
     title: "Eleganckie wejście do domu",
-    span: "row-span-2", // Karta wysoka
+    span: "row-span-2",
   },
   {
     imageUrl: "/jaworowa-wizualizacja-2.jpg",
     title: "Widok na całe osiedle z lotu ptaka",
-    span: "row-span-1", // Średnia wysokość
+    span: "row-span-1",
   },
 ];
 
@@ -1101,7 +1357,7 @@ export function GallerySection() {
   return (
     <section
       id="galeria"
-      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mat-32"
+      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-3xl">
@@ -1114,7 +1370,18 @@ export function GallerySection() {
           </p>
         </div>
 
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 grid-flow-dense [grid-auto-rows:150px]">
+        {/* MOBILE: stos kart z gestem swipe */}
+        <div className="mt-10 md:hidden">
+          <GalleryStackMobile
+            items={galleryImages.map(({ imageUrl, title }) => ({
+              imageUrl,
+              title,
+            }))}
+          />
+        </div>
+
+        {/* DESKTOP: Twoja siatka bez zmian */}
+        <div className="mt-16 hidden grid-flow-dense grid-cols-2 gap-4 [grid-auto-rows:150px] md:grid md:grid-cols-4">
           {galleryImages.map((image, index) => (
             <GalleryCard
               key={index}
@@ -1264,9 +1531,9 @@ import * as React from "react";
 
 /**
  * Alt Hero v7 — HIGH on mobile, LOWER on desktop
- * - MOBILE (<= md-1): content pushed UP via 3-row grid (1.7fr / auto / 0.8fr)
- * - DESKTOP (md+): content panel lowered using a page-high grid (1fr / auto / 1.6fr)
- *   Panel stays left-aligned with nav/container; "Dębowy Park" stays on one line.
+ * - MOBILE (<= md-1): 0.3fr / auto / 0.8fr (treść wyżej)
+ * - DESKTOP (md+): 1fr / auto / 1.6fr (panel niżej)
+ * - OSOBNE TŁA: full-bleed na poziomie sekcji (bez max-w ograniczeń)
  */
 export function HeroSection() {
   const onScroll = React.useCallback((id: string) => {
@@ -1286,31 +1553,45 @@ export function HeroSection() {
       id="hero"
       className="relative isolate min-h-[100svh] w-full overflow-hidden"
     >
-      {/* FULL-BLEED BG */}
-      <Image
-        src="/Artboard_2.jpg"
-        alt="Nowoczesny dom w otoczeniu zieleni – Osiedle Dębowy Park"
-        fill
-        priority
-        className="-z-10 object-cover object-bottom"
-        sizes="100vw"
-        quality={80}
-      />
+      {/* ====== TŁA FULL-BLEED (poziom sekcji) ====== */}
+      {/* MOBILE BG */}
+      <div className="absolute inset-0 -z-20 md:hidden">
+        <Image
+          src="/Artboard_2.jpg"
+          alt="Nowoczesny dom – mobile"
+          fill
+          priority
+          className="object-cover object-bottom"
+          sizes="100vw"
+          quality={80}
+        />
+      </div>
 
-      {/* Contrast helpers */}
+      {/* DESKTOP BG */}
+      <div className="absolute inset-0 -z-20 hidden md:block">
+        <Image
+          src="/Hero.jpg" // Twój obraz desktop
+          alt="Nowoczesny dom – desktop"
+          fill
+          className="object-cover object-bottom"
+          sizes="100vw"
+          quality={100}
+        />
+      </div>
+
+      {/* OVERLAYE (wspólne, też względem sekcji) */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-2/5 bg-gradient-to-b from-background/80 via-background/20 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-2/5 bg-gradient-to-b from-background/80 via-background/20 to-transparent"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/5 bg-gradient-to-t from-background via-background/20 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/5 bg-gradient-to-t from-background via-background/20 to-transparent"
         aria-hidden
       />
 
       {/* ================= MOBILE (HIGH) ================= */}
       <div className="relative z-10 block md:hidden">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-          {/* Push content up: bigger top spring */}
           <div className="grid h-[100svh] grid-rows-[0.3fr_auto_0.8fr]">
             <div />
 
@@ -1362,19 +1643,16 @@ export function HeroSection() {
       {/* ================= DESKTOP (LOW) ================= */}
       <div className="relative z-10 hidden md:block">
         <div className="mx-auto w-full max-w-7xl">
-          {/* Full-height grid lowers the panel */}
           <div className="container mx-auto grid h-[100svh] grid-rows-[1fr_auto_1.6fr] grid-cols-12 gap-8 px-8 lg:px-12">
-            {/* row 1 spacer across all cols */}
             <div className="col-span-12" />
 
-            {/* row 2 content */}
             <div className="col-span-7 lg:col-span-6">
               <div className="rounded-[2rem] bg-black/35 p-8 shadow-[0_20px_70px_rgba(0,0,0,0.45)] backdrop-blur-md">
                 <h1 className="text-left font-extrabold text-white">
                   <span className="block text-3xl tracking-tight text-white/90">
                     Osiedle
                   </span>
-                  <span className="relative mt-1 inline-block whitespace-wrap">
+                  <span className="relative mt-1 inline-block whitespace-nowrap">
                     <span className="relative z-10 block text-[clamp(3rem,6vw,4rem)] leading-[0.95] tracking-tight">
                       Dębowy Park
                     </span>
@@ -1413,10 +1691,9 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* row 2 empty right area for alignment */}
+            {/* prawa kolumna pusta dla alignmentu */}
             <div className="col-span-5 lg:col-span-6" />
 
-            {/* row 3 spacer */}
             <div className="col-span-12" />
           </div>
         </div>
@@ -1466,7 +1743,7 @@ const features = [
   },
   {
     icon: <MapPin className="size-6 text-secondary-foreground" />,
-    title: "Dla oszczędności Twojego czasu",
+    title: "Dla oszczędności czasu",
     description: "Blisko miasta",
     bgSrc: "/icons/bliskosc.png",
   },
@@ -1527,14 +1804,16 @@ export function InvestmentSection() {
             budownictwa, tworząc solidne fundamenty dla Ciebie i Twojej rodziny.
           </p>
           <div className="overflow-hidden rounded-3xl">
-            <Image
-              src="/investment-image.png"
-              alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
-              fill
-              sizes="100vw"
-              loading="lazy"
-              className="object-cover transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
-            />
+            <div className="relative w-full aspect-[3/2]">
+              <Image
+                src="/investment-image.png"
+                alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
+                fill
+                sizes="100vw"
+                loading="lazy"
+                className="object-cover transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
+              />
+            </div>
           </div>
           <p className="text-lg leading-relaxed text-muted-foreground">
             Naszą ambicją było stworzenie osiedla, które nie tylko zachwyca
@@ -1542,14 +1821,16 @@ export function InvestmentSection() {
             komfort w codziennym życiu.
           </p>
           <div className="overflow-hidden rounded-3xl">
-            <Image
-              src="/3s2.jpg"
-              alt="Wizualizacja osiedla w otoczeniu zieleni"
-              fill
-              sizes="100vw"
-              loading="lazy"
-              className="object-cover transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
-            />
+            <div className="relative w-full aspect-[3/2]">
+              <Image
+                src="/3s2.jpg"
+                alt="Wizualizacja nowoczesnej fasady domu w ciągu dnia"
+                fill
+                sizes="100vw"
+                loading="lazy"
+                className="object-cover transition-transform duration-300 hover:scale-105 motion-reduce:transition-none"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -2755,6 +3036,7 @@ export default nextConfig;
     "clsx": "^2.1.1",
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",
     "next": "15.5.3",
     "next-themes": "^0.4.6",
@@ -2794,7 +3076,15 @@ export default config;
 
 ```
 
+# public\1.jpg
+
+This is a binary file of the type: Image
+
 # public\1s.png
+
+This is a binary file of the type: Image
+
+# public\2.jpg
 
 This is a binary file of the type: Image
 
@@ -2802,7 +3092,15 @@ This is a binary file of the type: Image
 
 This is a binary file of the type: Image
 
+# public\3.jpg
+
+This is a binary file of the type: Image
+
 # public\3s2.jpg
+
+This is a binary file of the type: Image
+
+# public\4.jpg
 
 This is a binary file of the type: Image
 
@@ -2819,6 +3117,10 @@ This is a binary file of the type: Image
 This is a binary file of the type: Image
 
 # public\9s2.jpg
+
+This is a binary file of the type: Image
+
+# public\Art.jpg
 
 This is a binary file of the type: Image
 
@@ -2858,9 +3160,21 @@ This is a binary file of the type: Image
 
 This is a binary file of the type: Image
 
+# public\hero_final_desktop_new.png
+
+This is a binary file of the type: Image
+
+# public\hero_final_desktop.png
+
+This is a binary file of the type: Image
+
 # public\hero_final_large.jpg
 
 This is a binary file of the type: Image
+
+# public\hero_final-2.psd
+
+This is a binary file of the type: Binary
 
 # public\hero_final.jpg
 
@@ -2875,6 +3189,10 @@ This is a binary file of the type: Image
 This is a binary file of the type: Image
 
 # public\icons\bliskosc.png
+
+This is a binary file of the type: Image
+
+# public\icons\hero_final_desktop.png
 
 This is a binary file of the type: Image
 
