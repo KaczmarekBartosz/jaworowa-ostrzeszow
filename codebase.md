@@ -64,19 +64,6 @@ This is a binary file of the type: Binary
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -99,65 +86,64 @@ This is a binary file of the type: Binary
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* --- Light theme (neutralny OFF‑WHITE + gradient tokens) --- */
+/* --- Light theme ("DĘBOWY PARK") --- */
 :root {
   --radius: 0.625rem;
 
-  /* Neutralny off‑white (bez beżowego zafarbu) */
-  --background: oklch(0.985 0.004 250);
-  --foreground: oklch(0.12 0.02 250);
+  --background: oklch(0.97 0.003 120); /* Subtelny, naturalny off-white */
+  --foreground: oklch(0.18 0.02 120); /* Głęboka, leśna szarość/zieleń */
 
-  --card: oklch(0.995 0 0); /* czysta biel */
+  --card: oklch(1 0 0); /* Czysta biel dla kart */
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--foreground);
 
-  /* Akcent + fallback dla gradientu */
-  --primary: oklch(0.7 0.17 64.9);
-  --primary-foreground: oklch(1 0 0);
-  /* Gradient CTA */
-  --accent-from: oklch(0.76 0.16 64.9);
-  --accent-to: oklch(0.64 0.19 64.9);
+  /* === NOWY ZIELONY AKCENT === */
+  --primary: oklch(0.5 0.15 150); /* Głęboka zieleń jako fallback */
+  --primary-foreground: oklch(0.98 0.005 120); /* Jasny tekst na zielonym */
+  --gradient-from: #34d399; /* emerald-400 */
+  --gradient-to: #065f46; /* emerald-800 */
 
-  --secondary: oklch(0.96 0.01 250);
-  --secondary-foreground: oklch(0.25 0.02 250);
-  --muted: oklch(0.96 0.005 250);
-  --muted-foreground: oklch(0.48 0.02 250);
+  --secondary: oklch(0.94 0.008 120);
+  --secondary-foreground: oklch(0.25 0.015 120);
+  --muted: oklch(0.94 0.008 120);
+  --muted-foreground: oklch(0.45 0.01 120);
   --accent: var(--secondary);
   --accent-foreground: var(--secondary-foreground);
-  --destructive: oklch(0.6 0.23 27);
-  --border: oklch(0.9 0.01 250);
+
+  --destructive: oklch(0.58 0.24 27);
+  --border: oklch(0.9 0.01 120);
   --input: var(--border);
-  --ring: oklch(0.7 0.05 250);
+  --ring: oklch(0.55 0.15 150);
 }
 
 /* --- Dark theme --- */
 .dark {
-  --background: oklch(0.15 0.01 250);
-  --foreground: oklch(0.98 0.002 250);
+  --background: oklch(0.12 0.015 120); /* Bardzo ciemna, leśna zieleń */
+  --foreground: oklch(0.95 0.005 120); /* Jasny, lekko zielonkawy biały */
 
-  --card: oklch(0.2 0.01 250);
+  --card: oklch(0.16 0.015 120); /* Karta delikatnie jaśniejsza od tła */
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--foreground);
 
-  --primary: oklch(0.7 0.17 64.9);
+  /* === ZIELONY AKCENT W DARK MODE === */
+  --primary: oklch(0.55 0.15 150);
   --primary-foreground: oklch(1 0 0);
-  /* Gradient CTA (ciemny wariant) */
-  --accent-from: oklch(0.75 0.16 64.9);
-  --accent-to: oklch(0.62 0.2 64.9);
+  --gradient-from: #1b855e; /* emerald-400 */
+  --gradient-to: #034d38; /* emerald-800 */
 
-  --secondary: oklch(0.25 0.015 250);
-  --secondary-foreground: oklch(0.94 0.002 250);
-  --muted: oklch(0.24 0.01 250);
-  --muted-foreground: oklch(0.72 0.01 250);
+  --secondary: oklch(0.2 0.015 120);
+  --secondary-foreground: oklch(0.95 0.005 120);
+  --muted: oklch(0.2 0.015 120);
+  --muted-foreground: oklch(0.65 0.01 120);
   --accent: var(--secondary);
   --accent-foreground: var(--secondary-foreground);
 
-  --destructive: oklch(0.6 0.23 27);
+  --destructive: oklch(0.58 0.24 27);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.55 0.03 250);
+  --ring: oklch(0.55 0.15 150);
 }
 
 /* --- Base layer --- */
@@ -168,12 +154,12 @@ This is a binary file of the type: Binary
 
   html {
     -webkit-text-size-adjust: 100%;
-    scrollbar-gutter: stable; /* ZOSTAWIONE: Twoje ustawienie na desktop */
+    scrollbar-gutter: stable;
   }
 
   html,
   body {
-    overflow-x: clip; /* blokada poziomego scrolla */
+    overflow-x: clip;
     height: 100%;
   }
 
@@ -187,7 +173,6 @@ This is a binary file of the type: Binary
     height: auto;
   }
 
-  /* Scrollbary — ZOSTAWIONE dokładnie jak u Ciebie */
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -210,7 +195,6 @@ This is a binary file of the type: Binary
     }
   }
 
-  /* Offset pod fixed header przy skoku do #kotwic */
   section[id] {
     scroll-margin-top: theme(spacing.24);
   }
@@ -218,6 +202,17 @@ This is a binary file of the type: Binary
     section[id] {
       scroll-margin-top: theme(spacing.32);
     }
+  }
+  .hero-gradient-overlay {
+    background-image: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.4) 5%,
+      transparent 10%,
+      transparent 70%,
+      rgba(0, 0, 0, 0.4) 85%,
+      rgba(0, 0, 0, 0.8) 100%
+    );
   }
 }
 
@@ -242,9 +237,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// === NOWE, POPRAWNE METADANE ===
 export const metadata = {
-  title: "Jaworowa Ostrzeszów",
-  description: "Perfekcja w prostocie — każdy piksel ma znaczenie.",
+  title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
+  description:
+    "Nowoczesne, kameralne osiedle w Ostrzeszowie. Domy z ogrodem, blisko natury i miasta. Idealna przestrzeń dla Ciebie i Twojej rodziny.",
 };
 
 export default function RootLayout({
@@ -259,7 +256,6 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          // KLUCZOWA ZMIANA: Ustawiamy Dark Mode jako domyślny
           defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
@@ -280,26 +276,11 @@ export default function RootLayout({
 import { HeroSection } from "@/components/sections/hero-section";
 import { InvestmentSection } from "@/components/sections/investment-section";
 import { PlansSection } from "@/components/sections/plans-section";
+import { TestimonialsSection } from "@/components/sections/testimonials-section"; // 1. Import
 import { GallerySection } from "@/components/sections/gallery-section";
-import { LocationSection } from "@/components/sections/location-section"; // Import
-import { ContactSection } from "@/components/sections/contact-section"; // Import
-import { Footer } from "@/components/sections/footer";
-
-const PlaceholderSection = ({ id, title }: { id: string; title: string }) => (
-  <section
-    id={id}
-    className="min-h-dvh bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
-  >
-    <div className="mx-auto max-w-7xl px-6 md:px-8">
-      <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-        {title}
-      </h2>
-      <p className="mt-4 max-w-2xl text-muted-foreground">
-        Treść tej sekcji zostanie uzupełniona w kolejnych iteracjach.
-      </p>
-    </div>
-  </section>
-);
+import { LocationSection } from "@/components/sections/location-section";
+import { ContactSection } from "@/components/sections/contact-section";
+import { Footer } from "@/components/layout/footer"; // Poprawiony import
 
 export default function HomePage() {
   return (
@@ -307,6 +288,7 @@ export default function HomePage() {
       <HeroSection />
       <InvestmentSection />
       <PlansSection />
+      <TestimonialsSection />
       <GallerySection />
       <LocationSection />
       <ContactSection />
@@ -348,29 +330,29 @@ export default function HomePage() {
 # components\common\feature-card.tsx
 
 ```tsx
-import type { LucideIcon } from "lucide-react";
+"use client";
+
+import { cn } from "@/lib/utils";
 
 interface FeatureCardProps {
-  icon: LucideIcon;
+  children: React.ReactNode; // Prop `icon` został zastąpiony przez `children`
   title: string;
   description: string;
   isHighlighted?: boolean;
 }
 
 export function FeatureCard({
-  icon: Icon,
+  children,
   title,
   description,
   isHighlighted = false,
 }: FeatureCardProps) {
-  const cardClasses = `
-    rounded-3xl p-6 flex flex-col justify-between h-full transition-all duration-300
-    ${
-      isHighlighted
-        ? "bg-gradient-to-br from-[#F53F0F] to-[#F97318] text-primary-foreground"
-        : "bg-card/50 border backdrop-blur-sm hover:bg-card/80"
-    }
-  `;
+  const cardClasses = cn(
+    "rounded-3xl p-6 flex flex-col justify-between h-full transition-all duration-300",
+    isHighlighted
+      ? "bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground"
+      : "bg-card/50 border backdrop-blur-sm hover:bg-card/80"
+  );
 
   return (
     <div className={cardClasses}>
@@ -380,13 +362,8 @@ export function FeatureCard({
         }`}
         aria-hidden="true"
       >
-        <Icon
-          className={`h-6 w-6 ${
-            isHighlighted
-              ? "text-primary-foreground"
-              : "text-secondary-foreground"
-          }`}
-        />
+        {/* Renderujemy przekazaną ikonę */}
+        {children}
       </div>
       <div>
         <p
@@ -542,7 +519,7 @@ export function GalleryCard({ imageUrl, title, className }: GalleryCardProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 
           <div className="absolute bottom-0 left-0 p-6 text-left">
-            <h3 className="text-base font-bold text-white">{title}</h3>
+            <h3 className="text-sm font-bold text-white">{title}</h3>
           </div>
 
           <div className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
@@ -561,6 +538,39 @@ export function GalleryCard({ imageUrl, title, className }: GalleryCardProps) {
         />
       </DialogContent>
     </Dialog>
+  );
+}
+
+```
+
+# components\common\testimonial-card.tsx
+
+```tsx
+"use client";
+
+import { Quote } from "lucide-react";
+
+interface TestimonialCardProps {
+  quote: string;
+  author: string;
+  role: string;
+}
+
+export function TestimonialCard({ quote, author, role }: TestimonialCardProps) {
+  return (
+    // POPRAWKA: Dodano h-full
+    <div className="flex h-full flex-col justify-between rounded-3xl border bg-card/50 p-8">
+      <div>
+        <Quote className="h-8 w-8 text-primary" />
+        <p className="mt-6 text-lg leading-relaxed text-foreground">
+          &ldquo;{quote}&rdquo;
+        </p>
+      </div>
+      <div className="mt-8">
+        <p className="font-bold text-foreground">{author}</p>
+        <p className="text-sm text-muted-foreground">{role}</p>
+      </div>
+    </div>
   );
 }
 
@@ -633,6 +643,121 @@ export function ThemeToggle({
 
 ```
 
+# components\layout\footer.tsx
+
+```tsx
+import { Trees, Mail, Phone, Instagram, Facebook } from "lucide-react";
+import Link from "next/link";
+import { Button } from "../ui/button";
+
+export function Footer() {
+  return (
+    <footer className="bg-card border-t border-border/50">
+      <div className="mx-auto max-w-7xl px-6 py-12 md:px-8 md:py-16">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
+          {/* Kolumna 1: Logo i opis */}
+          <div className="lg:col-span-1">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2"
+              aria-label="Strona główna"
+            >
+              <Trees
+                className="size-7 text-foreground flex-shrink-0"
+                aria-hidden="true"
+              />
+              <span className="text-xl font-bold tracking-tight text-foreground">
+                Osiedle Dębowy Park
+              </span>
+            </Link>
+            <p className="mt-4 text-muted-foreground max-w-xs">
+              Nowoczesne osiedle domów w zabudowie bliźniaczej, zaprojektowane z
+              myślą o komforcie i harmonii z naturą.
+            </p>
+          </div>
+
+          {/* Kolumna 2 i 3: Linki i kontakt */}
+          <div className="grid grid-cols-2 gap-8 lg:col-span-2 md:grid-cols-3">
+            <div>
+              <h3 className="font-semibold text-foreground">Nawigacja</h3>
+              <ul className="mt-4 space-y-2">
+                <li>
+                  <a
+                    href="#inwestycja"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    O Inwestycji
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#domy"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Domy i Plany
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#galeria"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Galeria
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#lokalizacja"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Lokalizacja
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">Kontakt</h3>
+              <ul className="mt-4 space-y-2">
+                <li className="flex items-center gap-2">
+                  <Mail className="size-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">
+                    email@przykład.pl
+                  </span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Phone className="size-4 text-muted-foreground" />
+                  <span className="text-muted-foreground">+48 123 456 789</span>
+                </li>
+              </ul>
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <h3 className="font-semibold text-foreground">Social Media</h3>
+              <div className="mt-4 flex gap-2">
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Instagram className="size-5" />
+                  <span className="sr-only">Instagram</span>
+                </Button>
+                <Button variant="outline" size="icon" className="rounded-full">
+                  <Facebook className="size-5" />
+                  <span className="sr-only">Facebook</span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Dolna część stopki */}
+        <div className="mt-12 border-t border-border/50 pt-8 text-center text-sm text-muted-foreground">
+          © {new Date().getFullYear()} Jaworowa Ostrzeszów. Wszelkie prawa
+          zastrzeżone.
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+```
+
 # components\layout\main-nav.tsx
 
 ```tsx
@@ -647,14 +772,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, Home, X } from "lucide-react";
+import { Menu, Trees, X } from "lucide-react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { cn } from "@/lib/utils";
 
 // === OSTATECZNA, POPRAWNA LISTA SEKCJI ===
 const navItems = [
-  { href: "#inwestycja", label: "O Inwestycji" },
-  { href: "#domy", label: "Domy i Plany" }, // Sekcja "Domy" i "Plany" jest teraz jedną o id="domy"
+  { href: "#dlaczego-warto", label: "Dlaczego Warto?" },
+  { href: "#domy", label: "Domy i Plany" },
   { href: "#galeria", label: "Galeria" },
   { href: "#lokalizacja", label: "Lokalizacja" },
   { href: "#kontakt", label: "Kontakt" },
@@ -679,7 +804,7 @@ export function MainNav() {
       className="flex items-center gap-2"
       aria-label="Strona główna"
     >
-      <Home
+      <Trees
         className="size-6 ml-2 text-foreground flex-shrink-0"
         aria-hidden="true"
       />
@@ -884,121 +1009,6 @@ export function ContactSection() {
 
 ```
 
-# components\sections\footer.tsx
-
-```tsx
-import { Home, Mail, Phone, Instagram, Facebook } from "lucide-react";
-import Link from "next/link";
-import { Button } from "../ui/button";
-
-export function Footer() {
-  return (
-    <footer className="bg-card border-t border-border/50">
-      <div className="mx-auto max-w-7xl px-6 py-12 md:px-8 md:py-16">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
-          {/* Kolumna 1: Logo i opis */}
-          <div className="lg:col-span-1">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2"
-              aria-label="Strona główna"
-            >
-              <Home
-                className="size-7 text-foreground flex-shrink-0"
-                aria-hidden="true"
-              />
-              <span className="text-xl font-bold tracking-tight text-foreground">
-                Jaworowa Ostrzeszów
-              </span>
-            </Link>
-            <p className="mt-4 text-muted-foreground max-w-xs">
-              Nowoczesne osiedle domów w zabudowie bliźniaczej, zaprojektowane z
-              myślą o komforcie i harmonii z naturą.
-            </p>
-          </div>
-
-          {/* Kolumna 2 i 3: Linki i kontakt */}
-          <div className="grid grid-cols-2 gap-8 lg:col-span-2 md:grid-cols-3">
-            <div>
-              <h3 className="font-semibold text-foreground">Nawigacja</h3>
-              <ul className="mt-4 space-y-2">
-                <li>
-                  <a
-                    href="#inwestycja"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    O Inwestycji
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#domy"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    Domy i Plany
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#galeria"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    Galeria
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#lokalizacja"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    Lokalizacja
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground">Kontakt</h3>
-              <ul className="mt-4 space-y-2">
-                <li className="flex items-center gap-2">
-                  <Mail className="size-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">
-                    email@przykład.pl
-                  </span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Phone className="size-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">+48 123 456 789</span>
-                </li>
-              </ul>
-            </div>
-            <div className="col-span-2 md:col-span-1">
-              <h3 className="font-semibold text-foreground">Social Media</h3>
-              <div className="mt-4 flex gap-2">
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Instagram className="size-5" />
-                  <span className="sr-only">Instagram</span>
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Facebook className="size-5" />
-                  <span className="sr-only">Facebook</span>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Dolna część stopki */}
-        <div className="mt-12 border-t border-border/50 pt-8 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Jaworowa Ostrzeszów. Wszelkie prawa
-          zastrzeżone.
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-```
-
 # components\sections\gallery-section.tsx
 
 ```tsx
@@ -1088,71 +1098,66 @@ export function GallerySection() {
 "use client";
 
 import Image from "next/image";
-import { ArrowDown, ChevronRight } from "lucide-react";
+import { ChevronsDown, ChevronRight, Trees } from "lucide-react";
 
 export function HeroSection() {
   return (
     <section className="relative flex h-[100dvh] flex-col overflow-hidden">
       <Image
-        src="/hero_4.png"
-        alt="Nowoczesny dom z przestronnym wnętrzem"
+        src="/Artboard_2.jpg"
+        alt="Nowoczesny dom z przestronnym wnętrzem - Osiedle Dębowy Park"
         fill
         priority
-        className="z-0 object-cover transition-transform duration-300"
+        className="z-0 object-cover object-bottom"
       />
 
-      {/* Gradient używa teraz 'from-background', aby adaptować się do motywu */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-background via-transparent to-black/60" />
+      <div className="absolute inset-0 z-10 hero-gradient-overlay" />
 
       <div className="relative z-20 mx-auto flex h-full min-h-screen w-full max-w-7xl flex-1 flex-col justify-between p-6 pt-24 md:p-8 md:pt-32">
         <div>
-          {/* H1 ZAWSZE pozostaje biały */}
-          <h1 className="max-w-3xl mt-4 p-6 text-5xl font-bold text-white md:text-8xl">
-            Domy z{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">przyszłością</span>
+          <h1 className="max-w-3xl mt-4 p-0 text-3xl text-center font-bold text-white md:text-8xl">
+            Osiedle{" "}
+            <span className="relative inline-flex">
+              <span className="relative z-10 text-5xl text-center md:text-8xl">
+                Dębowy Park
+              </span>
               <Image
-                src="/underline_3.svg"
+                src="/underline-gradient-green.svg"
                 alt=""
-                width={246}
-                height={23}
-                className="absolute -bottom-3 left-0 w-full md:-bottom-4"
+                width={250}
+                height={20}
+                className="absolute -bottom-2 left-0 w-full md:-bottom-3"
                 aria-hidden="true"
               />
             </span>
           </h1>
         </div>
 
-        <div className="w-full max-w-md">
-          {/* POPRAWKA: Paragraf używa teraz 'text-foreground', aby adaptować kolor */}
-          <p className="text-lg text-foreground/80 md:text-2xl">
-            Poznaj wyjątkowe miejsce dla Ciebie oraz Twojej rodziny i zamieszkaj
-            mądrzej.
+        <div className="w-full p-8 max-w-md mb-80">
+          <p className="text-lg text-center text-foreground md:text-2xl">
+            Poznaj wyjątkowe miejsce dla Ciebie i Twojej rodziny.
           </p>
 
-          {/* POPRAWKA: Przycisk używa teraz adaptacyjnych kolorów */}
           <button
             onClick={() =>
               document
-                .querySelector("#inwestycja")
+                .querySelector("#dlaczego-warto")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            // Zmieniono tło na adaptacyjne, zachowując efekt "glass"
             className="group mb-24 mt-8 flex w-full items-center justify-between rounded-full bg-secondary/50 p-2 text-left transition-all duration-300 hover:bg-secondary/80 border backdrop-blur-sm"
           >
             <span className="pl-6 text-lg font-medium text-foreground">
               Dowiedz się więcej
             </span>
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#F53F0F] to-[#F97318] transition-transform duration-300 group-hover:scale-110">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] transition-transform duration-300 group-hover:scale-110">
               <ChevronRight className="h-6 w-6 text-primary-foreground" />
             </div>
           </button>
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2">
-        {/* POPRAWKA: Ikona używa teraz 'text-foreground' */}
-        <ArrowDown className="h-6 w-6 animate-bounce text-foreground" />
+      <div className="absolute bottom-2 left-1/2 z-20 -translate-x-1/2">
+        <ChevronsDown className="h-10 w-10 animate-bounce text-foreground" />
       </div>
     </section>
   );
@@ -1166,63 +1171,84 @@ export function HeroSection() {
 import Image from "next/image";
 import { FeatureCard } from "@/components/common/feature-card";
 import { FeatureCarousel } from "@/components/common/feature-carousel";
-import { Button } from "@/components/ui/button";
-import { AreaChart, Building2, Trees, Paintbrush } from "lucide-react";
+import { Home, Trees, Shield, MapPin } from "lucide-react";
 
+// Definiujemy dane wewnątrz komponentu
 const features = [
   {
-    icon: AreaChart,
-    title: "Powierzchnia",
-    description: "Ponad 103 m²",
+    icon: <Trees className="size-6 text-primary-foreground" />,
+    title: "Harmonia z naturą",
+    description: "Prywatny ogród i dużo zieleni",
     isHighlighted: true,
   },
-  { icon: Building2, title: "Rozmiar inwestycji", description: "8 budynków" },
-  { icon: Paintbrush, title: "Architektura", description: "Nowoczesna" },
-  { icon: Trees, title: "Otoczenie", description: "Pełne zieleni" },
+  {
+    icon: <Home className="size-6 text-secondary-foreground" />,
+    title: "Dla Twojej wygody",
+    description: "Przemyślany układ",
+  },
+  {
+    icon: <Shield className="size-6 text-secondary-foreground" />,
+    title: "Dla Twojego spokoju",
+    description: "Kameralne i bezpieczne osiedle",
+  },
+  {
+    icon: <MapPin className="size-6 text-secondary-foreground" />,
+    title: "Dla oszczędności Twojego czasu",
+    description: "Blisko miasta",
+  },
 ];
 
 export function InvestmentSection() {
   return (
     <section
-      id="inwestycja"
+      id="dlaczego-warto"
       className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-8">
-        {/* Nagłówek wyrównany do lewej */}
         <div className="max-w-3xl">
           <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            O Inwestycji
+            Miejsce, w którym zapuścisz korzenie.
           </h2>
         </div>
       </div>
 
-      {/* WERSJA MOBILNA: Karuzela (bez zmian) */}
+      {/* WERSJA MOBILNA: Karuzela */}
       <div className="mt-12 md:hidden">
         <FeatureCarousel>
           {features.map((feature, index) => (
-            <FeatureCard key={index} {...feature} />
+            <FeatureCard
+              key={index}
+              title={feature.title}
+              description={feature.description}
+              isHighlighted={feature.isHighlighted}
+            >
+              {feature.icon}
+            </FeatureCard>
           ))}
         </FeatureCarousel>
       </div>
 
-      {/* WERSJA DESKTOP: Centralna siatka z kartami */}
+      {/* WERSJA DESKTOP: Siatka */}
       <div className="mx-auto mt-12 hidden max-w-7xl px-6 md:grid md:grid-cols-4 md:gap-8 md:px-8">
         {features.map((feature, index) => (
-          <FeatureCard key={index} {...feature} />
+          <FeatureCard
+            key={index}
+            title={feature.title}
+            description={feature.description}
+            isHighlighted={feature.isHighlighted}
+          >
+            {feature.icon}
+          </FeatureCard>
         ))}
       </div>
 
-      {/* WERSJA MOBILNA: Treść w jednej kolumnie (bez zmian) */}
+      {/* WERSJA MOBILNA: Treść */}
       <div className="mx-auto mt-16 max-w-7xl px-6 md:px-8 md:hidden">
         <div className="space-y-8">
           <p className="text-lg leading-relaxed text-muted-foreground">
-            <span className="font-bold text-foreground">
-              Domy z Przyszłością
-            </span>{" "}
-            to nowoczesna inwestycja deweloperska składająca się z domów w
-            zabudowie bliźniaczej. Każdy budynek oferuje dwa poziomy komfortu:
-            parter z przestronnym salonem i aneksem kuchennym oraz poddasze z
-            sypialniami.
+            Dąb to od wieków symbol siły, natury i zaufania. Na osiedlu Dębowy
+            Park łączymy te ponadczasowe wartości z nowoczesnymi technologiami
+            budownictwa, tworząc solidne fundamenty dla Ciebie i Twojej rodziny.
           </p>
           <div className="overflow-hidden rounded-3xl">
             <Image
@@ -1234,11 +1260,9 @@ export function InvestmentSection() {
             />
           </div>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            Osiedle zaprojektowano z myślą o harmonii z naturą, oferując zielone
-            tereny, wewnętrzne drogi dojazdowe i indywidualne parkingi. Jeśli
-            marzysz o własnym domu bliźniaczym, nasza inwestycja łączy
-            funkcjonalność z estetyką, zapewniając idealną przestrzeń dla Twojej
-            rodziny.
+            Naszą ambicją było stworzenie osiedla, które nie tylko zachwyca
+            architekturą, ale przede wszystkim zapewnia spokój, bezpieczeństwo i
+            komfort w codziennym życiu.
           </p>
           <div className="overflow-hidden rounded-3xl">
             <Image
@@ -1252,19 +1276,15 @@ export function InvestmentSection() {
         </div>
       </div>
 
-      {/* WERSJA DESKTOP: Nowy, asymetryczny układ dwukolumnowy */}
+      {/* WERSJA DESKTOP: Treść */}
       <div className="mx-auto max-w-7xl px-6 md:px-8 mt-16 hidden md:block">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16">
-          {/* Lewa kolumna: Tekst + Obraz */}
           <div className="space-y-8 flex flex-col">
             <p className="text-lg leading-relaxed text-muted-foreground">
-              <span className="font-bold text-foreground">
-                Domy z Przyszłością
-              </span>{" "}
-              to nowoczesna inwestycja deweloperska składająca się z domów w
-              zabudowie bliźniaczej. Każdy budynek oferuje dwa poziomy komfortu:
-              parter z przestronnym salonem i aneksem kuchennym oraz poddasze z
-              sypialniami.
+              Dąb to od wieków symbol siły, natury i zaufania. Na osiedlu Dębowy
+              Park łączymy te ponadczasowe wartości z nowoczesnymi technologiami
+              budownictwa, tworząc solidne fundamenty dla Ciebie i Twojej
+              rodziny.
             </p>
             <div className="overflow-hidden rounded-3xl mt-auto">
               <Image
@@ -1276,7 +1296,6 @@ export function InvestmentSection() {
               />
             </div>
           </div>
-          {/* Prawa kolumna: Obraz + Tekst */}
           <div className="space-y-8 flex flex-col">
             <div className="overflow-hidden rounded-3xl">
               <Image
@@ -1288,11 +1307,9 @@ export function InvestmentSection() {
               />
             </div>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Osiedle zaprojektowano z myślą o harmonii z naturą, oferując
-              zielone tereny, wewnętrzne drogi dojazdowe i indywidualne
-              parkingi. Jeśli marzysz o własnym domu bliźniaczym, nasza
-              inwestycja łączy funkcjonalność z estetyką, zapewniając idealną
-              przestrzeń dla Twojej rodziny.
+              Naszą ambicją było stworzenie osiedla, które nie tylko zachwyca
+              architekturą, ale przede wszystkim zapewnia spokój, bezpieczeństwo
+              i komfort w codziennym życiu.
             </p>
           </div>
         </div>
@@ -1335,8 +1352,8 @@ export function LocationSection() {
             <ul className="mt-8 space-y-4">
               {locationFeatures.map((feature, index) => (
                 <li key={index} className="flex items-center gap-3">
-                  {/* POPRAWKA: Ikona jest teraz w gradientowym, okrągłym kontenerze */}
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#F53F0F] to-[#F97318] flex-shrink-0">
+                  {/* === OSTATECZNA POPRAWKA: Używamy zmiennych CSS dla gradientu === */}
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] flex-shrink-0">
                     <feature.icon className="h-5 w-5 text-primary-foreground" />
                   </div>
                   <span className="text-foreground/80">{feature.text}</span>
@@ -1391,9 +1408,7 @@ import {
   TableHeader,
   TableHead,
 } from "@/components/ui/table";
-import { Home, Zap, Shield } from "lucide-react";
-import { FeatureCard } from "@/components/common/feature-card";
-import { FeatureCarousel } from "@/components/common/feature-carousel";
+import { Maximize, Sofa, BedDouble, CheckCircle2 } from "lucide-react";
 
 const parterRooms = [
   { name: "Przedsionek", area: "4,86 m²" },
@@ -1413,15 +1428,32 @@ const pietroRooms = [
   { name: "Pokój 2", area: "10,24 m²" },
 ];
 
+// Zmieniamy strukturę, aby łatwiej było stylizować tekst
 const keyFeatures = [
-  { icon: Home, title: "Układ", description: "Funkcjonalny" },
   {
-    icon: Zap,
-    title: "Rozwiązania",
-    description: "Smart Home",
-    isHighlighted: true,
+    icon: Maximize,
+    textStart: "Ponad",
+    textBold: "103 m²",
+    textEnd: "przestrzeni dla Ciebie",
   },
-  { icon: Shield, title: "Okolica", description: "Bezpieczna" },
+  {
+    icon: Sofa,
+    textStart: "Przestronny salon z jadalnią i kuchnią",
+    textBold: "",
+    textEnd: "",
+  },
+  {
+    icon: BedDouble,
+    textStart: "Trzy wygodne sypialnie na piętrze",
+    textBold: "",
+    textEnd: "",
+  },
+  {
+    icon: CheckCircle2,
+    textStart: "Dwie łazienki i dwie garderoby",
+    textBold: "",
+    textEnd: "",
+  },
 ];
 
 export function PlansSection() {
@@ -1435,23 +1467,29 @@ export function PlansSection() {
         <div className="md:hidden">
           <div className="w-full">
             <h2 className="text-4xl font-bold tracking-tight text-foreground">
-              Idealny układ dla Ciebie i Twojej rodziny
+              Dom zaprojektowany dla Ciebie.
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Każdy segment oferuje ok.{" "}
-              <span className="font-bold text-foreground">103,30 m²</span>{" "}
-              powierzchni użytkowej, zoptymalizowanej do codziennego życia.
+              Odkryj przemyślany układ, który łączy otwartą przestrzeń dzienną z
+              komfortową i prywatną strefą na piętrze.
             </p>
-          </div>
-
-          <div className="mt-12 -mx-6">
-            <FeatureCarousel>
+            <ul className="mt-8 space-y-4">
               {keyFeatures.map((feature, index) => (
-                <FeatureCard key={index} {...feature} />
+                <li key={index} className="flex items-center gap-3">
+                  <feature.icon className="h-6 w-6 text-primary flex-shrink-0" />
+                  <span className="text-foreground/80">
+                    {feature.textStart}{" "}
+                    {feature.textBold && (
+                      <span className="font-bold text-foreground">
+                        {feature.textBold}
+                      </span>
+                    )}{" "}
+                    {feature.textEnd}
+                  </span>
+                </li>
               ))}
-            </FeatureCarousel>
+            </ul>
           </div>
-
           <div className="w-full mt-12">
             <Tabs defaultValue="parter" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
@@ -1480,7 +1518,6 @@ export function PlansSection() {
               </TabsContent>
             </Tabs>
           </div>
-
           <div className="mt-12">
             <h3 className="text-2xl font-semibold">Szczegółowy metraż</h3>
             <Table className="mt-4">
@@ -1545,7 +1582,7 @@ export function PlansSection() {
             </div>
             <div className="flex flex-col justify-center">
               <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-                Idealny układ dla Ciebie i Twojej rodziny
+                Dom zaprojektowany dla Ciebie.
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 Każdy segment oferuje ok.{" "}
@@ -1554,14 +1591,24 @@ export function PlansSection() {
                 przestronny parter dla wspólnego spędzania czasu i wygodne
                 piętro zapewniające prywatność.
               </p>
-              <div className="mt-8 grid grid-cols-3 gap-4">
+              <ul className="mt-8 space-y-4">
                 {keyFeatures.map((feature, index) => (
-                  <FeatureCard key={index} {...feature} />
+                  <li key={index} className="flex items-center gap-3">
+                    <feature.icon className="h-6 w-6 text-primary flex-shrink-0" />
+                    <span className="text-foreground/80">
+                      {feature.textStart}{" "}
+                      {feature.textBold && (
+                        <span className="font-bold text-foreground">
+                          {feature.textBold}
+                        </span>
+                      )}{" "}
+                      {feature.textEnd}
+                    </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
-
           <div className="mt-24">
             <h3 className="text-3xl font-semibold text-center">
               Szczegółowy metraż
@@ -1617,6 +1664,113 @@ export function PlansSection() {
 
 ```
 
+# components\sections\testimonials-section.tsx
+
+```tsx
+"use client";
+
+import { TestimonialCard } from "@/components/common/testimonial-card";
+import React, { useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const testimonials = [
+  {
+    quote:
+      "To miejsce przerosło nasze oczekiwania. Spokój, zieleń i nowoczesny design – wszystko, czego szukaliśmy jako młoda rodzina.",
+    author: "Anna i Tomasz Nowak",
+    role: "Mieszkańcy",
+  },
+  {
+    quote:
+      "Jakość wykonania i dbałość o detale są tu na najwyższym poziomie. Osiedle Dębowy Park to wzór nowoczesnego budownictwa.",
+    author: "Jan Kowalski",
+    role: "Architekt",
+  },
+  {
+    quote:
+      "Idealna lokalizacja. Mamy blisko do pracy i szkoły, a po południu możemy cieszyć się ciszą i własnym ogrodem. Polecamy!",
+    author: "Rodzina Zielińskich",
+    role: "Mieszkańcy",
+  },
+  {
+    quote:
+      "Rzadko spotyka się inwestycję tak dobrze przemyślaną pod kątem funkcjonalności. Każdy metr kwadratowy jest tu idealnie wykorzystany.",
+    author: "Maria Piotrowska",
+    role: "Projektantka Wnętrz",
+  },
+];
+
+export function TestimonialsSection() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    loop: true,
+  });
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  return (
+    <section
+      id="opinie"
+      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
+    >
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div className="max-w-3xl">
+          <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+            Dlaczego Dębowy Park?
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Posłuchaj, co o Osiedlu Dębowy Park mówią ci, którzy już wkrótce
+            nazwą je swoim domem.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-16">
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex -ml-4">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 flex-grow-0 basis-4/5 pl-4 first:pl-6 last:pr-6 md:basis-1/2 lg:basis-1/3"
+              >
+                <TestimonialCard {...testimonial} />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="mx-auto mt-8 flex max-w-7xl justify-end gap-2 px-6">
+          <Button
+            size="icon"
+            className="rounded-full h-12 w-12"
+            onClick={scrollPrev}
+          >
+            <ChevronLeft className="size-6" />
+            <span className="sr-only">Poprzednia opinia</span>
+          </Button>
+          <Button
+            size="icon"
+            className="rounded-full h-12 w-12"
+            onClick={scrollNext}
+          >
+            <ChevronRight className="size-6" />
+            <span className="sr-only">Następna opinia</span>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+```
+
 # components\theme-provider.tsx
 
 ```tsx
@@ -1638,7 +1792,6 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
@@ -1646,17 +1799,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // POPRAWKA: Używamy zmiennych CSS dla gradientu
         default:
-          "bg-gradient-to-br from-[#F53F0F] to-[#F97318] text-primary-foreground shadow-xs hover:opacity-90",
+          "bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground shadow-xs hover:opacity-90",
         destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-destructive text-white shadow-xs hover:bg-destructive/90",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground",
+          "border bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // === NOWY, DEDYKOWANY WARIANT ===
         glass:
           "bg-white/10 text-white border border-white/20 backdrop-blur-sm hover:bg-white/20",
       },
@@ -2322,6 +2475,7 @@ export default nextConfig;
     "@radix-ui/react-tabs": "^1.1.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.544.0",
     "next": "15.5.3",
@@ -2362,6 +2516,42 @@ export default config;
 
 ```
 
+# public\1s.png
+
+This is a binary file of the type: Image
+
+# public\2a3.jpg
+
+This is a binary file of the type: Image
+
+# public\3s2.jpg
+
+This is a binary file of the type: Image
+
+# public\5.jpg
+
+This is a binary file of the type: Image
+
+# public\6.jpg
+
+This is a binary file of the type: Image
+
+# public\9.jpg
+
+This is a binary file of the type: Image
+
+# public\9s2.jpg
+
+This is a binary file of the type: Image
+
+# public\Artboard 1.jpg
+
+This is a binary file of the type: Image
+
+# public\Artboard_2.jpg
+
+This is a binary file of the type: Image
+
 # public\file.svg
 
 This is a file of the type: SVG Image
@@ -2383,6 +2573,18 @@ This is a binary file of the type: Image
 This is a binary file of the type: Image
 
 # public\hero_4.png
+
+This is a binary file of the type: Image
+
+# public\hero_final_23.jpg
+
+This is a binary file of the type: Image
+
+# public\hero_final_large.jpg
+
+This is a binary file of the type: Image
+
+# public\hero_final.jpg
 
 This is a binary file of the type: Image
 
@@ -2455,6 +2657,14 @@ This is a file of the type: SVG Image
 This is a file of the type: SVG Image
 
 # public\underline_5.svg
+
+This is a file of the type: SVG Image
+
+# public\underline_green.svg
+
+This is a file of the type: SVG Image
+
+# public\underline-gradient-green.svg
 
 This is a file of the type: SVG Image
 
