@@ -5,43 +5,68 @@ import { GalleryStackMobile } from "@/components/common/gallery-stack-mobile";
 
 const galleryImages = [
   {
-    imageUrl: "/jaworowa-wizualizacja-1.png",
-    title: "Dom dla całej rodziny",
+    imageUrl: "/galeria/1.jpg",
+    title: "Nowoczesny dom z przestronnym podjazdem",
     span: "row-span-1",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-salon.jpeg",
-    title: "Wnętrze salonu",
+    imageUrl: "/galeria/2.jpg",
+    title: "Elegancka bryła budynku z podjazdem",
     span: "row-span-2",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-3.png",
-    title: "Harmonia domu z otaczającą zielenią",
-    span: "row-span-2",
-  },
-  {
-    imageUrl: "/jaworowa-wizualizacja-4.png",
-    title: "Nowoczesna bryła budynku",
+    imageUrl: "/galeria/3.jpg",
+    title: "Dom idealny dla całej rodziny",
     span: "row-span-1",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-5.jpg",
-    title: "Przestronny podjazd z garażem",
+    imageUrl: "/galeria/4.jpg",
+    title: "Widok z góry na nowoczesną architekturę",
     span: "row-span-1",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-6.jpg",
-    title: "Wewnętrzna droga osiedlowa",
+    imageUrl: "/galeria/5.jpg",
+    title: "Detal elewacji i duże przeszklenia",
     span: "row-span-2",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-7.png",
-    title: "Eleganckie wejście do domu",
+    imageUrl: "/galeria/6.jpg",
+    title: "Stylowe wejście do domu",
+    span: "row-span-1",
+  },
+  {
+    imageUrl: "/galeria/7.jpg",
+    title: "Wizualizacja frontu budynku",
     span: "row-span-2",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-2.jpg",
-    title: "Widok na całe osiedle z lotu ptaka",
+    imageUrl: "/galeria/8.jpg",
+    title: "Osiedle domów z lotu ptaka",
+    span: "row-span-2",
+  },
+  {
+    imageUrl: "/galeria/9.jpg",
+    title: "Spójna koncepcja architektoniczna osiedla",
+    span: "row-span-1",
+  },
+  {
+    imageUrl: "/galeria/10.jpg",
+    title: "Dom wkomponowany w otoczenie",
+    span: "row-span-1",
+  },
+  {
+    imageUrl: "/galeria/11.jpg",
+    title: "Nowoczesne osiedle w zielonej okolicy",
+    span: "row-span-2",
+  },
+  {
+    imageUrl: "/galeria/12.jpeg",
+    title: "Przestronne i słoneczne wnętrze salonu",
+    span: "row-span-1",
+  },
+  {
+    imageUrl: "/galeria/jaworowa-wizualizacja-5.jpg",
+    title: "Nastrojowe oświetlenie domu po zmroku",
     span: "row-span-1",
   },
 ];

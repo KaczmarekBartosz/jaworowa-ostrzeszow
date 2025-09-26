@@ -55,11 +55,10 @@ export function TestimonialsSection() {
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-3xl">
           <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            Dlaczego Dębowy Park?
+            Tak o nas mówią
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Posłuchaj, co o Osiedlu Dębowy Park mówią ci, którzy już wkrótce
-            nazwą je swoim domem.
+            Historie przyszłych mieszkańców i ekspertów.
           </p>
         </div>
       </div>

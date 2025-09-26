@@ -1,8 +1,8 @@
 import { MapPin, School, ShoppingCart, Trees } from "lucide-react";
 
 const locationFeatures = [
-  { icon: ShoppingCart, text: "Sklepy i usługi w zasięgu spaceru" },
-  { icon: School, text: "Bliskość szkół i przedszkoli" },
+  { icon: ShoppingCart, text: "Sklepy i usługi na wyciągnięcie ręki" },
+  { icon: School, text: "Osiedle blisko szkół i przedszkoli" },
   { icon: Trees, text: "Tereny zielone i rekreacyjne w okolicy" },
 ];
 
@@ -16,13 +16,13 @@ export function LocationSection() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16">
           <div className="flex flex-col justify-center">
             <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Podmiejska cisza w sercu Ostrzeszowa
+              Spokojna i zielona część Ostrzeszowa
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-              Inwestycja przy ulicy Jaworowej w Ostrzeszowie to miejsce, gdzie
-              nowoczesne osiedle spotyka się z naturą. Zyskujesz spokój i
-              prywatność, a jednocześnie szybki dostęp do szkół, sklepów,
-              punktów usługowych i centrum miasta.
+              Osiedle Dębowy Park powstaje w spokojnej, zielonej części
+              Ostrzeszowa. Lokalizacja zapewnia doskonałą komunikację z centrum
+              miasta, szkołami, sklepami i punktami usługowymi. To miejsce,
+              gdzie codzienna wygoda spotyka się z ciszą i naturą.
             </p>
             <ul className="mt-8 space-y-4">
               {locationFeatures.map((feature, index) => (

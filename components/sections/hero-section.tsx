@@ -91,7 +91,7 @@ export function HeroSection() {
               </h1>
 
               <p className="mx-auto mt-6 max-w-prose text-center text-[1rem] leading-relaxed text-white/90">
-                Poznaj wyjątkowe miejsce dla Ciebie i Twojej rodziny.
+                Nowoczesne osiedle wśród zieleni. Idealne dla Twojej rodziny.
               </p>
 
               <div className="mx-auto mt-8 max-w-[32rem]">
