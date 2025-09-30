@@ -4,12 +4,6 @@ import Image from "next/image";
 import { ChevronRight, ChevronsDown } from "lucide-react";
 import * as React from "react";
 
-/**
- * Alt Hero v7 — HIGH on mobile, LOWER on desktop
- * - MOBILE (<= md-1): 0.3fr / auto / 0.8fr (treść wyżej)
- * - DESKTOP (md+): 1fr / auto / 1.6fr (panel niżej)
- * - OSOBNE TŁA: full-bleed na poziomie sekcji (bez max-w ograniczeń)
- */
 export function HeroSection() {
   const onScroll = React.useCallback((id: string) => {
     const el = document.getElementById(id);
@@ -29,7 +23,6 @@ export function HeroSection() {
       className="relative isolate min-h-[100svh] w-full overflow-hidden"
     >
       {/* ====== TŁA FULL-BLEED (poziom sekcji) ====== */}
-      {/* MOBILE BG */}
       <div className="absolute inset-0 -z-20 md:hidden">
         <Image
           src="/Artboard_2.jpg"
@@ -42,10 +35,9 @@ export function HeroSection() {
         />
       </div>
 
-      {/* DESKTOP BG */}
       <div className="absolute inset-0 -z-20 hidden md:block">
         <Image
-          src="/Hero.jpg" // Twój obraz desktop
+          src="/Hero.jpg"
           alt="Nowoczesny dom – desktop"
           fill
           className="object-cover object-bottom"
@@ -166,7 +158,6 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* prawa kolumna pusta dla alignmentu */}
             <div className="col-span-5 lg:col-span-6" />
 
             <div className="col-span-12" />
@@ -174,13 +165,16 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll cue (shared) */}
-      <div
-        className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2"
-        aria-hidden
+      {/* === KLUCZOWA POPRAWKA: Interaktywny wskaźnik przewijania === */}
+      {/* === KLUCZOWA POPRAWKA: Interaktywny wskaźnik przewijania === */}
+      <button
+        type="button"
+        onClick={() => onScroll("dlaczego-warto")}
+        className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full p-2 transition-transform duration-200 ease-in-out hover:scale-130 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        aria-label="Przewiń do następnej sekcji"
       >
         <ChevronsDown className="h-10 w-10 animate-bounce text-foreground/90" />
-      </div>
+      </button>
     </section>
   );
 }

@@ -40,15 +40,15 @@ export function FeatureCard({
       {/* OVERLAY PNG po prawej (dekoracja) */}
       {bgSrc && (
         <div
-          className="pointer-events-none absolute top-0 right-0 pr-3 md:pr-4 pt-3 md:pt-4"
+          className="pointer-events-none absolute bottom-20 right-[-55] pr-3 md:pr-4 pt-3 md:pt-4"
           aria-hidden="true"
         >
           {/* 96x96 ~ h-24; możesz podnieść na md */}
           <Image
             src={bgSrc}
             alt=""
-            width={120}
-            height={120}
+            width={280}
+            height={280}
             loading="lazy"
             className={cn(
               "opacity-100 md:opacity-100 drop-shadow-xl object-contain",
