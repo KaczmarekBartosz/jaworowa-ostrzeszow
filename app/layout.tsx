@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -14,7 +13,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// === NOWE, POPRAWNE METADANE ===
 export const metadata = {
   title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
   description:

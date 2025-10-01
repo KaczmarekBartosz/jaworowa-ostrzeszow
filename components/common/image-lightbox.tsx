@@ -22,40 +22,42 @@ export function ImageLightbox({
   onClose,
   onIndexChange,
 }: ImageLightboxProps) {
-  const mounted = React.useRef(false);
-  const imgs = Array.isArray(images) ? images : [];
+  // Normalizuj dane wejściowe
+  const imgs = React.useMemo(
+    () => (Array.isArray(images) ? images : []),
+    [images]
+  );
 
-  // renderuj tylko w przeglądarce (eliminuje błędy hydration)
+  // Renderuj tylko po stronie klienta (eliminuje problemy z hydration)
   const [isClient, setIsClient] = React.useState(false);
   React.useEffect(() => setIsClient(true), []);
 
-  // bezpieczny index
+  // Bezpieczny indeks w zakresie [0, imgs.length - 1]
   const safeIndex = React.useMemo(() => {
     if (!imgs.length) return 0;
     return Math.min(Math.max(index, 0), imgs.length - 1);
   }, [index, imgs.length]);
 
+  // Aktualny indeks obrazu
   const [current, setCurrent] = React.useState(safeIndex);
   React.useEffect(() => {
     setCurrent(safeIndex);
-  }, [safeIndex, imgs.length, open]);
-
-  // jeśli zamknięte lub brak zdjęć albo SSR – nie renderuj
-  if (!open || !imgs.length || !isClient) return null;
+  }, [safeIndex]);
 
   const total = imgs.length;
-  const go = (dir: 1 | -1) => {
-    if (!total) return;
-    const next = (current + dir + total) % total;
-    setCurrent(next);
-    onIndexChange?.(next);
-  };
 
-  React.useEffect(() => {
-    if (mounted.current) return;
-    mounted.current = true;
-  }, []);
+  // Nawigacja po obrazach (stabilna referencja)
+  const go = React.useCallback(
+    (dir: 1 | -1) => {
+      if (!total) return;
+      const next = (current + dir + total) % total;
+      setCurrent(next);
+      onIndexChange?.(next);
+    },
+    [current, total, onIndexChange]
+  );
 
+  // Obsługa klawiatury
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") go(1);
@@ -64,7 +66,10 @@ export function ImageLightbox({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [current, total, onClose]);
+  }, [go, onClose]);
+
+  // ↙️ Warunkowy render dopiero po wszystkich hookach
+  if (!open || !isClient || !total) return null;
 
   const img = imgs[current];
 
@@ -102,7 +107,6 @@ export function ImageLightbox({
         )}
 
         <div className="relative w-full h-full">
-          {/* Podwójny guard – nawet gdyby coś było nie tak, nie wywali projektu */}
           {img?.src ? (
             <Image
               src={img.src}

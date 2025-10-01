@@ -158,7 +158,7 @@ export function HeroSection() {
         className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full p-2 transition-transform duration-200 ease-in-out hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
         aria-label="Przewiń do następnej sekcji"
       >
-        <ChevronsDown className="h-10 w-10 animate-bounce text-foreground/90 motion-reduce:animate-none" />
+        <ChevronsDown className="h-10 w-10 animate-bounce text-foreground/90" />
       </button>
     </section>
   );

@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { GalleryCard } from "@/components/common/gallery-card";
 import { GalleryStackMobile } from "@/components/common/gallery-stack-mobile";
+import { FullscreenImageViewer } from "@/components/common/fullscreen-image-viewer";
 
 const galleryImages = [
   {
@@ -72,44 +74,61 @@ const galleryImages = [
 ];
 
 export function GallerySection() {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState({ src: "", alt: "" });
+
+  const openLightbox = (image: (typeof galleryImages)[0]) => {
+    setLightboxImage({ src: image.imageUrl, alt: image.title });
+    setLightboxOpen(true);
+  };
+
   return (
-    <section
-      id="galeria"
-      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
-    >
-      <div className="mx-auto max-w-7xl px-6 md:px-8">
-        <div className="max-w-3xl">
-          <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            Galeria
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Każda wizualizacja przedstawia nie tylko architekturę, ale i
-            atmosferę miejsca, w którym możesz zamieszkać wraz ze swoją rodziną.
-          </p>
-        </div>
+    <>
+      <section
+        id="galeria"
+        className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
+      >
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
+          <div className="max-w-3xl">
+            <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+              Galeria
+            </h2>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Każda wizualizacja przedstawia nie tylko architekturę, ale i
+              atmosferę miejsca, w którym możesz zamieszkać wraz ze swoją
+              rodziną.
+            </p>
+          </div>
 
-        {/* MOBILE: stos kart z gestem swipe */}
-        <div className="mt-10 md:hidden">
-          <GalleryStackMobile
-            items={galleryImages.map(({ imageUrl, title }) => ({
-              imageUrl,
-              title,
-            }))}
-          />
-        </div>
-
-        {/* DESKTOP: Twoja siatka bez zmian */}
-        <div className="mt-16 hidden grid-flow-dense grid-cols-2 gap-4 [grid-auto-rows:150px] md:grid md:grid-cols-4">
-          {galleryImages.map((image, index) => (
-            <GalleryCard
-              key={index}
-              imageUrl={image.imageUrl}
-              title={image.title}
-              className={image.span}
+          <div className="mt-10 md:hidden">
+            <GalleryStackMobile
+              items={galleryImages.map(({ imageUrl, title }) => ({
+                imageUrl,
+                title,
+              }))}
             />
-          ))}
+          </div>
+
+          <div className="mt-16 hidden grid-flow-dense grid-cols-2 gap-4 [grid-auto-rows:150px] md:grid md:grid-cols-4">
+            {galleryImages.map((image, index) => (
+              <GalleryCard
+                key={index}
+                imageUrl={image.imageUrl}
+                title={image.title}
+                className={image.span}
+                onClick={() => openLightbox(image)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <FullscreenImageViewer
+        open={lightboxOpen}
+        src={lightboxImage.src}
+        alt={lightboxImage.alt}
+        onClose={() => setLightboxOpen(false)}
+      />
+    </>
   );
 }
