@@ -2879,8 +2879,9 @@ export function PlansSection() {
                 className={cn(
                   "py-2 rounded-xl font-semibold",
                   currentView.floor === "parter"
-                    ? "bg-primary text-white"
-                    : "bg-muted text-foreground"
+                    ? // === OSTATECZNA POPRAWKA: Zmiana bg-primary na gradient ===
+                      "bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground"
+                    : "bg-muted text-muted-foreground"
                 )}
                 onClick={() => setActiveView(views[0].id)}
               >
@@ -2890,8 +2891,9 @@ export function PlansSection() {
                 className={cn(
                   "py-2 rounded-xl font-semibold",
                   currentView.floor === "pietro"
-                    ? "bg-primary text-white"
-                    : "bg-muted text-foreground"
+                    ? // === OSTATECZNA POPRAWKA: Zmiana bg-primary na gradient ===
+                      "bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground"
+                    : "bg-muted text-muted-foreground"
                 )}
                 onClick={() => setActiveView(views[1].id)}
               >
@@ -2949,7 +2951,7 @@ export function PlansSection() {
               </div>
               <div className="mt-4 pt-4 border-t">
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold">
+                  <span className="text-sm font-semibold">
                     Całkowita powierzchnia użytkowa
                   </span>
                   <span className="text-lg font-bold text-primary">

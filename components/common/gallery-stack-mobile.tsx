@@ -15,7 +15,6 @@ type Item = { imageUrl: string; title: string };
 
 type GalleryStackMobileProps = {
   items: Item[];
-  /** Tryb animacji hinta: "continuous" (ciągły) lub "pulsed" (co 3 sekundy). Domyślnie: "pulsed". */
   hintMode?: "continuous" | "pulsed";
 };
 
@@ -26,24 +25,22 @@ export function GalleryStackMobile({
   const [queue, setQueue] = React.useState(items);
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(0);
-  const [didDrag, setDidDrag] = React.useState(false); // 🔒 guard na klik po drag
+  const [didDrag, setDidDrag] = React.useState(false);
 
   const x = useMotionValue(0);
 
-  // Odczuwalny próg przesunięcia (px) – łączymy offset i prędkość
   const THRESHOLD = 90;
   const VELOCITY_WEIGHT = 0.35;
 
-  // Warstwy "peek"
   const layers = [
-    { scale: 1, y: 0, x: 0, rot: 0, z: 30, opacity: 1 }, // TOP
-    { scale: 0.97, y: -5, x: 15, rot: 5, z: 20, opacity: 0.95 }, // MID
-    { scale: 0.94, y: 10, x: -10, rot: -8, z: 10, opacity: 0.9 }, // BACK
+    { scale: 1, y: 0, x: 0, rot: 0, z: 30, opacity: 1 },
+    { scale: 0.97, y: -5, x: 15, rot: 5, z: 20, opacity: 0.95 },
+    { scale: 0.94, y: 10, x: -10, rot: -8, z: 10, opacity: 0.9 },
   ] as const;
 
-  // Kolejka – operacje
   const visible = queue.slice(0, 3);
 
+  // === POPRAWKA: Poprawiono składnię spread '...rest' ===
   const next = React.useCallback(() => {
     setQueue((q) => {
       const [first, ...rest] = q;
@@ -62,14 +59,12 @@ export function GalleryStackMobile({
   }, []);
 
   const openLightbox = () => {
-    // jeśli przed chwilą był drag, zignoruj klik (chroni przed otwieraniem po przesunięciu)
     if (didDrag) return;
     setActiveIndex(0);
     setIsOpen(true);
   };
   const closeLightbox = () => setIsOpen(false);
 
-  // Drag handlers — z kierunkiem
   const onDragStart = () => {
     setDidDrag(false);
   };
@@ -78,57 +73,43 @@ export function GalleryStackMobile({
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo
   ) => {
-    // siła z kierunkiem: offset.x + v.x * waga
     const swipeStrength = info.offset.x + info.velocity.x * VELOCITY_WEIGHT;
 
-    // jeśli było faktyczne przesunięcie, zaznacz to (blokuje klik)
     if (Math.abs(info.offset.x) > 2 || Math.abs(info.velocity.x) > 50) {
       setDidDrag(true);
-      // zresetuj flagę po krótkiej chwili, żeby zwykłe kliki znów działały
       setTimeout(() => setDidDrag(false), 120);
     }
 
     if (Math.abs(swipeStrength) > THRESHOLD) {
       if (swipeStrength > 0) {
-        // 👉 w prawo: cofnij (poprzednia karta)
         prev();
       } else {
-        // 👈 w lewo: następna
         next();
       }
       x.set(0);
     } else {
-      // za słaby gest – wróć do środka
       x.set(0);
     }
   };
 
-  // --- HINT: płynny eliptyczny ruch (sin/cos) sterowany motionValue ---
   const hintX = useMotionValue(0);
   const hintY = useMotionValue(0);
-
-  // Twoje parametry ruchu
-  const A = 112; // pół oś pozioma (px)
-  const B = 16; // pół oś pionowa (px)
-  const SPEED = 1.8; // rad/s
-  const LIMIT = 2; // zakres kąta: -LIMIT..+LIMIT
-
+  const A = 112;
+  const B = 16;
+  const SPEED = 1.8;
+  const LIMIT = 2;
   const angleRef = React.useRef(0);
   const dirRef = React.useRef<1 | -1>(1);
-
-  // --- Pulsowanie widoczności hinta (fade in → łuk → fade out → przerwa) ---
   const [hintVisible, setHintVisible] = React.useState(
     hintMode === "continuous"
   );
   const timeoutsRef = React.useRef<number[]>([]);
-
-  const CYCLE_MS = 3000; // pełny cykl
-  const FADE_MS = 250; // fade in/out
-  const ACTIVE_MS = 2200; // czas widoczności (ruchu) w pulsed
-  const PAUSE_MS = Math.max(0, CYCLE_MS - ACTIVE_MS); // przerwa
+  const CYCLE_MS = 3000;
+  const FADE_MS = 250;
+  const ACTIVE_MS = 2200;
+  const PAUSE_MS = Math.max(0, CYCLE_MS - ACTIVE_MS);
 
   React.useEffect(() => {
-    // czyścimy poprzednie timeouts przy każdej zmianie trybu/okna
     timeoutsRef.current.forEach((id) => clearTimeout(id));
     timeoutsRef.current = [];
 
@@ -139,15 +120,14 @@ export function GalleryStackMobile({
 
     if (hintMode === "continuous") {
       setHintVisible(true);
-      return; // brak cykli
+      return;
     }
 
-    // hintMode === "pulsed": pętla time-outów
     const startCycle = () => {
-      setHintVisible(true); // fade in
+      setHintVisible(true);
       const t1 = window.setTimeout(() => {
-        setHintVisible(false); // fade out
-        const t2 = window.setTimeout(startCycle, PAUSE_MS); // przerwa, potem znów
+        setHintVisible(false);
+        const t2 = window.setTimeout(startCycle, PAUSE_MS);
         timeoutsRef.current.push(t2);
       }, ACTIVE_MS);
       timeoutsRef.current.push(t1);
@@ -159,9 +139,8 @@ export function GalleryStackMobile({
       timeoutsRef.current.forEach((id) => clearTimeout(id));
       timeoutsRef.current = [];
     };
-  }, [hintMode, isOpen]);
+  }, [hintMode, isOpen, PAUSE_MS]); // Dodano brakującą zależność
 
-  // animujemy pozycję tylko gdy hint ma być aktywny
   const isHintAnimating = !isOpen && (hintMode === "continuous" || hintVisible);
 
   useAnimationFrame((_, delta) => {
@@ -181,14 +160,12 @@ export function GalleryStackMobile({
 
     angleRef.current = nextAngle;
 
-    // x = A * sin(θ), y = B * (1 - cos(θ))
     hintX.set(A * Math.sin(nextAngle));
     hintY.set(B * (1 - Math.cos(nextAngle)));
   });
 
   return (
     <>
-      {/* STOS KART */}
       <div className="relative mx-auto w-full max-w-md">
         <div className="relative h-[64vh] min-h-[420px] w-full">
           <AnimatePresence initial={false}>
@@ -216,8 +193,8 @@ export function GalleryStackMobile({
                     dragElastic={0.15}
                     dragConstraints={{ left: 0, right: 0 }}
                     style={isTop ? { x } : undefined}
-                    onDragStart={isTop ? onDragStart : undefined} // ✅
-                    onDragEnd={isTop ? onDragEnd : undefined} // ✅ z kierunkiem
+                    onDragStart={isTop ? onDragStart : undefined}
+                    onDragEnd={isTop ? onDragEnd : undefined}
                     whileTap={isTop ? { cursor: "grabbing" } : {}}
                     className="relative h-full w-full select-none"
                   >
@@ -235,7 +212,6 @@ export function GalleryStackMobile({
                         className="object-cover"
                         priority={isTop}
                       />
-                      {/* winieta + tytuł */}
                       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
                       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-4">
                         <div className="rounded-2xl bg-black/45 px-4 py-3 backdrop-blur">
@@ -250,8 +226,6 @@ export function GalleryStackMobile({
               );
             })}
           </AnimatePresence>
-
-          {/* HINT: łapka po elipsie */}
           <AnimatePresence>
             {!isOpen && (
               <motion.div
@@ -283,8 +257,6 @@ export function GalleryStackMobile({
           </AnimatePresence>
         </div>
       </div>
-
-      {/* LIGHTBOX (pełny ekran) */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -313,8 +285,6 @@ export function GalleryStackMobile({
                   priority
                 />
               </div>
-
-              {/* Sterowanie w lightboxie */}
               <div className="pointer-events-none absolute inset-x-0 bottom-4 flex items-center justify-center gap-3">
                 <button
                   type="button"
@@ -337,8 +307,6 @@ export function GalleryStackMobile({
                   Następne
                 </button>
               </div>
-
-              {/* Zamknij */}
               <button
                 type="button"
                 onClick={closeLightbox}

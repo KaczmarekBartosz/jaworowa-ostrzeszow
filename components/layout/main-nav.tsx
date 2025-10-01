@@ -13,7 +13,6 @@ import { Menu, Trees, X } from "lucide-react";
 import { ThemeToggle } from "@/components/common/theme-toggle";
 import { cn } from "@/lib/utils";
 
-// === OSTATECZNA, POPRAWNA LISTA SEKCJI ===
 const navItems = [
   { href: "#dlaczego-warto", label: "Dlaczego Warto?" },
   { href: "#domy", label: "Domy i Plany" },
@@ -46,30 +45,22 @@ export function MainNav() {
         aria-hidden="true"
       />
       <span className="text-xl font-bold tracking-tight text-foreground">
-        {/*Nazwa_firmy*/}
+        Osiedle Dębowy Park
       </span>
     </Link>
   );
 
-  const smoothScroll = (href: string) => {
-    if (!href.startsWith("#")) return;
+  const handleScrollTo = (href: string) => {
     const id = href.slice(1);
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
-  const handleNavClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string,
-    isMobile = false
-  ) => {
-    e.preventDefault();
-    if (isMobile) {
-      setOpen(false);
-      setTimeout(() => smoothScroll(href), 300);
-    } else {
-      smoothScroll(href);
-    }
+  const handleMobileNavClick = (href: string) => {
+    setOpen(false);
+    setTimeout(() => handleScrollTo(href), 150);
   };
 
   return (
@@ -83,8 +74,7 @@ export function MainNav() {
         <div
           className={cn(
             "flex w-full items-center justify-between transition-all duration-300 md:hidden",
-            scrolled &&
-              "rounded-full border bg-background/50 p-2 backdrop-blur-sm"
+            scrolled && "rounded-full border bg-card/50 p-2 backdrop-blur-sm"
           )}
         >
           <div className={cn("flex-1", scrolled && "pl-2")}>
@@ -92,7 +82,8 @@ export function MainNav() {
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle size="lg" />
-            <Sheet open={open} onOpenChange={setOpen}>
+            {/* POPRAWKA: Dodajemy prop 'modal={false}' */}
+            <Sheet open={open} onOpenChange={setOpen} modal={false}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
@@ -123,24 +114,22 @@ export function MainNav() {
                 </div>
                 <nav className="mt-24 flex flex-1 flex-col items-center justify-center gap-y-8">
                   {navItems.map((item) => (
-                    <a
+                    <button
                       key={item.href}
-                      href={item.href}
-                      onClick={(e) => handleNavClick(e, item.href, true)}
+                      onClick={() => handleMobileNavClick(item.href)}
                       className="text-3xl font-medium text-foreground/80 transition-colors hover:text-foreground"
                     >
                       {item.label}
-                    </a>
+                    </button>
                   ))}
                 </nav>
                 <div className="mt-auto pb-4">
-                  <Button size="lg" className="w-full rounded-full" asChild>
-                    <a
-                      href="#kontakt"
-                      onClick={(e) => handleNavClick(e, "#kontakt", true)}
-                    >
-                      Kontakt
-                    </a>
+                  <Button
+                    size="lg"
+                    className="w-full rounded-full"
+                    onClick={() => handleMobileNavClick("#kontakt")}
+                  >
+                    Kontakt
                   </Button>
                 </div>
               </SheetContent>
@@ -148,26 +137,26 @@ export function MainNav() {
           </div>
         </div>
 
-        <div className="hidden w-full items-center justify-between rounded-full border bg-background/50 p-2 pl-8 backdrop-blur-sm md:flex">
+        <div className="hidden w-full items-center justify-between rounded-full border bg-card/50 p-2 pl-8 backdrop-blur-sm md:flex">
           <Logo />
           <nav className="flex gap-x-8">
             {navItems.map((item) => (
-              <a
+              <button
                 key={item.href}
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                className="text-foreground/80 transition-colors hover:text-foreground"
+                onClick={() => handleScrollTo(item.href)}
+                className="bg-transparent text-foreground/80 transition-colors hover:text-foreground"
               >
                 {item.label}
-              </a>
+              </button>
             ))}
           </nav>
           <div className="flex items-center gap-1">
             <ThemeToggle size="lg" />
-            <Button className="rounded-full" asChild>
-              <a href="#kontakt" onClick={(e) => handleNavClick(e, "#kontakt")}>
-                Kontakt
-              </a>
+            <Button
+              className="rounded-full"
+              onClick={() => handleScrollTo("#kontakt")}
+            >
+              Kontakt
             </Button>
           </div>
         </div>

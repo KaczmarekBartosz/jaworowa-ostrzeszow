@@ -7,7 +7,6 @@ export function Footer() {
     <footer className="bg-card border-t border-border/50">
       <div className="mx-auto max-w-7xl px-6 py-12 md:px-8 md:py-16">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
-          {/* Kolumna 1: Logo i opis */}
           <div className="lg:col-span-1">
             <Link
               href="/"
@@ -27,15 +26,14 @@ export function Footer() {
               myślą o komforcie i harmonii z naturą.
             </p>
           </div>
-
-          {/* Kolumna 2 i 3: Linki i kontakt */}
           <div className="grid grid-cols-2 gap-8 lg:col-span-2 md:grid-cols-3">
             <div>
               <h3 className="font-semibold text-foreground">Nawigacja</h3>
               <ul className="mt-4 space-y-2">
                 <li>
+                  {/* POPRAWKA: Poprawiono 'href' na działający */}
                   <a
-                    href="#inwestycja"
+                    href="#dlaczego-warto"
                     className="text-muted-foreground hover:text-foreground"
                   >
                     O Inwestycji
@@ -97,10 +95,8 @@ export function Footer() {
             </div>
           </div>
         </div>
-
-        {/* Dolna część stopki */}
         <div className="mt-12 border-t border-border/50 pt-8 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Jaworowa Ostrzeszów. Wszelkie prawa
+          © {new Date().getFullYear()} Osiedle Dębowy Park. Wszelkie prawa
           zastrzeżone.
         </div>
       </div>
