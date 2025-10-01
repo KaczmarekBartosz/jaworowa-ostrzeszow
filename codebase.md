@@ -327,6 +327,262 @@ export default function HomePage() {
 
 ```
 
+# components\common\before-after-slider.tsx
+
+```tsx
+"use client";
+
+import * as React from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Maximize2, Minimize2 } from "lucide-react";
+
+type Props = {
+  beforeSrc: string;
+  beforeAlt: string;
+  afterSrc: string;
+  afterAlt: string;
+  beforeLabel?: string;
+  afterLabel?: string;
+  /** np. "aspect-[4/3]" | "aspect-[16/9]" | "aspect-square" */
+  aspectRatioClass?: string;
+  /** start slider position in % */
+  initialPercent?: number;
+  /** optional container classes */
+  className?: string;
+  /** max pixel height clamp (desktop) */
+  maxH?: number; // e.g. 640
+};
+
+export default function BeforeAfterSlider({
+  beforeSrc,
+  beforeAlt,
+  afterSrc,
+  afterAlt,
+  beforeLabel = "Rzut 2D",
+  afterLabel = "Wizualizacja 3D",
+  aspectRatioClass = "aspect-[16/10]",
+  initialPercent = 50,
+  className = "",
+  maxH = 640,
+}: Props) {
+  const [percent, setPercent] = React.useState(
+    Math.max(0, Math.min(100, initialPercent))
+  );
+  const [open, setOpen] = React.useState(false);
+  const [isClient, setIsClient] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement | null>(null);
+
+  React.useEffect(() => setIsClient(true), []);
+
+  const setFromClientX = (clientX: number) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const p = ((clientX - r.left) / r.width) * 100;
+    setPercent(Math.max(0, Math.min(100, p)));
+  };
+
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") setPercent((p) => Math.max(0, p - 4));
+    if (e.key === "ArrowRight") setPercent((p) => Math.min(100, p + 4));
+    if (e.key === "Home") setPercent(0);
+    if (e.key === "End") setPercent(100);
+  };
+
+  return (
+    <>
+      <div
+        className={[
+          // premium card frame
+          "relative rounded-3xl border bg-gradient-to-b from-card/60 to-card/30",
+          "shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset,0_20px_50px_-20px_rgba(0,0,0,0.35)]",
+          "ring-1 ring-white/5 overflow-hidden",
+          aspectRatioClass,
+          "max-h-[70vh]",
+          // clamp on desktops so visuals never stretch oddly
+          `md:[--maxH:${maxH}px] md:max-h-[var(--maxH)]`,
+          className || "",
+        ].join(" ")}
+        ref={ref}
+        onPointerDown={(e) => setFromClientX(e.clientX)}
+        onPointerMove={(e) => {
+          if (e.buttons === 1) setFromClientX(e.clientX);
+        }}
+      >
+        {/* checker + glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.06),transparent_40%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),transparent)]" />
+
+        {/* BASE: before (2D) */}
+        <Image
+          src={beforeSrc}
+          alt={beforeAlt}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-contain select-none"
+          priority={false}
+        />
+
+        {/* OVERLAY: after (3D) clipped by width */}
+        <div
+          className="absolute inset-0 overflow-hidden"
+          style={{ width: `${percent}%` }}
+        >
+          <Image
+            src={afterSrc}
+            alt={afterAlt}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-contain select-none"
+            priority={false}
+          />
+        </div>
+
+        {/* badges */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute top-3 left-3">
+            <span className="inline-flex items-center rounded-full bg-black/55 text-white text-xs px-2.5 py-1 backdrop-blur">
+              {beforeLabel}
+            </span>
+          </div>
+          <div className="absolute top-3 right-3">
+            <span className="inline-flex items-center rounded-full bg-black/55 text-white text-xs px-2.5 py-1 backdrop-blur">
+              {afterLabel}
+            </span>
+          </div>
+          {/* side scrims for readability */}
+          <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-black/25 to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-black/25 to-transparent" />
+        </div>
+
+        {/* handle */}
+        {isClient && (
+          <motion.div
+            role="slider"
+            aria-label="Porównaj 2D i 3D"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(percent)}
+            tabIndex={0}
+            onKeyDown={onKey}
+            className="absolute top-0 bottom-0 -translate-x-1/2 cursor-col-resize select-none"
+            style={{ left: `${percent}%` }}
+            onPan={(e, info) => setFromClientX(info.point.x)}
+            onPanStart={(e, info) => setFromClientX(info.point.x)}
+          >
+            <div className="h-full w-px bg-white/80 shadow-[0_0_0_1px_rgba(0,0,0,0.25)]" />
+            <div className="absolute top-1/2 -translate-y-1/2 -left-5 right-0 pointer-events-none">
+              <div className="pointer-events-auto mx-auto w-11 h-11 rounded-full bg-white text-foreground shadow-md grid place-items-center">
+                <div className="w-5 h-0.5 bg-black" />
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* fullscreen button */}
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-label="Powiększ"
+          className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-2 rounded-full bg-black/55 text-white text-xs px-3 py-1.5 hover:bg-black/70"
+        >
+          <Maximize2 className="w-4 h-4" />
+          Pełny ekran
+        </button>
+      </div>
+
+      {/* FULLSCREEN */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="p-0 max-w-none w-screen h-screen border-0 bg-black/95">
+          <div className="absolute top-4 right-4 z-50">
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="inline-flex items-center gap-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs px-3 py-1.5"
+            >
+              <Minimize2 className="w-4 h-4" />
+              Zamknij
+            </button>
+          </div>
+          <div className="relative w-full h-full">
+            <div className="absolute inset-0 m-4 md:m-8 rounded-3xl overflow-hidden border ring-1 ring-white/10 bg-gradient-to-b from-white/5 to-transparent">
+              {/* contain in fullscreen as well */}
+              <Image
+                src={beforeSrc}
+                alt={beforeAlt}
+                fill
+                sizes="100vw"
+                className="object-contain select-none"
+                priority
+              />
+              <div
+                className="absolute inset-0 overflow-hidden"
+                style={{ width: `${percent}%` }}
+              >
+                <Image
+                  src={afterSrc}
+                  alt={afterAlt}
+                  fill
+                  sizes="100vw"
+                  className="object-contain select-none"
+                  priority
+                />
+              </div>
+
+              {/* badges */}
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute top-4 left-4">
+                  <span className="inline-flex items-center rounded-full bg-black/60 text-white text-sm px-3 py-1.5 backdrop-blur">
+                    {beforeLabel}
+                  </span>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center rounded-full bg-black/60 text-white text-sm px-3 py-1.5 backdrop-blur">
+                    {afterLabel}
+                  </span>
+                </div>
+              </div>
+
+              {/* handle fs */}
+              {isClient && (
+                <motion.div
+                  role="slider"
+                  aria-label="Porównaj 2D i 3D"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(percent)}
+                  tabIndex={0}
+                  className="absolute top-0 bottom-0 -translate-x-1/2 cursor-col-resize select-none"
+                  style={{ left: `${percent}%` }}
+                  onKeyDown={(e) => {
+                    if (e.key === "ArrowLeft")
+                      setPercent((p) => Math.max(0, p - 4));
+                    if (e.key === "ArrowRight")
+                      setPercent((p) => Math.min(100, p + 4));
+                  }}
+                  onPan={(e, info) => setFromClientX(info.point.x)}
+                  onPanStart={(e, info) => setFromClientX(info.point.x)}
+                >
+                  <div className="h-full w-px bg-white/85" />
+                  <div className="absolute top-1/2 -translate-y-1/2 -left-6 right-0 pointer-events-none">
+                    <div className="pointer-events-auto mx-auto w-12 h-12 rounded-full bg-white text-foreground shadow-md grid place-items-center">
+                      <div className="w-6 h-0.5 bg-black" />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+```
+
 # components\common\feature-card.tsx
 
 ```tsx
@@ -372,15 +628,15 @@ export function FeatureCard({
       {/* OVERLAY PNG po prawej (dekoracja) */}
       {bgSrc && (
         <div
-          className="pointer-events-none absolute top-0 right-0 pr-3 md:pr-4 pt-3 md:pt-4"
+          className="pointer-events-none absolute bottom-20 right-[-55] pr-3 md:pr-4 pt-3 md:pt-4"
           aria-hidden="true"
         >
           {/* 96x96 ~ h-24; możesz podnieść na md */}
           <Image
             src={bgSrc}
             alt=""
-            width={120}
-            height={120}
+            width={280}
+            height={280}
             loading="lazy"
             className={cn(
               "opacity-100 md:opacity-100 drop-shadow-xl object-contain",
@@ -593,73 +849,185 @@ import {
   motion,
   AnimatePresence,
   useMotionValue,
-  useReducedMotion,
+  useAnimationFrame,
+  type PanInfo,
 } from "framer-motion";
-import { X, ChevronRight, Pointer } from "lucide-react";
+import { X, ChevronRight, ChevronLeft, Pointer } from "lucide-react";
 
 type Item = { imageUrl: string; title: string };
 
-export function GalleryStackMobile({ items }: { items: Item[] }) {
+type GalleryStackMobileProps = {
+  items: Item[];
+  /** Tryb animacji hinta: "continuous" (ciągły) lub "pulsed" (co 3 sekundy). Domyślnie: "pulsed". */
+  hintMode?: "continuous" | "pulsed";
+};
+
+export function GalleryStackMobile({
+  items,
+  hintMode = "pulsed",
+}: GalleryStackMobileProps) {
   const [queue, setQueue] = React.useState(items);
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [didDrag, setDidDrag] = React.useState(false); // 🔒 guard na klik po drag
 
   const x = useMotionValue(0);
-  const prefersReduced = useReducedMotion();
-  const threshold = 120;
 
-  // Twoje warstwy z „peekiem”
+  // Odczuwalny próg przesunięcia (px) – łączymy offset i prędkość
+  const THRESHOLD = 90;
+  const VELOCITY_WEIGHT = 0.35;
+
+  // Warstwy "peek"
   const layers = [
     { scale: 1, y: 0, x: 0, rot: 0, z: 30, opacity: 1 }, // TOP
-    { scale: 0.97, y: -5, x: 15, rot: 5, z: 20, opacity: 0.95 }, // MID (w prawo)
-    { scale: 0.94, y: 10, x: -10, rot: -8, z: 10, opacity: 0.9 }, // BACK (w lewo)
+    { scale: 0.97, y: -5, x: 15, rot: 5, z: 20, opacity: 0.95 }, // MID
+    { scale: 0.94, y: 10, x: -10, rot: -8, z: 10, opacity: 0.9 }, // BACK
   ] as const;
 
-  const onDragEnd = (
-    _: any,
-    info: { offset: { x: number }; velocity: { x: number } }
-  ) => {
-    const power = Math.abs(info.offset.x) + Math.abs(info.velocity.x) * 0.2;
-    if (power > threshold) {
-      setQueue((q) => {
-        const [first, ...rest] = q;
-        return [...rest, first];
-      });
-      x.set(0);
-    }
-  };
-
+  // Kolejka – operacje
   const visible = queue.slice(0, 3);
 
-  const openLightbox = () => {
-    setActiveIndex(0);
-    setIsOpen(true);
-  };
-  const closeLightbox = () => setIsOpen(false);
-
-  const next = () => {
+  const next = React.useCallback(() => {
     setQueue((q) => {
       const [first, ...rest] = q;
       return [...rest, first];
     });
     setActiveIndex(0);
-  };
-  const prev = () => {
+  }, []);
+
+  const prev = React.useCallback(() => {
     setQueue((q) => {
       const last = q[q.length - 1];
       const rest = q.slice(0, -1);
       return [last, ...rest];
     });
     setActiveIndex(0);
+  }, []);
+
+  const openLightbox = () => {
+    // jeśli przed chwilą był drag, zignoruj klik (chroni przed otwieraniem po przesunięciu)
+    if (didDrag) return;
+    setActiveIndex(0);
+    setIsOpen(true);
+  };
+  const closeLightbox = () => setIsOpen(false);
+
+  // Drag handlers — z kierunkiem
+  const onDragStart = () => {
+    setDidDrag(false);
   };
 
-  // ---- Hint animowany: eliptyczny tor + fade in/out w pętli ----
-  // Sekwencje x/y tworzą delikatną elipsę (prawo-góra-prawo-dół-powrót)
-  const hintX = [0, 12, 24, 36, 50, 62, 50, 36, 24, 12, 0];
-  const hintY = [0, -6, -10, -12, -10, 0, 8, 12, 8, 2, 0];
+  const onDragEnd = (
+    _e: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
+  ) => {
+    // siła z kierunkiem: offset.x + v.x * waga
+    const swipeStrength = info.offset.x + info.velocity.x * VELOCITY_WEIGHT;
 
-  // Gdy włączony lightbox – nie pokazujemy hinta
-  const showHint = !isOpen && !prefersReduced;
+    // jeśli było faktyczne przesunięcie, zaznacz to (blokuje klik)
+    if (Math.abs(info.offset.x) > 2 || Math.abs(info.velocity.x) > 50) {
+      setDidDrag(true);
+      // zresetuj flagę po krótkiej chwili, żeby zwykłe kliki znów działały
+      setTimeout(() => setDidDrag(false), 120);
+    }
+
+    if (Math.abs(swipeStrength) > THRESHOLD) {
+      if (swipeStrength > 0) {
+        // 👉 w prawo: cofnij (poprzednia karta)
+        prev();
+      } else {
+        // 👈 w lewo: następna
+        next();
+      }
+      x.set(0);
+    } else {
+      // za słaby gest – wróć do środka
+      x.set(0);
+    }
+  };
+
+  // --- HINT: płynny eliptyczny ruch (sin/cos) sterowany motionValue ---
+  const hintX = useMotionValue(0);
+  const hintY = useMotionValue(0);
+
+  // Twoje parametry ruchu
+  const A = 112; // pół oś pozioma (px)
+  const B = 16; // pół oś pionowa (px)
+  const SPEED = 1.8; // rad/s
+  const LIMIT = 2; // zakres kąta: -LIMIT..+LIMIT
+
+  const angleRef = React.useRef(0);
+  const dirRef = React.useRef<1 | -1>(1);
+
+  // --- Pulsowanie widoczności hinta (fade in → łuk → fade out → przerwa) ---
+  const [hintVisible, setHintVisible] = React.useState(
+    hintMode === "continuous"
+  );
+  const timeoutsRef = React.useRef<number[]>([]);
+
+  const CYCLE_MS = 3000; // pełny cykl
+  const FADE_MS = 250; // fade in/out
+  const ACTIVE_MS = 2200; // czas widoczności (ruchu) w pulsed
+  const PAUSE_MS = Math.max(0, CYCLE_MS - ACTIVE_MS); // przerwa
+
+  React.useEffect(() => {
+    // czyścimy poprzednie timeouts przy każdej zmianie trybu/okna
+    timeoutsRef.current.forEach((id) => clearTimeout(id));
+    timeoutsRef.current = [];
+
+    if (isOpen) {
+      setHintVisible(false);
+      return;
+    }
+
+    if (hintMode === "continuous") {
+      setHintVisible(true);
+      return; // brak cykli
+    }
+
+    // hintMode === "pulsed": pętla time-outów
+    const startCycle = () => {
+      setHintVisible(true); // fade in
+      const t1 = window.setTimeout(() => {
+        setHintVisible(false); // fade out
+        const t2 = window.setTimeout(startCycle, PAUSE_MS); // przerwa, potem znów
+        timeoutsRef.current.push(t2);
+      }, ACTIVE_MS);
+      timeoutsRef.current.push(t1);
+    };
+
+    startCycle();
+
+    return () => {
+      timeoutsRef.current.forEach((id) => clearTimeout(id));
+      timeoutsRef.current = [];
+    };
+  }, [hintMode, isOpen]);
+
+  // animujemy pozycję tylko gdy hint ma być aktywny
+  const isHintAnimating = !isOpen && (hintMode === "continuous" || hintVisible);
+
+  useAnimationFrame((_, delta) => {
+    if (!isHintAnimating) return;
+
+    const dAngle = (delta / 1000) * SPEED * dirRef.current;
+    let nextAngle = angleRef.current + dAngle;
+
+    if (nextAngle > LIMIT) {
+      nextAngle = LIMIT;
+      dirRef.current = -1;
+    }
+    if (nextAngle < -LIMIT) {
+      nextAngle = -LIMIT;
+      dirRef.current = 1;
+    }
+
+    angleRef.current = nextAngle;
+
+    // x = A * sin(θ), y = B * (1 - cos(θ))
+    hintX.set(A * Math.sin(nextAngle));
+    hintY.set(B * (1 - Math.cos(nextAngle)));
+  });
 
   return (
     <>
@@ -691,7 +1059,8 @@ export function GalleryStackMobile({ items }: { items: Item[] }) {
                     dragElastic={0.15}
                     dragConstraints={{ left: 0, right: 0 }}
                     style={isTop ? { x } : undefined}
-                    onDragEnd={isTop ? onDragEnd : undefined}
+                    onDragStart={isTop ? onDragStart : undefined} // ✅
+                    onDragEnd={isTop ? onDragEnd : undefined} // ✅ z kierunkiem
                     whileTap={isTop ? { cursor: "grabbing" } : {}}
                     className="relative h-full w-full select-none"
                   >
@@ -725,35 +1094,30 @@ export function GalleryStackMobile({ items }: { items: Item[] }) {
             })}
           </AnimatePresence>
 
-          {/* ANIMOWANY HINT „SWIPE” – pętla: fade in → ruch po elipsie → fade out → powrót */}
+          {/* HINT: łapka po elipsie */}
           <AnimatePresence>
-            {showHint && (
+            {!isOpen && (
               <motion.div
-                className="pointer-events-none absolute -bottom-10 left-1/2 -translate-x-1/2"
+                className="pointer-events-none absolute bottom-[-20px] left-1/2 z-50 -translate-x-1/2"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 1, 1, 0] }}
+                animate={{
+                  opacity: hintMode === "continuous" ? 1 : hintVisible ? 1 : 0,
+                }}
                 exit={{ opacity: 0 }}
                 transition={{
-                  duration: 3.6,
-                  repeat: Infinity,
+                  duration: hintMode === "continuous" ? 0.25 : FADE_MS / 1000,
                   ease: "easeInOut",
-                  times: [0, 0.08, 0.85, 1],
                 }}
               >
-                <div className="relative h-10 w-28">
-                  {/* tor ruchu */}
+                <div className="relative h-12 w-32">
                   <motion.div
-                    className="absolute top-1/2 left-6 -translate-y-1/2"
-                    animate={{ x: hintX, y: hintY }}
-                    transition={{
-                      duration: 2.8,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
+                    className="absolute top-1/2 left-8 -translate-y-1/2 will-change-transform"
+                    style={{ x: hintX, y: hintY }}
                   >
                     <div className="flex items-center gap-2">
-                      <Pointer className="h-5 w-5 text-muted-foreground" />
-                      <ChevronRight className="h-4 w-4 text-muted-foreground/80" />
+                      <ChevronLeft className="h-5 w-5 text-foreground/90" />
+                      <Pointer className="h-6 w-6 text-foreground drop-shadow" />
+                      <ChevronRight className="h-5 w-5 text-foreground/90" />
                     </div>
                   </motion.div>
                 </div>
@@ -831,6 +1195,304 @@ export function GalleryStackMobile({ items }: { items: Item[] }) {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+```
+
+# components\common\image-lightbox.tsx
+
+```tsx
+"use client";
+
+import * as React from "react";
+import Image from "next/image";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
+
+type LightboxImage = { src: string; alt: string };
+
+type ImageLightboxProps = {
+  images: LightboxImage[] | null | undefined;
+  index: number;
+  open: boolean;
+  onClose: () => void;
+  onIndexChange?: (next: number) => void;
+};
+
+export function ImageLightbox({
+  images,
+  index,
+  open,
+  onClose,
+  onIndexChange,
+}: ImageLightboxProps) {
+  const mounted = React.useRef(false);
+  const imgs = Array.isArray(images) ? images : [];
+
+  // renderuj tylko w przeglądarce (eliminuje błędy hydration)
+  const [isClient, setIsClient] = React.useState(false);
+  React.useEffect(() => setIsClient(true), []);
+
+  // bezpieczny index
+  const safeIndex = React.useMemo(() => {
+    if (!imgs.length) return 0;
+    return Math.min(Math.max(index, 0), imgs.length - 1);
+  }, [index, imgs.length]);
+
+  const [current, setCurrent] = React.useState(safeIndex);
+  React.useEffect(() => {
+    setCurrent(safeIndex);
+  }, [safeIndex, imgs.length, open]);
+
+  // jeśli zamknięte lub brak zdjęć albo SSR – nie renderuj
+  if (!open || !imgs.length || !isClient) return null;
+
+  const total = imgs.length;
+  const go = (dir: 1 | -1) => {
+    if (!total) return;
+    const next = (current + dir + total) % total;
+    setCurrent(next);
+    onIndexChange?.(next);
+  };
+
+  React.useEffect(() => {
+    if (mounted.current) return;
+    mounted.current = true;
+  }, []);
+
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") go(1);
+      if (e.key === "ArrowLeft") go(-1);
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [current, total, onClose]);
+
+  const img = imgs[current];
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => (!v ? onClose() : null)}>
+      <DialogContent
+        className="inset-0 fixed p-0 max-w-none w-screen h-screen border-0 bg-black/95"
+        aria-label="Podgląd pełnoekranowy"
+      >
+        <button
+          className="absolute top-4 right-4 z-50 rounded-full bg-white/10 hover:bg-white/20 p-2 outline-none focus-visible:ring-2 focus-visible:ring-white"
+          onClick={onClose}
+          aria-label="Zamknij podgląd"
+        >
+          <X className="w-5 h-5 text-white" />
+        </button>
+
+        {total > 1 && (
+          <>
+            <button
+              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-50 rounded-full bg-white/10 hover:bg-white/20 p-3 outline-none focus-visible:ring-2 focus-visible:ring-white"
+              onClick={() => go(-1)}
+              aria-label="Poprzednie zdjęcie"
+            >
+              <ChevronLeft className="w-6 h-6 text-white" />
+            </button>
+            <button
+              className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-50 rounded-full bg-white/10 hover:bg-white/20 p-3 outline-none focus-visible:ring-2 focus-visible:ring-white"
+              onClick={() => go(1)}
+              aria-label="Następne zdjęcie"
+            >
+              <ChevronRight className="w-6 h-6 text-white" />
+            </button>
+          </>
+        )}
+
+        <div className="relative w-full h-full">
+          {/* Podwójny guard – nawet gdyby coś było nie tak, nie wywali projektu */}
+          {img?.src ? (
+            <Image
+              src={img.src}
+              alt={img.alt ?? "Podgląd obrazu"}
+              fill
+              className="object-contain select-none"
+              sizes="100vw"
+              priority
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-white/80">
+              Brak obrazu do wyświetlenia
+            </div>
+          )}
+        </div>
+
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/90 text-sm px-3 py-1 rounded-full bg-white/10 backdrop-blur">
+          {current + 1} / {total}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export function ZoomableImageCard({
+  src,
+  alt,
+  onClick,
+  className,
+  sizes = "(max-width: 768px) 100vw, 50vw",
+}: {
+  src: string;
+  alt: string;
+  onClick?: () => void;
+  className?: string;
+  sizes?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="Powiększ obraz"
+      className={
+        "group relative overflow-hidden rounded-3xl border bg-card/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring " +
+        (className ?? "")
+      }
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={1600}
+        height={1200}
+        className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+        sizes={sizes}
+        quality={80}
+      />
+      <div className="absolute inset-0 pointer-events-none flex items-end justify-end p-3">
+        <span className="inline-flex items-center gap-2 text-white/95 bg-black/40 backdrop-blur px-2.5 py-1.5 rounded-full text-xs md:text-sm opacity-0 group-hover:opacity-100 transition">
+          Kliknij, aby powiększyć
+        </span>
+      </div>
+    </button>
+  );
+}
+
+```
+
+# components\common\interactive-plan.tsx
+
+```tsx
+"use client";
+
+import Image from "next/image";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Maximize } from "lucide-react";
+
+type Room = { name: string; area: string };
+
+interface InteractivePlanProps {
+  level: "parter" | "piętro";
+  totalArea: string;
+  plan2DUrl: string;
+  plan3DUrl: string;
+  rooms: Room[];
+}
+
+export function InteractivePlan({
+  level,
+  totalArea,
+  plan2DUrl,
+  plan3DUrl,
+  rooms,
+}: InteractivePlanProps) {
+  return (
+    <div className="rounded-3xl border bg-card/50 p-6 md:p-8">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-x-12">
+        {/* Kolumna z wizualizacjami */}
+        <div>
+          <Tabs defaultValue="plan-3d" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="plan-3d">Wizualizacja 3D</TabsTrigger>
+              <TabsTrigger value="plan-2d">Rzut 2D</TabsTrigger>
+            </TabsList>
+            <Dialog>
+              <TabsContent value="plan-3d" className="mt-6">
+                <DialogTrigger asChild>
+                  <div className="group relative cursor-pointer overflow-hidden rounded-2xl">
+                    <Image
+                      src={plan3DUrl}
+                      alt={`Wizualizacja 3D - ${level}`}
+                      width={800}
+                      height={600}
+                      className="transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
+                      <Maximize className="size-5" />
+                    </div>
+                  </div>
+                </DialogTrigger>
+              </TabsContent>
+              <TabsContent value="plan-2d" className="mt-6">
+                <DialogTrigger asChild>
+                  <div className="group relative cursor-pointer overflow-hidden rounded-2xl">
+                    <Image
+                      src={plan2DUrl}
+                      alt={`Rzut 2D - ${level}`}
+                      width={800}
+                      height={800}
+                      className="transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm opacity-0 transition-opacity group-hover:opacity-100">
+                      <Maximize className="size-5" />
+                    </div>
+                  </div>
+                </DialogTrigger>
+              </TabsContent>
+              <DialogContent className="max-w-7xl w-full bg-transparent border-none p-4">
+                <TabsContent value="plan-3d">
+                  <Image
+                    src={plan3DUrl}
+                    alt={`Wizualizacja 3D - ${level}`}
+                    width={1920}
+                    height={1080}
+                    className="w-full h-auto object-contain rounded-2xl"
+                  />
+                </TabsContent>
+                <TabsContent value="plan-2d">
+                  <Image
+                    src={plan2DUrl}
+                    alt={`Rzut 2D - ${level}`}
+                    width={1920}
+                    height={1080}
+                    className="w-full h-auto object-contain rounded-2xl"
+                  />
+                </TabsContent>
+              </DialogContent>
+            </Dialog>
+          </Tabs>
+        </div>
+
+        {/* Kolumna z metrażem */}
+        <div className="flex flex-col">
+          <h3 className="text-2xl font-bold text-foreground">
+            {level.charAt(0).toUpperCase() + level.slice(1)}{" "}
+            <span className="text-muted-foreground font-medium">
+              ({totalArea})
+            </span>
+          </h3>
+          <Table className="mt-4">
+            <TableBody>
+              {rooms.map((room) => (
+                <TableRow key={room.name}>
+                  <TableCell>{room.name}</TableCell>
+                  <TableCell className="text-right font-medium">
+                    {room.area}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -1312,43 +1974,68 @@ import { GalleryStackMobile } from "@/components/common/gallery-stack-mobile";
 
 const galleryImages = [
   {
-    imageUrl: "/jaworowa-wizualizacja-1.png",
-    title: "Dom dla całej rodziny",
+    imageUrl: "/galeria/1.jpg",
+    title: "Nowoczesny dom z przestronnym podjazdem",
     span: "row-span-1",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-salon.jpeg",
-    title: "Wnętrze salonu",
+    imageUrl: "/galeria/2.jpg",
+    title: "Elegancka bryła budynku z podjazdem",
     span: "row-span-2",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-3.png",
-    title: "Harmonia domu z otaczającą zielenią",
-    span: "row-span-2",
-  },
-  {
-    imageUrl: "/jaworowa-wizualizacja-4.png",
-    title: "Nowoczesna bryła budynku",
+    imageUrl: "/galeria/3.jpg",
+    title: "Dom idealny dla całej rodziny",
     span: "row-span-1",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-5.jpg",
-    title: "Przestronny podjazd z garażem",
+    imageUrl: "/galeria/4.jpg",
+    title: "Widok z góry na nowoczesną architekturę",
     span: "row-span-1",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-6.jpg",
-    title: "Wewnętrzna droga osiedlowa",
+    imageUrl: "/galeria/5.jpg",
+    title: "Detal elewacji i duże przeszklenia",
     span: "row-span-2",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-7.png",
-    title: "Eleganckie wejście do domu",
+    imageUrl: "/galeria/6.jpg",
+    title: "Stylowe wejście do domu",
+    span: "row-span-1",
+  },
+  {
+    imageUrl: "/galeria/7.jpg",
+    title: "Wizualizacja frontu budynku",
     span: "row-span-2",
   },
   {
-    imageUrl: "/jaworowa-wizualizacja-2.jpg",
-    title: "Widok na całe osiedle z lotu ptaka",
+    imageUrl: "/galeria/8.jpg",
+    title: "Osiedle domów z lotu ptaka",
+    span: "row-span-2",
+  },
+  {
+    imageUrl: "/galeria/9.jpg",
+    title: "Spójna koncepcja architektoniczna osiedla",
+    span: "row-span-1",
+  },
+  {
+    imageUrl: "/galeria/10.jpg",
+    title: "Dom wkomponowany w otoczenie",
+    span: "row-span-1",
+  },
+  {
+    imageUrl: "/galeria/11.jpg",
+    title: "Nowoczesne osiedle w zielonej okolicy",
+    span: "row-span-2",
+  },
+  {
+    imageUrl: "/galeria/12.jpeg",
+    title: "Przestronne i słoneczne wnętrze salonu",
+    span: "row-span-1",
+  },
+  {
+    imageUrl: "/galeria/jaworowa-wizualizacja-5.jpg",
+    title: "Nastrojowe oświetlenie domu po zmroku",
     span: "row-span-1",
   },
 ];
@@ -1529,12 +2216,6 @@ import Image from "next/image";
 import { ChevronRight, ChevronsDown } from "lucide-react";
 import * as React from "react";
 
-/**
- * Alt Hero v7 — HIGH on mobile, LOWER on desktop
- * - MOBILE (<= md-1): 0.3fr / auto / 0.8fr (treść wyżej)
- * - DESKTOP (md+): 1fr / auto / 1.6fr (panel niżej)
- * - OSOBNE TŁA: full-bleed na poziomie sekcji (bez max-w ograniczeń)
- */
 export function HeroSection() {
   const onScroll = React.useCallback((id: string) => {
     const el = document.getElementById(id);
@@ -1554,7 +2235,6 @@ export function HeroSection() {
       className="relative isolate min-h-[100svh] w-full overflow-hidden"
     >
       {/* ====== TŁA FULL-BLEED (poziom sekcji) ====== */}
-      {/* MOBILE BG */}
       <div className="absolute inset-0 -z-20 md:hidden">
         <Image
           src="/Artboard_2.jpg"
@@ -1567,10 +2247,9 @@ export function HeroSection() {
         />
       </div>
 
-      {/* DESKTOP BG */}
       <div className="absolute inset-0 -z-20 hidden md:block">
         <Image
-          src="/Hero.jpg" // Twój obraz desktop
+          src="/Hero.jpg"
           alt="Nowoczesny dom – desktop"
           fill
           className="object-cover object-bottom"
@@ -1616,7 +2295,7 @@ export function HeroSection() {
               </h1>
 
               <p className="mx-auto mt-6 max-w-prose text-center text-[1rem] leading-relaxed text-white/90">
-                Poznaj wyjątkowe miejsce dla Ciebie i Twojej rodziny.
+                Nowoczesne osiedle wśród zieleni. Idealne dla Twojej rodziny.
               </p>
 
               <div className="mx-auto mt-8 max-w-[32rem]">
@@ -1691,7 +2370,6 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* prawa kolumna pusta dla alignmentu */}
             <div className="col-span-5 lg:col-span-6" />
 
             <div className="col-span-12" />
@@ -1699,13 +2377,16 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll cue (shared) */}
-      <div
-        className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2"
-        aria-hidden
+      {/* === KLUCZOWA POPRAWKA: Interaktywny wskaźnik przewijania === */}
+      {/* === KLUCZOWA POPRAWKA: Interaktywny wskaźnik przewijania === */}
+      <button
+        type="button"
+        onClick={() => onScroll("dlaczego-warto")}
+        className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full p-2 transition-transform duration-200 ease-in-out hover:scale-130 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        aria-label="Przewiń do następnej sekcji"
       >
         <ChevronsDown className="h-10 w-10 animate-bounce text-foreground/90" />
-      </div>
+      </button>
     </section>
   );
 }
@@ -1885,8 +2566,8 @@ export function InvestmentSection() {
 import { MapPin, School, ShoppingCart, Trees } from "lucide-react";
 
 const locationFeatures = [
-  { icon: ShoppingCart, text: "Sklepy i usługi w zasięgu spaceru" },
-  { icon: School, text: "Bliskość szkół i przedszkoli" },
+  { icon: ShoppingCart, text: "Sklepy i usługi na wyciągnięcie ręki" },
+  { icon: School, text: "Osiedle blisko szkół i przedszkoli" },
   { icon: Trees, text: "Tereny zielone i rekreacyjne w okolicy" },
 ];
 
@@ -1900,13 +2581,13 @@ export function LocationSection() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16">
           <div className="flex flex-col justify-center">
             <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Podmiejska cisza w sercu Ostrzeszowa
+              Spokojna i zielona część Ostrzeszowa
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-              Inwestycja przy ulicy Jaworowej w Ostrzeszowie to miejsce, gdzie
-              nowoczesne osiedle spotyka się z naturą. Zyskujesz spokój i
-              prywatność, a jednocześnie szybki dostęp do szkół, sklepów,
-              punktów usługowych i centrum miasta.
+              Osiedle Dębowy Park powstaje w spokojnej, zielonej części
+              Ostrzeszowa. Lokalizacja zapewnia doskonałą komunikację z centrum
+              miasta, szkołami, sklepami i punktami usługowymi. To miejsce,
+              gdzie codzienna wygoda spotyka się z ciszą i naturą.
             </p>
             <ul className="mt-8 space-y-4">
               {locationFeatures.map((feature, index) => (
@@ -1957,17 +2638,46 @@ export function LocationSection() {
 ```tsx
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableHeader,
-  TableHead,
-} from "@/components/ui/table";
-import { Maximize, Sofa, BedDouble, CheckCircle2 } from "lucide-react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Maximize, Sofa, BedDouble, CheckCircle2, Expand } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const views = [
+  {
+    id: "parter-3d",
+    label: "Parter - Wizualizacja 3D",
+    type: "visualization",
+    floor: "parter",
+    image: "/wiz-parter-3d.jpeg",
+    alt: "Wizualizacja 3D parteru domu",
+  },
+  {
+    id: "pietro-3d",
+    label: "Piętro - Wizualizacja 3D",
+    type: "visualization",
+    floor: "pietro",
+    image: "/wiz-pietro-3d.jpeg",
+    alt: "Wizualizacja 3D piętra domu",
+  },
+  {
+    id: "parter-2d",
+    label: "Parter - Plan 2D",
+    type: "floor-plan",
+    floor: "parter",
+    image: "/plan-parter.png",
+    alt: "Rzut architektoniczny parteru domu",
+  },
+  {
+    id: "pietro-2d",
+    label: "Piętro - Plan 2D",
+    type: "floor-plan",
+    floor: "pietro",
+    image: "/plan-pietro.png",
+    alt: "Rzut architektoniczny piętra domu",
+  },
+];
 
 const parterRooms = [
   { name: "Przedsionek", area: "4,86 m²" },
@@ -1987,232 +2697,266 @@ const pietroRooms = [
   { name: "Pokój 2", area: "10,24 m²" },
 ];
 
-// Zmieniamy strukturę, aby łatwiej było stylizować tekst
 const keyFeatures = [
   {
     icon: Maximize,
-    textStart: "Ponad",
-    textBold: "103 m²",
-    textEnd: "przestrzeni dla Ciebie",
+    color: "from-indigo-400 to-blue-600",
+    title: "Ponad",
+    value: "103 m²",
+    description: "przestrzeni dla Ciebie",
   },
   {
     icon: Sofa,
-    textStart: "Przestronny salon z jadalnią i kuchnią",
-    textBold: "",
-    textEnd: "",
+    color: "from-pink-400 to-fuchsia-600",
+    title: "Przestronny salon",
+    value: "",
+    description: "z jadalnią i kuchnią",
   },
   {
     icon: BedDouble,
-    textStart: "Trzy wygodne sypialnie na piętrze",
-    textBold: "",
-    textEnd: "",
+    color: "from-orange-400 to-amber-500",
+    title: "Trzy wygodne sypialnie",
+    value: "",
+    description: "na piętrze",
   },
   {
     icon: CheckCircle2,
-    textStart: "Dwie łazienki i dwie garderoby",
-    textBold: "",
-    textEnd: "",
+    color: "from-green-400 to-emerald-500",
+    title: "Dwie łazienki",
+    value: "",
+    description: "i dwie garderoby",
   },
 ];
 
 export function PlansSection() {
+  const [activeView, setActiveView] = useState(views[0].id);
+  const currentView = views.find((v) => v.id === activeView) || views[0];
+  const currentRooms =
+    currentView.floor === "parter" ? parterRooms : pietroRooms;
+  const currentFloorArea =
+    currentView.floor === "parter" ? "50,98 m²" : "52,32 m²";
+
   return (
-    <section
-      id="domy"
-      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
-    >
+    <section id="domy" className="bg-background py-20 md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
-        {/* === WERSJA MOBILNA === */}
-        <div className="md:hidden">
-          <div className="w-full">
-            <h2 className="text-4xl font-bold tracking-tight text-foreground">
-              Dom zaprojektowany dla Ciebie.
-            </h2>
-            <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Odkryj przemyślany układ, który łączy otwartą przestrzeń dzienną z
-              komfortową i prywatną strefą na piętrze.
-            </p>
-            <ul className="mt-8 space-y-4">
-              {keyFeatures.map((feature, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <feature.icon className="h-6 w-6 text-primary flex-shrink-0" />
-                  <span className="text-foreground/80">
-                    {feature.textStart}{" "}
-                    {feature.textBold && (
-                      <span className="font-bold text-foreground">
-                        {feature.textBold}
+        <div className="text-left max-w-xl mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+            Dom zaprojektowany dla Ciebie
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            Odkryj przemyślany układ, który łączy otwartą przestrzeń dzienną z
+            komfortową i prywatną strefą na piętrze.
+          </p>
+        </div>
+
+        <div className="w-full mb-12">
+          <div className="bg-card/50 rounded-3xl border p-8 shadow space-y-8 md:space-y-0 md:grid md:grid-cols-4 md:gap-6">
+            {keyFeatures.map((feature, i) => (
+              <div
+                key={i}
+                className="flex flex-row items-center gap-4 md:flex-col md:items-start"
+              >
+                <div
+                  className={`p-3 rounded-xl bg-gradient-to-br ${feature.color} text-white shadow-lg flex-shrink-0`}
+                >
+                  <feature.icon className="h-6 w-6" />
+                </div>
+                <div>
+                  <div className="font-bold text-lg text-foreground">
+                    {feature.title}{" "}
+                    {feature.value && (
+                      <span className="text-primary text-xl">
+                        {feature.value}
                       </span>
-                    )}{" "}
-                    {feature.textEnd}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="w-full mt-12">
-            <Tabs defaultValue="parter" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="parter">Parter</TabsTrigger>
-                <TabsTrigger value="pietro">Piętro</TabsTrigger>
-              </TabsList>
-              <TabsContent value="parter" className="mt-6">
-                <div className="overflow-hidden rounded-3xl border bg-card/50">
-                  <Image
-                    src="/plan-parter.png"
-                    alt="Rzut architektoniczny parteru domu"
-                    width={800}
-                    height={800}
-                  />
+                    )}
+                  </div>
+                  <div className="text-muted-foreground text-sm">
+                    {feature.description}
+                  </div>
                 </div>
-              </TabsContent>
-              <TabsContent value="pietro" className="mt-6">
-                <div className="overflow-hidden rounded-3xl border bg-card/50">
-                  <Image
-                    src="/plan-pietro.png"
-                    alt="Rzut architektoniczny piętra domu"
-                    width={800}
-                    height={800}
-                  />
-                </div>
-              </TabsContent>
-            </Tabs>
-          </div>
-          <div className="mt-12">
-            <h3 className="text-2xl font-semibold">Szczegółowy metraż</h3>
-            <Table className="mt-4">
-              <TableBody>
-                <TableRow className="bg-secondary/50 font-bold">
-                  <TableCell colSpan={2}>Parter (50,98 m²)</TableCell>
-                </TableRow>
-                {parterRooms.map((room) => (
-                  <TableRow key={room.name}>
-                    <TableCell>{room.name}</TableCell>
-                    <TableCell className="text-right font-medium">
-                      {room.area}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                <TableRow className="bg-secondary/50 font-bold">
-                  <TableCell colSpan={2}>Piętro (52,32 m²)</TableCell>
-                </TableRow>
-                {pietroRooms.map((room) => (
-                  <TableRow key={room.name}>
-                    <TableCell>{room.name}</TableCell>
-                    <TableCell className="text-right font-medium">
-                      {room.area}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* === WERSJA DESKTOP === */}
-        <div className="hidden md:block">
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16 lg:gap-x-24">
-            <div className="w-full">
-              <Tabs defaultValue="parter" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="parter">Parter</TabsTrigger>
-                  <TabsTrigger value="pietro">Piętro</TabsTrigger>
-                </TabsList>
-                <TabsContent value="parter" className="mt-6">
-                  <div className="overflow-hidden rounded-3xl border bg-card/50">
-                    <Image
-                      src="/plan-parter.png"
-                      alt="Rzut architektoniczny parteru domu"
-                      width={800}
-                      height={800}
-                    />
+        <div className="hidden md:grid grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-stretch">
+          <div className="flex flex-col h-full">
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="relative overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group flex-1 min-h-0">
+                  <Image
+                    src={currentView.image}
+                    alt={currentView.alt}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <Expand className="h-16 w-16 text-white" />
                   </div>
-                </TabsContent>
-                <TabsContent value="pietro" className="mt-6">
-                  <div className="overflow-hidden rounded-3xl border bg-card/50">
-                    <Image
-                      src="/plan-pietro.png"
-                      alt="Rzut architektoniczny piętra domu"
-                      width={800}
-                      height={800}
-                    />
+                  <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                    <p className="text-sm font-medium">{currentView.label}</p>
                   </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-            <div className="flex flex-col justify-center">
-              <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-                Dom zaprojektowany dla Ciebie.
-              </h2>
-              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-                Każdy segment oferuje ok.{" "}
-                <span className="font-bold text-foreground">103,30 m²</span>{" "}
-                powierzchni użytkowej, zoptymalizowanej do codziennego życia:
-                przestronny parter dla wspólnego spędzania czasu i wygodne
-                piętro zapewniające prywatność.
-              </p>
-              <ul className="mt-8 space-y-4">
-                {keyFeatures.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <feature.icon className="h-6 w-6 text-primary flex-shrink-0" />
-                    <span className="text-foreground/80">
-                      {feature.textStart}{" "}
-                      {feature.textBold && (
-                        <span className="font-bold text-foreground">
-                          {feature.textBold}
-                        </span>
-                      )}{" "}
-                      {feature.textEnd}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+                </div>
+              </DialogTrigger>
+              <DialogContent
+                className="max-w-[95vw] max-h-[95vh] p-0"
+                style={{ position: "fixed" }}
+              >
+                <Image
+                  src={currentView.image}
+                  alt={currentView.alt}
+                  width={1920}
+                  height={1920}
+                  className="w-full h-auto"
+                />
+              </DialogContent>
+            </Dialog>
+            <div className="grid grid-cols-4 gap-3 mt-6">
+              {views.map((view) => (
+                <div
+                  key={view.id}
+                  className={cn(
+                    "relative overflow-hidden rounded-xl border cursor-pointer transition-all aspect-square",
+                    activeView === view.id
+                      ? "ring-2 ring-primary border-primary"
+                      : "hover:border-primary/50"
+                  )}
+                  onClick={() => setActiveView(view.id)}
+                >
+                  <Image
+                    src={view.image}
+                    alt={view.alt}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute bottom-2 left-2 bg-background/80 px-2 py-1 rounded-lg text-xs font-bold shadow">
+                    {view.label}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="mt-24">
-            <h3 className="text-3xl font-semibold text-center">
-              Szczegółowy metraż
-            </h3>
-            <div className="mt-8 grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="font-bold">
-                      Parter (50,98 m²)
-                    </TableHead>
-                    <TableHead className="text-right"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {parterRooms.map((room) => (
-                    <TableRow key={room.name}>
-                      <TableCell>{room.name}</TableCell>
-                      <TableCell className="text-right font-medium">
-                        {room.area}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="font-bold">
-                      Piętro (52,32 m²)
-                    </TableHead>
-                    <TableHead className="text-right"></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pietroRooms.map((room) => (
-                    <TableRow key={room.name}>
-                      <TableCell>{room.name}</TableCell>
-                      <TableCell className="text-right font-medium">
-                        {room.area}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+          <div className="flex flex-col h-full justify-between">
+            <div className="bg-card/50 rounded-3xl border p-8 flex flex-col h-full">
+              <h3 className="text-2xl font-semibold mb-2">
+                {currentView.floor === "parter" ? "Parter" : "Piętro"}
+              </h3>
+              <p className="text-muted-foreground mb-6">
+                Całkowita powierzchnia:{" "}
+                <span className="font-bold text-foreground">
+                  {currentFloorArea}
+                </span>
+              </p>
+              <div className="space-y-2 flex-1">
+                {currentRooms.map((room) => (
+                  <div
+                    key={room.name}
+                    className="flex justify-between items-center py-3 border-b last:border-b-0"
+                  >
+                    <span className="text-foreground/80">{room.name}</span>
+                    <span className="font-medium">{room.area}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 pt-6 border-t">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg font-semibold">
+                    Całkowita powierzchnia użytkowa
+                  </span>
+                  <span className="text-2xl font-bold text-primary">
+                    103,30 m²
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="md:hidden">
+          <div className="mb-8">
+            <div className="grid grid-cols-2 gap-2 mb-4">
+              <button
+                className={cn(
+                  "py-2 rounded-xl font-semibold",
+                  currentView.floor === "parter"
+                    ? "bg-primary text-white"
+                    : "bg-muted text-foreground"
+                )}
+                onClick={() => setActiveView(views[0].id)}
+              >
+                Parter
+              </button>
+              <button
+                className={cn(
+                  "py-2 rounded-xl font-semibold",
+                  currentView.floor === "pietro"
+                    ? "bg-primary text-white"
+                    : "bg-muted text-foreground"
+                )}
+                onClick={() => setActiveView(views[1].id)}
+              >
+                Piętro
+              </button>
+            </div>
+            <div className="space-y-4">
+              {views
+                .filter((v) => v.floor === currentView.floor)
+                .map((view) => (
+                  <Dialog key={view.id}>
+                    <DialogTrigger asChild>
+                      <div className="relative overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group">
+                        <Image
+                          src={view.image}
+                          alt={view.alt}
+                          width={800}
+                          height={800}
+                          className="w-full h-auto"
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Expand className="h-12 w-12 text-white" />
+                        </div>
+                        <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full">
+                          <p className="text-sm font-medium">{view.label}</p>
+                        </div>
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-[95vw] max-h-[95vh] p-0">
+                      <Image
+                        src={view.image}
+                        alt={view.alt}
+                        width={1920}
+                        height={1920}
+                        className="w-full h-auto"
+                      />
+                    </DialogContent>
+                  </Dialog>
+                ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="text-2xl font-semibold mb-4">Szczegółowy metraż</h3>
+            <div className="bg-card/50 rounded-2xl border p-4">
+              <div className="space-y-2">
+                {currentRooms.map((room) => (
+                  <div
+                    key={room.name}
+                    className="flex justify-between items-center py-2 border-b last:border-b-0"
+                  >
+                    <span className="text-foreground/80">{room.name}</span>
+                    <span className="font-medium">{room.area}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 pt-4 border-t">
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold">
+                    Całkowita powierzchnia użytkowa
+                  </span>
+                  <span className="text-lg font-bold text-primary">
+                    103,30 m²
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -2283,11 +3027,10 @@ export function TestimonialsSection() {
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-3xl">
           <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            Dlaczego Dębowy Park?
+            Tak o nas mówią
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Posłuchaj, co o Osiedlu Dębowy Park mówią ci, którzy już wkrótce
-            nazwą je swoim domem.
+            Historie przyszłych mieszkańców i ekspertów.
           </p>
         </div>
       </div>
@@ -3088,15 +3831,7 @@ This is a binary file of the type: Image
 
 This is a binary file of the type: Image
 
-# public\2a3.jpg
-
-This is a binary file of the type: Image
-
 # public\3.jpg
-
-This is a binary file of the type: Image
-
-# public\3s2.jpg
 
 This is a binary file of the type: Image
 
@@ -3109,14 +3844,6 @@ This is a binary file of the type: Image
 This is a binary file of the type: Image
 
 # public\6.jpg
-
-This is a binary file of the type: Image
-
-# public\9.jpg
-
-This is a binary file of the type: Image
-
-# public\9s2.jpg
 
 This is a binary file of the type: Image
 
@@ -3135,6 +3862,58 @@ This is a binary file of the type: Image
 # public\file.svg
 
 This is a file of the type: SVG Image
+
+# public\galeria\1.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\2.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\3.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\4.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\5.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\6.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\7.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\8.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\9.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\10.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\11.jpg
+
+This is a binary file of the type: Image
+
+# public\galeria\12.jpeg
+
+This is a binary file of the type: Image
+
+# public\galeria\jaworowa-wizualizacja-5.jpg
+
+This is a binary file of the type: Image
 
 # public\globe.svg
 
@@ -3184,19 +3963,23 @@ This is a binary file of the type: Image
 
 This is a binary file of the type: Image
 
-# public\icons\bezpieczenstwo.png
-
-This is a binary file of the type: Image
-
-# public\icons\bliskosc.png
-
-This is a binary file of the type: Image
-
 # public\icons\hero_final_desktop.png
 
 This is a binary file of the type: Image
 
-# public\icons\ogrod.png
+# public\icons\old\bezpieczenstwo.png
+
+This is a binary file of the type: Image
+
+# public\icons\old\bliskosc.png
+
+This is a binary file of the type: Image
+
+# public\icons\old\ogrod.png
+
+This is a binary file of the type: Image
+
+# public\icons\old\uklad.png
 
 This is a binary file of the type: Image
 
@@ -3228,19 +4011,11 @@ This is a binary file of the type: Image
 
 This is a binary file of the type: Image
 
-# public\jaworowa-wizualizacja-5.jpg
-
-This is a binary file of the type: Image
-
 # public\jaworowa-wizualizacja-6.jpg
 
 This is a binary file of the type: Image
 
 # public\jaworowa-wizualizacja-7.png
-
-This is a binary file of the type: Image
-
-# public\jaworowa-wizualizacja-salon.jpeg
 
 This is a binary file of the type: Image
 
@@ -3291,6 +4066,22 @@ This is a file of the type: SVG Image
 # public\window.svg
 
 This is a file of the type: SVG Image
+
+# public\wiz-parter-3d.jpeg
+
+This is a binary file of the type: Image
+
+# public\wiz-pietro-3d.jpeg
+
+This is a binary file of the type: Image
+
+# public\wizualizacje\wiz-parter-3d.jpeg
+
+This is a binary file of the type: Image
+
+# public\wizualizacje\wiz-pietro-3d.jpeg
+
+This is a binary file of the type: Image
 
 # README.md
 
