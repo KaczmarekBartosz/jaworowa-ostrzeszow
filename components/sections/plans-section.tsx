@@ -4,14 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { Maximize, Sofa, BedDouble, CheckCircle2, Expand } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableHead,
-  TableRow,
-} from "@/components/ui/table";
 import { FullscreenImageViewer } from "@/components/common/fullscreen-image-viewer";
 
 const views = [

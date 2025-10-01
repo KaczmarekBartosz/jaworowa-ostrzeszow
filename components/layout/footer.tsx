@@ -36,7 +36,7 @@ export function Footer() {
                     href="#dlaczego-warto"
                     className="text-muted-foreground hover:text-foreground"
                   >
-                    O Inwestycji
+                    Dlaczego warto?
                   </a>
                 </li>
                 <li>
