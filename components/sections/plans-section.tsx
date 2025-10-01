@@ -89,10 +89,10 @@ const keyFeatures = [
 export function PlansSection() {
   const [activeViewId, setActiveViewId] = useState(views[0].id);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [lightboxImage, setLightboxImage] = useState({ src: "", alt: "" });
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const openLightbox = (view: (typeof views)[0]) => {
-    setLightboxImage({ src: view.image, alt: view.alt });
+  const openLightbox = (index: number) => {
+    setActiveIndex(index);
     setLightboxOpen(true);
   };
 
@@ -107,7 +107,7 @@ export function PlansSection() {
         <div className="mx-auto max-w-7xl px-6 md:px-8">
           <div className="text-left max-w-xl mb-12">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-              Dom zaprojektowany dla Ciebie.
+              Dom zaprojektowany dla Ciebie
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Odkryj przemyślany układ, który łączy otwartą przestrzeń dzienną z
@@ -116,34 +116,32 @@ export function PlansSection() {
           </div>
 
           <div className="w-full mb-12">
-            <div className="bg-card/50 rounded-3xl border p-8 shadow">
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-4 md:gap-6">
-                {keyFeatures.map((feature, i) => (
+            <div className="bg-card/50 rounded-3xl border p-8 shadow space-y-8 md:space-y-0 md:grid md:grid-cols-4 md:gap-6">
+              {keyFeatures.map((feature, i) => (
+                <div
+                  key={i}
+                  className="flex flex-row items-center gap-4 md:flex-col md:items-center md:text-center"
+                >
                   <div
-                    key={i}
-                    className="flex flex-row items-center gap-4 md:flex-col md:items-center md:text-center"
+                    className={`p-3 rounded-xl bg-gradient-to-br ${feature.color} text-white shadow-lg flex-shrink-0`}
                   >
-                    <div
-                      className={`p-3 rounded-xl bg-gradient-to-br ${feature.color} text-white shadow-lg flex-shrink-0`}
-                    >
-                      <feature.icon className="h-6 w-6" />
+                    <feature.icon className="h-6 w-6" />
+                  </div>
+                  <div className="md:mt-2">
+                    <div className="font-bold text-lg text-foreground">
+                      {feature.title}{" "}
+                      {feature.value && (
+                        <span className="text-primary text-xl">
+                          {feature.value}
+                        </span>
+                      )}
                     </div>
-                    <div className="md:mt-2">
-                      <div className="font-bold text-lg text-foreground">
-                        {feature.title}{" "}
-                        {feature.value && (
-                          <span className="text-primary text-xl">
-                            {feature.value}
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-muted-foreground text-sm">
-                        {feature.description}
-                      </div>
+                    <div className="text-muted-foreground text-sm">
+                      {feature.description}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -151,7 +149,9 @@ export function PlansSection() {
             <div className="flex flex-col">
               <button
                 type="button"
-                onClick={() => openLightbox(activeView)}
+                onClick={() =>
+                  openLightbox(views.findIndex((v) => v.id === activeViewId))
+                }
                 className={cn(
                   "relative overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group",
                   activeView.aspect
@@ -251,19 +251,24 @@ export function PlansSection() {
             <div className="space-y-4">
               {views
                 .filter((v) => v.id.includes(activeFloor))
-                .map((view) => (
+                .map((view, index) => (
                   <button
                     key={view.id}
                     type="button"
-                    onClick={() => openLightbox(view)}
-                    className="relative block w-full overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group"
+                    onClick={() =>
+                      openLightbox(views.findIndex((v) => v.id === view.id))
+                    }
+                    className={cn(
+                      "relative block w-full overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group",
+                      view.aspect
+                    )}
                   >
                     <Image
                       src={view.image}
                       alt={view.alt}
-                      width={800}
-                      height={800}
-                      className="w-full h-auto"
+                      fill
+                      className="object-cover"
+                      sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <Expand className="h-12 w-12 text-white" />
@@ -304,9 +309,9 @@ export function PlansSection() {
       </section>
       <FullscreenImageViewer
         open={lightboxOpen}
-        src={lightboxImage.src}
-        alt={lightboxImage.alt}
         onClose={() => setLightboxOpen(false)}
+        images={views.map((v) => ({ src: v.image, alt: v.alt }))}
+        startIndex={activeIndex}
       />
     </>
   );
