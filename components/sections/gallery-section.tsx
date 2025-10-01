@@ -9,67 +9,62 @@ const galleryImages = [
   {
     imageUrl: "/galeria/1.jpg",
     title: "Nowoczesny dom z przestronnym podjazdem",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/2.jpg",
     title: "Elegancka bryła budynku z podjazdem",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/3.jpg",
     title: "Dom idealny dla całej rodziny",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/4.jpg",
     title: "Widok z góry na nowoczesną architekturę",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/5.jpg",
     title: "Detal elewacji i duże przeszklenia",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/6.jpg",
     title: "Stylowe wejście do domu",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/7.jpg",
     title: "Wizualizacja frontu budynku",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/8.jpg",
     title: "Osiedle domów z lotu ptaka",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/9.jpg",
     title: "Spójna koncepcja architektoniczna osiedla",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/10.jpg",
     title: "Dom wkomponowany w otoczenie",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/11.jpg",
     title: "Nowoczesne osiedle w zielonej okolicy",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/12.jpeg",
     title: "Przestronne i słoneczne wnętrze salonu",
-    span: "row-span-1",
-  },
-  {
-    imageUrl: "/galeria/jaworowa-wizualizacja-5.jpg",
-    title: "Nastrojowe oświetlenie domu po zmroku",
-    span: "row-span-1",
+    span: "row-span-2",
   },
 ];
 
@@ -77,8 +72,11 @@ export function GallerySection() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImage, setLightboxImage] = useState({ src: "", alt: "" });
 
-  const openLightbox = (image: (typeof galleryImages)[0]) => {
-    setLightboxImage({ src: image.imageUrl, alt: image.title });
+  const openLightbox = (index: number) => {
+    setLightboxImage({
+      src: galleryImages[index].imageUrl,
+      alt: galleryImages[index].title,
+    });
     setLightboxOpen(true);
   };
 
@@ -106,6 +104,7 @@ export function GallerySection() {
                 imageUrl,
                 title,
               }))}
+              onCardClick={openLightbox}
             />
           </div>
 
@@ -116,7 +115,7 @@ export function GallerySection() {
                 imageUrl={image.imageUrl}
                 title={image.title}
                 className={image.span}
-                onClick={() => openLightbox(image)}
+                onClick={() => openLightbox(index)}
               />
             ))}
           </div>

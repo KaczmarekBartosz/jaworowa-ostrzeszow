@@ -19,14 +19,13 @@ export function FullscreenImageViewer({
   open,
   onClose,
 }: FullscreenImageViewerProps) {
-  // Niezawodne blokowanie scrolla
   useEffect(() => {
     if (!open) return;
     const scrollY = window.scrollY;
     document.body.style.overflow = "hidden";
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
+    document.body.style.width = "100vw";
     return () => {
       document.body.style.overflow = "";
       document.body.style.position = "";
@@ -36,7 +35,6 @@ export function FullscreenImageViewer({
     };
   }, [open]);
 
-  // Obsługa klawisza Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -56,40 +54,46 @@ export function FullscreenImageViewer({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.18 }}
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
           onClick={onClose}
         >
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
+            initial={{ scale: 0.97, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ duration: 0.2, delay: 0.1 }}
-            className="relative w-[min(92vw,1200px)] h-[90vh]"
+            exit={{ scale: 0.97, opacity: 0 }}
+            transition={{ duration: 0.24, delay: 0.05 }}
+            // Zamiast wrappera z paddingiem: absolutne pełny ekran
+            className="absolute inset-0 w-full h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
               src={src}
               alt={alt}
               fill
-              className="object-contain"
+              className="object-contain select-none"
               sizes="100vw"
+              draggable={false}
               priority
+              style={{
+                background: "transparent",
+                maxHeight: "100vh",
+                maxWidth: "100vw",
+              }}
             />
+            {/* Button X zawsze nad obrazem */}
+            <button
+              type="button"
+              onClick={onClose}
+              className="fixed top-4 right-4 z-[10001] rounded-full bg-black/80 p-2 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-primary transition"
+              aria-label="Zamknij"
+              tabIndex={0}
+            >
+              <X className="w-6 h-6" />
+            </button>
           </motion.div>
-          <motion.button
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.5, opacity: 0 }}
-            transition={{ duration: 0.2, delay: 0.15 }}
-            onClick={onClose}
-            className="absolute top-4 right-4 rounded-full bg-black/70 p-2 text-white/90 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
-            aria-label="Zamknij"
-          >
-            <X className="w-6 h-6" />
-          </motion.button>
         </motion.div>
       )}
     </AnimatePresence>,
