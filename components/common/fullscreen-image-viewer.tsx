@@ -137,7 +137,7 @@ export function FullscreenImageViewer({
       </div>
 
       {/* Wskazówka dla użytkownika */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm backdrop-blur-sm bg-black/30 px-4 py-2 rounded-full">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm backdrop-blur-sm bg-black/30 px-4 py-2 rounded-full text-center sm:w-auto w-full">
         Podpowiedź: Użyj Ctrl + scroll lub +/- do zoomowania!
       </div>
 

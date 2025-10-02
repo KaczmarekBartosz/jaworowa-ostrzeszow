@@ -9,7 +9,7 @@ const LOAN_STEP = 10_000;
 const TERM_MIN = 5;
 const TERM_MAX = 35;
 const TERM_STEP = 1;
-const MOCK_RATE = 8.41; // % – symulacja
+const MOCK_RATE = 8.41;
 
 function calculateInstallment(amount: number, years: number, rate: number) {
   const n = years * 12;
@@ -50,9 +50,34 @@ function AnimatedNumber({ value }: { value: number }) {
 export function CalculatorSection() {
   const [amount, setAmount] = useState(350_000);
   const [years, setYears] = useState(30);
+  const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const installment =
     Math.round(calculateInstallment(amount, years, MOCK_RATE) * 100) / 100;
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 9);
+    setPhone(value);
+    setPhoneError("");
+    setIsSubmitted(false);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (phone.length !== 9) {
+      setPhoneError("Podaj prawidłowy 9-cyfrowy numer telefonu");
+      return;
+    }
+    // Tutaj dodaj logikę wysyłki
+    setIsSubmitted(true);
+    setTimeout(() => {
+      setPhone("");
+      setIsSubmitted(false);
+    }, 3000);
+  };
 
   return (
     <section id="kalkulator" className="bg-background py-14 md:py-28">
@@ -93,6 +118,11 @@ export function CalculatorSection() {
                   value={amount}
                   onChange={(e) => setAmount(Number(e.target.value))}
                   className="w-full accent-primary"
+                  aria-label="Wybierz kwotę kredytu"
+                  aria-valuemin={LOAN_MIN}
+                  aria-valuemax={LOAN_MAX}
+                  aria-valuenow={amount}
+                  aria-valuetext={`${amount.toLocaleString("pl-PL")} złotych`}
                 />
                 <div className="mt-1.5 flex justify-between text-[11px] sm:text-xs text-muted-foreground">
                   <span>{LOAN_MIN.toLocaleString("pl-PL")} zł</span>
@@ -120,6 +150,11 @@ export function CalculatorSection() {
                   value={years}
                   onChange={(e) => setYears(Number(e.target.value))}
                   className="w-full accent-primary"
+                  aria-label="Wybierz okres kredytowania"
+                  aria-valuemin={TERM_MIN}
+                  aria-valuemax={TERM_MAX}
+                  aria-valuenow={years}
+                  aria-valuetext={`${years} lat`}
                 />
                 <div className="mt-1.5 flex justify-between text-[11px] sm:text-xs text-muted-foreground">
                   <span>{TERM_MIN} lat</span>
@@ -133,18 +168,34 @@ export function CalculatorSection() {
           <div className="bg-card/80 flex-1 flex flex-col justify-center items-center gap-5 sm:gap-6 md:gap-8 p-6 sm:p-7 md:p-12 border-t md:border-t-0 md:border-l">
             <div className="text-center">
               <span className="block text-xs sm:text-sm text-muted-foreground">
-                Wysokość raty
+                Miesięczna rata
               </span>
-              <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground">
+              <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground tabular-nums">
                 <AnimatedNumber value={installment} /> zł
               </span>
-              <span className="block text-xs sm:text-sm text-orange-900/80 font-medium mt-0.5 sm:mt-1">
-                RRSO{" "}
-                {MOCK_RATE.toLocaleString("pl-PL", {
-                  maximumFractionDigits: 2,
-                })}
-                %
-              </span>
+              <div className="relative mt-0.5 sm:mt-1">
+                <span
+                  className="block text-xs sm:text-sm text-slate-200/70 font-medium cursor-help"
+                  onMouseEnter={() => setShowTooltip(true)}
+                  onMouseLeave={() => setShowTooltip(false)}
+                  onFocus={() => setShowTooltip(true)}
+                  onBlur={() => setShowTooltip(false)}
+                  tabIndex={0}
+                  aria-label="Rzeczywista roczna stopa oprocentowania"
+                >
+                  RRSO{" "}
+                  {MOCK_RATE.toLocaleString("pl-PL", {
+                    maximumFractionDigits: 2,
+                  })}
+                  %
+                </span>
+                {showTooltip && (
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-foreground text-background text-xs rounded-lg whitespace-nowrap shadow-lg z-10 pointer-events-none">
+                    Rzeczywista roczna stopa oprocentowania
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-foreground" />
+                  </div>
+                )}
+              </div>
             </div>
 
             <button className="w-full sm:w-auto bg-primary hover:bg-primary/85 text-primary-foreground font-bold rounded-lg md:rounded-xl px-8 md:px-12 py-2.5 md:py-3 shadow focus:outline-none focus:ring-2 focus:ring-primary transition">
@@ -156,16 +207,41 @@ export function CalculatorSection() {
               <span className="block font-medium text-primary mb-1.5 sm:mb-2 text-sm sm:text-base">
                 Porozmawiaj z ekspertem:
               </span>
-              <form className="flex w-full max-w-xs gap-2 flex-col sm:flex-row">
-                <input
-                  type="tel"
-                  pattern="[0-9]{9}"
-                  placeholder="telefon (9 cyfr)"
-                  className="rounded-lg border p-2.5 sm:p-3 flex-1 text-base sm:text-lg"
-                />
+              <form
+                onSubmit={handleSubmit}
+                className="flex w-full max-w-xs gap-2 flex-col sm:flex-row"
+              >
+                <div className="flex-1">
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    placeholder="telefon (9 cyfr)"
+                    className={`w-full rounded-lg border p-2.5 sm:p-3 text-base sm:text-lg transition-colors ${
+                      phoneError ? "border-red-500" : ""
+                    }`}
+                    aria-invalid={phoneError ? "true" : "false"}
+                    aria-describedby={phoneError ? "phone-error" : undefined}
+                  />
+                  {phoneError && (
+                    <p
+                      id="phone-error"
+                      className="text-xs text-red-500 mt-1"
+                      role="alert"
+                    >
+                      {phoneError}
+                    </p>
+                  )}
+                  {isSubmitted && (
+                    <p className="text-xs text-green-600 mt-1" role="status">
+                      ✓ Dziękujemy! Skontaktujemy się wkrótce
+                    </p>
+                  )}
+                </div>
                 <button
                   type="submit"
-                  className="bg-orange-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 font-bold rounded-lg hover:bg-orange-500 transition"
+                  disabled={phone.length !== 9}
+                  className="bg-orange-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 font-bold rounded-lg hover:bg-orange-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Wyślij
                 </button>

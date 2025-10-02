@@ -221,7 +221,6 @@ This is a binary file of the type: Binary
 # app\layout.tsx
 
 ```tsx
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -237,7 +236,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// === NOWE, POPRAWNE METADANE ===
 export const metadata = {
   title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
   description:
@@ -281,6 +279,7 @@ import { GallerySection } from "@/components/sections/gallery-section";
 import { LocationSection } from "@/components/sections/location-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { Footer } from "@/components/layout/footer"; // Poprawiony import
+import { CalculatorSection } from "@/components/sections/calculator-section";
 
 export default function HomePage() {
   return (
@@ -290,6 +289,7 @@ export default function HomePage() {
       <PlansSection />
       <TestimonialsSection />
       <GallerySection />
+      <CalculatorSection />
       <LocationSection />
       <ContactSection />
       <Footer />
@@ -671,7 +671,7 @@ export function FeatureCard({
         </p>
         <p
           className={cn(
-            "text-xl font-bold",
+            "text-lg font-bold",
             isHighlighted ? "" : "text-foreground"
           )}
         >
@@ -782,11 +782,10 @@ export function FeatureCarousel({ children }: FeatureCarouselProps) {
 ```tsx
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { X, ZoomIn, ZoomOut } from "lucide-react";
 
 interface FullscreenImageViewerProps {
   src: string;
@@ -801,80 +800,142 @@ export function FullscreenImageViewer({
   open,
   onClose,
 }: FullscreenImageViewerProps) {
-  // Niezawodne blokowanie scrolla
+  const [scale, setScale] = useState(1);
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
-    if (!open) return;
-    const scrollY = window.scrollY;
-    document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
+    if (open) {
+      document.body.style.overflow = "hidden";
+      setIsLoaded(false);
+      // Delay dla płynnego fade-in obrazu
+      setTimeout(() => setIsLoaded(true), 50);
+    } else {
+      setScale(1);
+    }
     return () => {
       document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      window.scrollTo(0, scrollY);
     };
   }, [open]);
 
-  // Obsługa klawisza Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
+      } else if (e.key === "+" || e.key === "=") {
+        setScale((prev) => Math.min(prev + 0.2, 3));
+      } else if (e.key === "-") {
+        setScale((prev) => Math.max(prev - 0.2, 0.5));
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        setScale((prev) => Math.max(0.5, Math.min(3, prev + delta)));
+      }
+    };
+
+    if (open) {
+      window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("wheel", handleWheel, { passive: false });
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, [onClose, open]);
 
   if (!open) return null;
 
   return createPortal(
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
-          onClick={onClose}
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/95 p-4 md:p-8"
+      onClick={onClose}
+      aria-label="Podgląd obrazu"
+      style={{
+        backdropFilter: "blur(20px)",
+        animation: "fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+      }}
+    >
+      {/* Kontrolki */}
+      <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setScale((prev) => Math.min(prev + 0.3, 3));
+          }}
+          className="rounded-xl bg-white/10 p-3 text-white/90 backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+          aria-label="Powiększ"
         >
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ duration: 0.2, delay: 0.1 }}
-            className="relative w-[min(92vw,1200px)] h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
-              src={src}
-              alt={alt}
-              fill
-              className="object-contain"
-              sizes="100vw"
-              priority
-            />
-          </motion.div>
-          <motion.button
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.5, opacity: 0 }}
-            transition={{ duration: 0.2, delay: 0.15 }}
-            onClick={onClose}
-            className="absolute top-4 right-4 rounded-full bg-black/70 p-2 text-white/90 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
-            aria-label="Zamknij"
-          >
-            <X className="w-6 h-6" />
-          </motion.button>
-        </motion.div>
-      )}
-    </AnimatePresence>,
+          <ZoomIn className="w-5 h-5" />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setScale((prev) => Math.max(prev - 0.3, 0.5));
+          }}
+          className="rounded-xl bg-white/10 p-3 text-white/90 backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+          aria-label="Pomniejsz"
+        >
+          <ZoomOut className="w-5 h-5" />
+        </button>
+        <button
+          onClick={onClose}
+          className="rounded-xl bg-white/10 p-3 text-white/90 backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110 hover:rotate-90 focus:outline-none focus:ring-2 focus:ring-white/50"
+          aria-label="Zamknij"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* === KLUCZOWE: Wrapper z overflow hidden dla zaokrąglenia === */}
+      <div
+        className="relative max-w-[90vw] max-h-[85vh] w-full h-full"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          borderRadius: "24px",
+          overflow: "hidden",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+          transform: `scale(${scale})`,
+          transition:
+            "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease-out",
+          opacity: isLoaded ? 1 : 0,
+        }}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-contain"
+          sizes="90vw"
+          priority
+          quality={95}
+          onLoad={() => setIsLoaded(true)}
+        />
+      </div>
+
+      {/* Wskazówka dla użytkownika */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm backdrop-blur-sm bg-black/30 px-4 py-2 rounded-full text-center sm:w-auto w-full">
+        Podpowiedź: Użyj Ctrl + scroll lub +/- do zoomowania!
+      </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            backdrop-filter: blur(0px);
+          }
+          to {
+            opacity: 1;
+            backdrop-filter: blur(20px);
+          }
+        }
+      `}</style>
+    </div>,
     document.body
   );
 }
@@ -887,7 +948,6 @@ export function FullscreenImageViewer({
 "use client";
 
 import Image from "next/image";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Maximize } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -895,50 +955,42 @@ interface GalleryCardProps {
   imageUrl: string;
   title: string;
   className?: string;
+  onClick?: () => void; // Dodajemy prop onClick
 }
 
-export function GalleryCard({ imageUrl, title, className }: GalleryCardProps) {
+export function GalleryCard({
+  imageUrl,
+  title,
+  className,
+  onClick,
+}: GalleryCardProps) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button
-          className={cn(
-            "group relative block w-full overflow-hidden rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-            className
-          )}
-        >
-          <Image
-            src={imageUrl}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+    // Zmieniamy DialogTrigger na zwykły <button>
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "group relative block w-full overflow-hidden rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        className
+      )}
+    >
+      <Image
+        src={imageUrl}
+        alt={title}
+        fill
+        className="object-cover transition-transform duration-300 group-hover:scale-105"
+      />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 
-          <div className="absolute bottom-0 left-0 p-6 text-left">
-            <h3 className="text-base font-bold text-white">{title}</h3>
-          </div>
+      <div className="absolute bottom-0 left-0 p-6 text-left">
+        <h3 className="text-base font-bold text-white">{title}</h3>
+      </div>
 
-          <div className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm transition-opacity group-hover:opacity-100">
-            <Maximize className="size-5" />
-          </div>
-        </button>
-      </DialogTrigger>
-      {/* === OSTATECZNA POPRAWKA: Dodajemy onOpenAutoFocus === */}
-      <DialogContent
-        className="max-w-7xl w-full bg-transparent border-none shadow-none p-4"
-        onOpenAutoFocus={(e) => e.preventDefault()}
-      >
-        <Image
-          src={imageUrl}
-          alt={title}
-          width={1920}
-          height={1080}
-          className="w-full h-auto object-contain rounded-2xl"
-        />
-      </DialogContent>
-    </Dialog>
+      <div className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-sm transition-opacity group-hover:opacity-100">
+        <Maximize className="size-5" />
+      </div>
+    </button>
   );
 }
 
@@ -958,24 +1010,23 @@ import {
   useAnimationFrame,
   type PanInfo,
 } from "framer-motion";
-import { X, ChevronRight, ChevronLeft, Pointer } from "lucide-react";
+import { ChevronRight, ChevronLeft, Pointer } from "lucide-react";
 
 type Item = { imageUrl: string; title: string };
 
-type GalleryStackMobileProps = {
+interface GalleryStackMobileProps {
   items: Item[];
+  onCardClick: (index: number) => void;
   hintMode?: "continuous" | "pulsed";
-};
+}
 
 export function GalleryStackMobile({
   items,
+  onCardClick,
   hintMode = "pulsed",
 }: GalleryStackMobileProps) {
   const [queue, setQueue] = React.useState(items);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [activeIndex, setActiveIndex] = React.useState(0);
   const [didDrag, setDidDrag] = React.useState(false);
-
   const x = useMotionValue(0);
 
   const THRESHOLD = 90;
@@ -989,13 +1040,11 @@ export function GalleryStackMobile({
 
   const visible = queue.slice(0, 3);
 
-  // === POPRAWKA: Poprawiono składnię spread '...rest' ===
   const next = React.useCallback(() => {
     setQueue((q) => {
       const [first, ...rest] = q;
       return [...rest, first];
     });
-    setActiveIndex(0);
   }, []);
 
   const prev = React.useCallback(() => {
@@ -1004,37 +1053,30 @@ export function GalleryStackMobile({
       const rest = q.slice(0, -1);
       return [last, ...rest];
     });
-    setActiveIndex(0);
   }, []);
 
-  const openLightbox = () => {
+  const handleCardClick = () => {
     if (didDrag) return;
-    setActiveIndex(0);
-    setIsOpen(true);
+    const topCardUrl = queue[0].imageUrl;
+    const globalIndex = items.findIndex((item) => item.imageUrl === topCardUrl);
+    if (globalIndex !== -1) {
+      onCardClick(globalIndex);
+    }
   };
-  const closeLightbox = () => setIsOpen(false);
 
-  const onDragStart = () => {
-    setDidDrag(false);
-  };
+  const onDragStart = () => setDidDrag(false);
 
   const onDragEnd = (
     _e: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo
   ) => {
     const swipeStrength = info.offset.x + info.velocity.x * VELOCITY_WEIGHT;
-
-    if (Math.abs(info.offset.x) > 2 || Math.abs(info.velocity.x) > 50) {
+    if (Math.abs(info.offset.x) > 2) {
       setDidDrag(true);
       setTimeout(() => setDidDrag(false), 120);
     }
-
     if (Math.abs(swipeStrength) > THRESHOLD) {
-      if (swipeStrength > 0) {
-        prev();
-      } else {
-        next();
-      }
+      swipeStrength > 0 ? prev() : next();
       x.set(0);
     } else {
       x.set(0);
@@ -1061,17 +1103,10 @@ export function GalleryStackMobile({
   React.useEffect(() => {
     timeoutsRef.current.forEach((id) => clearTimeout(id));
     timeoutsRef.current = [];
-
-    if (isOpen) {
-      setHintVisible(false);
-      return;
-    }
-
     if (hintMode === "continuous") {
       setHintVisible(true);
       return;
     }
-
     const startCycle = () => {
       setHintVisible(true);
       const t1 = window.setTimeout(() => {
@@ -1081,23 +1116,18 @@ export function GalleryStackMobile({
       }, ACTIVE_MS);
       timeoutsRef.current.push(t1);
     };
-
     startCycle();
-
     return () => {
       timeoutsRef.current.forEach((id) => clearTimeout(id));
-      timeoutsRef.current = [];
     };
-  }, [hintMode, isOpen, PAUSE_MS]); // Dodano brakującą zależność
+  }, [hintMode, PAUSE_MS]);
 
-  const isHintAnimating = !isOpen && (hintMode === "continuous" || hintVisible);
+  const isHintAnimating = hintMode === "continuous" || hintVisible;
 
   useAnimationFrame((_, delta) => {
     if (!isHintAnimating) return;
-
     const dAngle = (delta / 1000) * SPEED * dirRef.current;
     let nextAngle = angleRef.current + dAngle;
-
     if (nextAngle > LIMIT) {
       nextAngle = LIMIT;
       dirRef.current = -1;
@@ -1106,169 +1136,94 @@ export function GalleryStackMobile({
       nextAngle = -LIMIT;
       dirRef.current = 1;
     }
-
     angleRef.current = nextAngle;
-
     hintX.set(A * Math.sin(nextAngle));
     hintY.set(B * (1 - Math.cos(nextAngle)));
   });
 
   return (
-    <>
-      <div className="relative mx-auto w-full max-w-md">
-        <div className="relative h-[64vh] min-h-[420px] w-full">
-          <AnimatePresence initial={false}>
-            {visible.map((item, i) => {
-              const isTop = i === 0;
-              const L = layers[i];
-              return (
-                <motion.div
-                  key={item.imageUrl + i}
-                  className="absolute inset-0"
-                  style={{ zIndex: L.z }}
-                  initial={{ scale: 0.92, opacity: 0, y: -10 }}
-                  animate={{
-                    scale: L.scale,
-                    y: L.y,
-                    x: L.x,
-                    rotate: L.rot,
-                    opacity: L.opacity,
-                  }}
-                  exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                  transition={{ type: "spring", stiffness: 260, damping: 28 }}
-                >
-                  <motion.div
-                    drag={isTop ? "x" : false}
-                    dragElastic={0.15}
-                    dragConstraints={{ left: 0, right: 0 }}
-                    style={isTop ? { x } : undefined}
-                    onDragStart={isTop ? onDragStart : undefined}
-                    onDragEnd={isTop ? onDragEnd : undefined}
-                    whileTap={isTop ? { cursor: "grabbing" } : {}}
-                    className="relative h-full w-full select-none"
-                  >
-                    <button
-                      type="button"
-                      onClick={openLightbox}
-                      className="absolute inset-0 overflow-hidden rounded-3xl shadow-xl"
-                      aria-label={`Otwórz „${item.title}” w pełnym ekranie`}
-                    >
-                      <Image
-                        src={item.imageUrl}
-                        alt={item.title}
-                        fill
-                        sizes="100vw"
-                        className="object-cover"
-                        priority={isTop}
-                      />
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
-                      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-4">
-                        <div className="rounded-2xl bg-black/45 px-4 py-3 backdrop-blur">
-                          <p className="text-base font-medium text-white">
-                            {item.title}
-                          </p>
-                        </div>
-                      </div>
-                    </button>
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-          <AnimatePresence>
-            {!isOpen && (
+    <div className="relative mx-auto w-full max-w-md">
+      <div className="relative h-[64vh] min-h-[420px] w-full">
+        <AnimatePresence initial={false}>
+          {visible.map((item, i) => {
+            const isTop = i === 0;
+            const L = layers[i];
+            return (
               <motion.div
-                className="pointer-events-none absolute bottom-[-20px] left-1/2 z-50 -translate-x-1/2"
-                initial={{ opacity: 0 }}
+                key={item.imageUrl + i}
+                className="absolute inset-0"
+                style={{ zIndex: L.z }}
+                initial={{ scale: 0.92, opacity: 0, y: -10 }}
                 animate={{
-                  opacity: hintMode === "continuous" ? 1 : hintVisible ? 1 : 0,
+                  scale: L.scale,
+                  y: L.y,
+                  x: L.x,
+                  rotate: L.rot,
+                  opacity: L.opacity,
                 }}
-                exit={{ opacity: 0 }}
-                transition={{
-                  duration: hintMode === "continuous" ? 0.25 : FADE_MS / 1000,
-                  ease: "easeInOut",
-                }}
+                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                transition={{ type: "spring", stiffness: 260, damping: 28 }}
               >
-                <div className="relative h-12 w-32">
-                  <motion.div
-                    className="absolute top-1/2 left-8 -translate-y-1/2 will-change-transform"
-                    style={{ x: hintX, y: hintY }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <ChevronLeft className="h-5 w-5 text-foreground/90" />
-                      <Pointer className="h-6 w-6 text-foreground drop-shadow" />
-                      <ChevronRight className="h-5 w-5 text-foreground/90" />
+                <motion.div
+                  drag={isTop ? "x" : false}
+                  dragElastic={0.15}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  style={isTop ? { x } : undefined}
+                  onDragStart={onDragStart}
+                  onDragEnd={onDragEnd}
+                  whileTap={isTop ? { cursor: "grabbing" } : {}}
+                  className="relative h-full w-full select-none"
+                  onClick={isTop ? handleCardClick : undefined}
+                >
+                  <div className="absolute inset-0 overflow-hidden rounded-3xl shadow-xl">
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.title}
+                      fill
+                      sizes="100vw"
+                      className="object-cover"
+                      priority={isTop}
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-4">
+                      <div className="rounded-2xl bg-black/45 px-4 py-3 backdrop-blur">
+                        <p className="text-base font-medium text-white">
+                          {item.title}
+                        </p>
+                      </div>
                     </div>
-                  </motion.div>
-                </div>
+                  </div>
+                </motion.div>
               </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            aria-modal="true"
-            role="dialog"
-            onClick={closeLightbox}
-          >
+            );
+          })}
+        </AnimatePresence>
+        <AnimatePresence>
+          {isHintAnimating && (
             <motion.div
-              className="absolute inset-0 flex items-center justify-center p-4"
-              initial={{ scale: 0.96 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.98 }}
-              onClick={(e) => e.stopPropagation()}
+              className="pointer-events-none absolute bottom-[-20px] left-1/2 z-50 -translate-x-1/2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: FADE_MS / 1000, ease: "easeInOut" }}
             >
-              <div className="relative aspect-[3/2] w-full max-w-[92vw] max-h-[80vh]">
-                <Image
-                  src={queue[activeIndex].imageUrl}
-                  alt={queue[activeIndex].title}
-                  fill
-                  sizes="100vw"
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <div className="pointer-events-none absolute inset-x-0 bottom-4 flex items-center justify-center gap-3">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    prev();
-                  }}
-                  className="pointer-events-auto rounded-full bg-white/10 px-3 py-2 text-white backdrop-blur hover:bg-white/15"
+              <div className="relative h-12 w-32">
+                <motion.div
+                  className="absolute top-1/2 left-8 -translate-y-1/2 will-change-transform"
+                  style={{ x: hintX, y: hintY }}
                 >
-                  Poprzednie
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    next();
-                  }}
-                  className="pointer-events-auto rounded-full bg-white/10 px-3 py-2 text-white backdrop-blur hover:bg-white/15"
-                >
-                  Następne
-                </button>
+                  <div className="flex items-center gap-2">
+                    <ChevronLeft className="h-5 w-5 text-foreground/90" />
+                    <Pointer className="h-6 w-6 text-foreground drop-shadow" />
+                    <ChevronRight className="h-5 w-5 text-foreground/90" />
+                  </div>
+                </motion.div>
               </div>
-              <button
-                type="button"
-                onClick={closeLightbox}
-                className="absolute right-3 top-3 rounded-full bg-white/10 p-2 text-white backdrop-blur hover:bg-white/20"
-                aria-label="Zamknij podgląd"
-              >
-                <X className="h-5 w-5" />
-              </button>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 }
 
@@ -1301,40 +1256,42 @@ export function ImageLightbox({
   onClose,
   onIndexChange,
 }: ImageLightboxProps) {
-  const mounted = React.useRef(false);
-  const imgs = Array.isArray(images) ? images : [];
+  // Normalizuj dane wejściowe
+  const imgs = React.useMemo(
+    () => (Array.isArray(images) ? images : []),
+    [images]
+  );
 
-  // renderuj tylko w przeglądarce (eliminuje błędy hydration)
+  // Renderuj tylko po stronie klienta (eliminuje problemy z hydration)
   const [isClient, setIsClient] = React.useState(false);
   React.useEffect(() => setIsClient(true), []);
 
-  // bezpieczny index
+  // Bezpieczny indeks w zakresie [0, imgs.length - 1]
   const safeIndex = React.useMemo(() => {
     if (!imgs.length) return 0;
     return Math.min(Math.max(index, 0), imgs.length - 1);
   }, [index, imgs.length]);
 
+  // Aktualny indeks obrazu
   const [current, setCurrent] = React.useState(safeIndex);
   React.useEffect(() => {
     setCurrent(safeIndex);
-  }, [safeIndex, imgs.length, open]);
-
-  // jeśli zamknięte lub brak zdjęć albo SSR – nie renderuj
-  if (!open || !imgs.length || !isClient) return null;
+  }, [safeIndex]);
 
   const total = imgs.length;
-  const go = (dir: 1 | -1) => {
-    if (!total) return;
-    const next = (current + dir + total) % total;
-    setCurrent(next);
-    onIndexChange?.(next);
-  };
 
-  React.useEffect(() => {
-    if (mounted.current) return;
-    mounted.current = true;
-  }, []);
+  // Nawigacja po obrazach (stabilna referencja)
+  const go = React.useCallback(
+    (dir: 1 | -1) => {
+      if (!total) return;
+      const next = (current + dir + total) % total;
+      setCurrent(next);
+      onIndexChange?.(next);
+    },
+    [current, total, onIndexChange]
+  );
 
+  // Obsługa klawiatury
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") go(1);
@@ -1343,7 +1300,10 @@ export function ImageLightbox({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [current, total, onClose]);
+  }, [go, onClose]);
+
+  // ↙️ Warunkowy render dopiero po wszystkich hookach
+  if (!open || !isClient || !total) return null;
 
   const img = imgs[current];
 
@@ -1381,7 +1341,6 @@ export function ImageLightbox({
         )}
 
         <div className="relative w-full h-full">
-          {/* Podwójny guard – nawet gdyby coś było nie tak, nie wywali projektu */}
           {img?.src ? (
             <Image
               src={img.src}
@@ -1713,7 +1672,7 @@ export function Footer() {
                     href="#dlaczego-warto"
                     className="text-muted-foreground hover:text-foreground"
                   >
-                    O Inwestycji
+                    Dlaczego warto?
                   </a>
                 </li>
                 <li>
@@ -1802,8 +1761,8 @@ import { ThemeToggle } from "@/components/common/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "#dlaczego-warto", label: "Dlaczego Warto?" },
-  { href: "#domy", label: "Domy i Plany" },
+  { href: "#dlaczego-warto", label: "Dlaczego warto?" },
+  { href: "#domy", label: "Domy i plany" },
   { href: "#galeria", label: "Galeria" },
   { href: "#lokalizacja", label: "Lokalizacja" },
   { href: "#kontakt", label: "Kontakt" },
@@ -1832,8 +1791,8 @@ export function MainNav() {
         className="size-6 ml-2 text-foreground flex-shrink-0"
         aria-hidden="true"
       />
-      <span className="text-xl font-bold tracking-tight text-foreground">
-        Osiedle Dębowy Park
+      <span className="text-lg font-bold tracking-tight text-foreground">
+        Dębowy Park
       </span>
     </Link>
   );
@@ -1955,6 +1914,402 @@ export function MainNav() {
 
 ```
 
+# components\sections\calculator-section.tsx
+
+```tsx
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSpring, useTransform } from "framer-motion";
+
+const LOAN_MIN = 200_000;
+const LOAN_MAX = 1_000_000;
+const LOAN_STEP = 10_000;
+const TERM_MIN = 5;
+const TERM_MAX = 35;
+const TERM_STEP = 1;
+const MOCK_RATE = 8.41; // % – symulacja
+
+function calculateInstallment(amount: number, years: number, rate: number) {
+  const n = years * 12;
+  const r = rate / 100 / 12;
+  return (amount * r) / (1 - Math.pow(1 + r, -n));
+}
+
+// Komponent do animowanego wyświetlania liczby
+function AnimatedNumber({ value }: { value: number }) {
+  const spring = useSpring(value, {
+    damping: 30,
+    stiffness: 200,
+  });
+
+  const display = useTransform(
+    spring,
+    (current) => Math.round(current * 100) / 100
+  );
+
+  const [displayValue, setDisplayValue] = useState("0,00");
+
+  useEffect(() => {
+    spring.set(value);
+    const unsubscribe = display.on("change", (latest) => {
+      setDisplayValue(
+        latest.toLocaleString("pl-PL", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      );
+    });
+    return () => unsubscribe();
+  }, [value, spring, display]);
+
+  return <>{displayValue}</>;
+}
+
+export function CalculatorSection() {
+  const [amount, setAmount] = useState(350_000);
+  const [years, setYears] = useState(30);
+  const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const installment =
+    Math.round(calculateInstallment(amount, years, MOCK_RATE) * 100) / 100;
+  const totalPayment = installment * years * 12;
+  const totalInterest = totalPayment - amount;
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 9);
+    setPhone(value);
+    setPhoneError("");
+    setIsSubmitted(false);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (phone.length !== 9) {
+      setPhoneError("Podaj prawidłowy 9-cyfrowy numer telefonu");
+      return;
+    }
+    setIsLoading(true);
+    // Symulacja wysyłki - tutaj dodaj rzeczywistą logikę
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setIsSubmitted(true);
+    setIsLoading(false);
+    setTimeout(() => {
+      setPhone("");
+      setIsSubmitted(false);
+    }, 3000);
+  };
+
+  // Oblicz procent dla gradientu slidera
+  const amountPercent = ((amount - LOAN_MIN) / (LOAN_MAX - LOAN_MIN)) * 100;
+  const yearsPercent = ((years - TERM_MIN) / (TERM_MAX - TERM_MIN)) * 100;
+
+  return (
+    <section id="kalkulator" className="bg-background py-14 md:py-28">
+      <div className="mx-auto max-w-5xl px-4 md:px-8">
+        <div className="bg-card/70 rounded-2xl md:rounded-3xl border shadow-xl md:shadow-2xl overflow-hidden flex flex-col md:flex-row">
+          {/* LEWA kolumna */}
+          <div className="flex-1 p-6 sm:p-7 md:p-12">
+            {/* Nagłówek */}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 tracking-tight leading-tight">
+              Kalkulator raty kredytowej
+            </h2>
+            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
+              Oblicz przybliżoną miesięczną ratę kredytu hipotecznego.
+              <br className="hidden sm:block" />
+              Wybierz kwotę i okres – lub zostaw numer, a <b>ekspert</b>{" "}
+              dobierze najlepszą ofertę.
+            </p>
+
+            {/* Slidery */}
+            <div className="space-y-6 sm:space-y-8">
+              {/* Kwota */}
+              <div>
+                <label
+                  htmlFor="slider-kwota"
+                  className="block mb-1.5 sm:mb-2 font-medium text-sm sm:text-base"
+                >
+                  Kwota kredytu:
+                  <span className="ml-2 text-primary font-bold text-base sm:text-lg">
+                    {amount.toLocaleString("pl-PL")} zł
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  id="slider-kwota"
+                  min={LOAN_MIN}
+                  max={LOAN_MAX}
+                  step={LOAN_STEP}
+                  value={amount}
+                  onChange={(e) => setAmount(Number(e.target.value))}
+                  className="w-full slider-amount touch-manipulation"
+                  aria-label="Wybierz kwotę kredytu"
+                  aria-valuemin={LOAN_MIN}
+                  aria-valuemax={LOAN_MAX}
+                  aria-valuenow={amount}
+                  aria-valuetext={`${amount.toLocaleString("pl-PL")} złotych`}
+                  role="slider"
+                  style={
+                    {
+                      "--slider-percent": `${amountPercent}%`,
+                    } as React.CSSProperties
+                  }
+                />
+                <div className="mt-1.5 flex justify-between text-[11px] sm:text-xs text-muted-foreground">
+                  <span>{LOAN_MIN.toLocaleString("pl-PL")} zł</span>
+                  <span>{LOAN_MAX.toLocaleString("pl-PL")} zł</span>
+                </div>
+              </div>
+
+              {/* Okres */}
+              <div>
+                <label
+                  htmlFor="slider-lata"
+                  className="block mb-1.5 sm:mb-2 font-medium text-sm sm:text-base"
+                >
+                  Okres kredytowania:
+                  <span className="ml-2 text-primary font-bold text-base sm:text-lg">
+                    {years} lat
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  id="slider-lata"
+                  min={TERM_MIN}
+                  max={TERM_MAX}
+                  step={TERM_STEP}
+                  value={years}
+                  onChange={(e) => setYears(Number(e.target.value))}
+                  className="w-full slider-years touch-manipulation"
+                  aria-label="Wybierz okres kredytowania"
+                  aria-valuemin={TERM_MIN}
+                  aria-valuemax={TERM_MAX}
+                  aria-valuenow={years}
+                  aria-valuetext={`${years} lat`}
+                  role="slider"
+                  style={
+                    {
+                      "--slider-percent": `${yearsPercent}%`,
+                    } as React.CSSProperties
+                  }
+                />
+                <div className="mt-1.5 flex justify-between text-[11px] sm:text-xs text-muted-foreground">
+                  <span>{TERM_MIN} lat</span>
+                  <span>{TERM_MAX} lat</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* PRAWA kolumna: wynik + CTA */}
+          <div className="bg-card/80 flex-1 flex flex-col justify-center items-center gap-5 sm:gap-6 md:gap-8 p-6 sm:p-7 md:p-12 border-t md:border-t-0 md:border-l">
+            <div className="text-center">
+              <span className="block text-xs sm:text-sm text-muted-foreground">
+                Wysokość raty
+              </span>
+              <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground tabular-nums">
+                <AnimatedNumber value={installment} /> zł
+              </span>
+              <div className="relative inline-block mt-0.5 sm:mt-1">
+                <span
+                  className="block text-xs sm:text-sm text-orange-900/80 dark:text-orange-100/80 font-medium cursor-help underline decoration-dotted"
+                  onMouseEnter={() => setShowTooltip(true)}
+                  onMouseLeave={() => setShowTooltip(false)}
+                  onFocus={() => setShowTooltip(true)}
+                  onBlur={() => setShowTooltip(false)}
+                  tabIndex={0}
+                  role="tooltip"
+                  aria-label="Rzeczywista Roczna Stopa Oprocentowania"
+                >
+                  RRSO{" "}
+                  {MOCK_RATE.toLocaleString("pl-PL", {
+                    maximumFractionDigits: 2,
+                  })}
+                  %
+                </span>
+                {showTooltip && (
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-foreground text-background text-xs rounded-lg whitespace-nowrap shadow-lg z-10 pointer-events-none">
+                    Rzeczywista Roczna Stopa Oprocentowania
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-foreground" />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Dodatkowe informacje */}
+            <div className="text-center text-xs sm:text-sm text-muted-foreground space-y-1 w-full border-t border-b border-border/50 py-3">
+              <p>
+                Całkowita kwota do spłaty:{" "}
+                <strong className="text-foreground">
+                  {Math.round(totalPayment).toLocaleString("pl-PL")} zł
+                </strong>
+              </p>
+              <p>
+                Koszt odsetek:{" "}
+                <strong className="text-orange-600">
+                  {Math.round(totalInterest).toLocaleString("pl-PL")} zł
+                </strong>
+              </p>
+            </div>
+
+            <button className="w-full sm:w-auto bg-primary hover:bg-primary/85 text-primary-foreground font-bold rounded-lg md:rounded-xl px-8 md:px-12 py-2.5 md:py-3 shadow focus:outline-none focus:ring-2 focus:ring-primary transition min-h-[44px] touch-manipulation">
+              Sprawdź oferty
+            </button>
+
+            {/* Ekspert */}
+            <div className="w-full flex flex-col items-center pt-1 sm:pt-2">
+              <span className="block font-medium text-primary mb-1.5 sm:mb-2 text-sm sm:text-base">
+                Porozmawiaj z ekspertem:
+              </span>
+              <form
+                onSubmit={handleSubmit}
+                className="flex w-full max-w-xs gap-2 flex-col sm:flex-row"
+              >
+                <div className="flex-1">
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    placeholder="telefon (9 cyfr)"
+                    className={`w-full rounded-lg border p-2.5 sm:p-3 text-base sm:text-lg transition-colors min-h-[44px] touch-manipulation ${
+                      phoneError
+                        ? "border-red-500 focus:ring-red-500 focus:ring-2 outline-none"
+                        : "focus:ring-2 focus:ring-primary outline-none"
+                    }`}
+                    aria-invalid={phoneError ? "true" : "false"}
+                    aria-describedby={
+                      phoneError
+                        ? "phone-error"
+                        : isSubmitted
+                        ? "phone-success"
+                        : undefined
+                    }
+                  />
+                  {phoneError && (
+                    <p
+                      id="phone-error"
+                      className="text-xs text-red-600 mt-1 text-left"
+                      role="alert"
+                    >
+                      {phoneError}
+                    </p>
+                  )}
+                  {isSubmitted && (
+                    <p
+                      id="phone-success"
+                      className="text-xs text-green-600 mt-1 text-left"
+                      role="status"
+                    >
+                      ✓ Dziękujemy! Skontaktujemy się wkrótce
+                    </p>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={phone.length !== 9 || isLoading}
+                  className="bg-orange-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 font-bold rounded-lg hover:bg-orange-500 transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[44px] min-w-[80px] touch-manipulation"
+                >
+                  {isLoading ? (
+                    <>
+                      <span className="animate-spin">⏳</span>
+                      <span className="hidden sm:inline">Wysyłam...</span>
+                    </>
+                  ) : (
+                    "Wyślij"
+                  )}
+                </button>
+              </form>
+            </div>
+
+            <div className="mt-1 sm:mt-2 text-[11px] sm:text-xs text-muted-foreground text-center opacity-70 leading-relaxed">
+              Symulacja ma charakter informacyjny i nie stanowi oferty
+              handlowej. Szczegółowe wyliczenie po analizie Twojej sytuacji.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Style dla custom sliderów */}
+      <style jsx>{`
+        input[type="range"] {
+          -webkit-appearance: none;
+          appearance: none;
+          height: 8px;
+          background: linear-gradient(
+            to right,
+            hsl(var(--primary)) 0%,
+            hsl(var(--primary)) var(--slider-percent),
+            hsl(var(--muted)) var(--slider-percent),
+            hsl(var(--muted)) 100%
+          );
+          border-radius: 5px;
+          outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          background: hsl(var(--primary));
+          cursor: pointer;
+          border-radius: 50%;
+          border: 3px solid hsl(var(--background));
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+          transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+          transform: scale(1.2);
+        }
+
+        input[type="range"]::-webkit-slider-thumb:active {
+          transform: scale(1.1);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+          width: 20px;
+          height: 20px;
+          background: hsl(var(--primary));
+          cursor: pointer;
+          border-radius: 50%;
+          border: 3px solid hsl(var(--background));
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+          transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-moz-range-thumb:hover {
+          transform: scale(1.2);
+        }
+
+        input[type="range"]::-moz-range-thumb:active {
+          transform: scale(1.1);
+        }
+
+        input[type="range"]:focus {
+          outline: 2px solid hsl(var(--primary));
+          outline-offset: 2px;
+        }
+
+        input[type="range"]:focus:not(:focus-visible) {
+          outline: none;
+        }
+
+        input[type="range"]:focus-visible {
+          outline: 2px solid hsl(var(--primary));
+          outline-offset: 2px;
+        }
+      `}</style>
+    </section>
+  );
+}
+
+```
+
 # components\sections\contact-section.tsx
 
 ```tsx
@@ -1966,7 +2321,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 export function ContactSection() {
   return (
-    // POPRAWKA: Zmieniono tło na bg-background dla spójności
     <section
       id="kontakt"
       className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
@@ -1987,13 +2341,27 @@ export function ContactSection() {
             <label htmlFor="name" className="sr-only">
               Imię
             </label>
-            <Input id="name" type="text" placeholder="Imię" required />
+            {/* POPRAWKA: Dodano autoComplete="name" */}
+            <Input
+              id="name"
+              type="text"
+              placeholder="Imię"
+              required
+              autoComplete="name"
+            />
           </div>
           <div>
             <label htmlFor="email" className="sr-only">
               E-mail
             </label>
-            <Input id="email" type="email" placeholder="E-mail" required />
+            {/* POPRAWKA: Dodano autoComplete="email" */}
+            <Input
+              id="email"
+              type="email"
+              placeholder="E-mail"
+              required
+              autoComplete="email"
+            />
           </div>
           <div>
             <label htmlFor="message" className="sr-only">
@@ -2028,239 +2396,135 @@ export function ContactSection() {
 ```tsx
 "use client";
 
+import { useState } from "react";
 import { GalleryCard } from "@/components/common/gallery-card";
 import { GalleryStackMobile } from "@/components/common/gallery-stack-mobile";
+import { FullscreenImageViewer } from "@/components/common/fullscreen-image-viewer";
 
 const galleryImages = [
   {
     imageUrl: "/galeria/1.jpg",
     title: "Nowoczesny dom z przestronnym podjazdem",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/2.jpg",
     title: "Elegancka bryła budynku z podjazdem",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/3.jpg",
     title: "Dom idealny dla całej rodziny",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/4.jpg",
     title: "Widok z góry na nowoczesną architekturę",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/5.jpg",
     title: "Detal elewacji i duże przeszklenia",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/6.jpg",
     title: "Stylowe wejście do domu",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/7.jpg",
     title: "Wizualizacja frontu budynku",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/8.jpg",
     title: "Osiedle domów z lotu ptaka",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/9.jpg",
     title: "Spójna koncepcja architektoniczna osiedla",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/10.jpg",
     title: "Dom wkomponowany w otoczenie",
-    span: "row-span-1",
+    span: "row-span-2",
   },
   {
     imageUrl: "/galeria/11.jpg",
     title: "Nowoczesne osiedle w zielonej okolicy",
-    span: "row-span-2",
+    span: "row-span-3",
   },
   {
     imageUrl: "/galeria/12.jpeg",
     title: "Przestronne i słoneczne wnętrze salonu",
-    span: "row-span-1",
-  },
-  {
-    imageUrl: "/galeria/jaworowa-wizualizacja-5.jpg",
-    title: "Nastrojowe oświetlenie domu po zmroku",
-    span: "row-span-1",
+    span: "row-span-2",
   },
 ];
 
 export function GallerySection() {
-  return (
-    <section
-      id="galeria"
-      className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
-    >
-      <div className="mx-auto max-w-7xl px-6 md:px-8">
-        <div className="max-w-3xl">
-          <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            Galeria
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Każda wizualizacja przedstawia nie tylko architekturę, ale i
-            atmosferę miejsca, w którym możesz zamieszkać wraz ze swoją rodziną.
-          </p>
-        </div>
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState({ src: "", alt: "" });
 
-        {/* MOBILE: stos kart z gestem swipe */}
-        <div className="mt-10 md:hidden">
-          <GalleryStackMobile
-            items={galleryImages.map(({ imageUrl, title }) => ({
-              imageUrl,
-              title,
-            }))}
-          />
-        </div>
-
-        {/* DESKTOP: Twoja siatka bez zmian */}
-        <div className="mt-16 hidden grid-flow-dense grid-cols-2 gap-4 [grid-auto-rows:150px] md:grid md:grid-cols-4">
-          {galleryImages.map((image, index) => (
-            <GalleryCard
-              key={index}
-              imageUrl={image.imageUrl}
-              title={image.title}
-              className={image.span}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-```
-
-# components\sections\hero-section copy.tsx
-
-```tsx
-"use client";
-
-import Image from "next/image";
-import { ChevronRight, ChevronsDown } from "lucide-react";
-import * as React from "react";
-
-/**
- * Alt Hero v2
- * - MOBILE: odtwarza układ ze screena (centrowanie, duże CTA-pill, ten sam rytm pionowy)
- * - DESKTOP: pełnoekranowe tło + pływający panel "glass" wyrównany do lewej krawędzi kontenera (jak nawigacja)
- * - "Dębowy Park" w jednej linii na md+
- */
-export function HeroSection() {
-  const onScroll = React.useCallback((id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    el.scrollIntoView({
-      behavior: reduced ? ("auto" as ScrollBehavior) : "smooth",
-      block: "start",
+  const openLightbox = (index: number) => {
+    setLightboxImage({
+      src: galleryImages[index].imageUrl,
+      alt: galleryImages[index].title,
     });
-  }, []);
+    setLightboxOpen(true);
+  };
 
   return (
-    <section
-      id="hero"
-      className="relative isolate flex min-h-[100svh] w-full items-stretch overflow-hidden"
-    >
-      {/* FULL-BLEED BG */}
-      <Image
-        src="/Artboard_2.jpg"
-        alt="Nowoczesny dom w otoczeniu zieleni – Osiedle Dębowy Park"
-        fill
-        priority
-        className="-z-10 object-cover object-bottom"
-        sizes="100vw"
-        quality={80}
-      />
-      {/* Readability helpers */}
-      <div
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,rgba(0,0,0,0.45),transparent_55%)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
-        aria-hidden
-      />
-
-      {/* CONTENT CONTAINER — aligns with site nav */}
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center">
-        <div className="container mx-auto grid w-full grid-cols-1 px-4 sm:px-6 md:px-8 lg:px-12 md:grid-cols-12 md:gap-8">
-          {/* FLOATING GLASS PANEL (desktop), mobile stays transparent */}
-          <div className="md:col-span-7 lg:col-span-6">
-            <div className="mb-50 rounded-[2rem] bg-black/0 p-[clamp(2.5rem,3vw,1.5rem)] backdrop-blur-0 md:bg-black/35 md:p-8 md:shadow-[0_20px_70px_rgba(0,0,0,0.45)] md:backdrop-blur-md">
-              {/* Heading */}
-              <h1 className="text-center font-extrabold text-white md:text-left">
-                <span className="block text-[clamp(1.375rem,2.5vw,1.875rem)] tracking-tight text-white/90">
-                  Osiedle
-                </span>
-                <span className="relative inline-block md:whitespace-nowrap">
-                  <span className="relative z-10 block text-[clamp(2.5rem,6vw,4rem)] leading-[0.95] tracking-tight">
-                    Dębowy Park
-                  </span>
-                  <Image
-                    src="/underline-gradient-green.svg"
-                    alt=""
-                    width={760}
-                    height={40}
-                    className="pointer-events-none absolute -bottom-2 left-0 w-full select-none md:-bottom-3"
-                    aria-hidden
-                  />
-                </span>
-              </h1>
-
-              {/* Lead */}
-              <p className="mx-auto mt-6 max-w-prose text-center text-[clamp(1rem,1.6vw,1.25rem)] leading-relaxed text-white/90 md:text-left">
-                Poznaj wyjątkowe miejsce dla Ciebie i Twojej rodziny.
-              </p>
-
-              {/* CTA pill (faithful to mobile look) */}
-              <div className="mx-auto mt-8 max-w-[32rem] md:mx-0">
-                <button
-                  type="button"
-                  onClick={() => onScroll("dlaczego-warto")}
-                  className="group flex w-full items-center justify-between rounded-full border border-white/15 bg-white/10 px-2 py-2 backdrop-blur-sm transition-all duration-300 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                >
-                  <span className="pl-6 text-[clamp(1.05rem,1.6vw,1.25rem)] font-medium text-white">
-                    Dowiedz się więcej
-                  </span>
-                  <span className="mr-1 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] transition-transform duration-300 group-hover:scale-110">
-                    <ChevronRight className="h-6 w-6 text-white" aria-hidden />
-                  </span>
-                </button>
-              </div>
-            </div>
+    <>
+      <section
+        id="galeria"
+        className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
+      >
+        <div className="mx-auto max-w-7xl px-6 md:px-8">
+          <div className="max-w-3xl">
+            <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+              Galeria
+            </h2>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Każda wizualizacja przedstawia nie tylko architekturę, ale i
+              atmosferę miejsca, w którym możesz zamieszkać wraz ze swoją
+              rodziną.
+            </p>
           </div>
 
-          <div className="hidden md:col-span-5 lg:col-span-6 md:block" />
+          <div className="mt-10 md:hidden">
+            <GalleryStackMobile
+              items={galleryImages.map(({ imageUrl, title }) => ({
+                imageUrl,
+                title,
+              }))}
+              onCardClick={openLightbox}
+            />
+          </div>
+
+          <div className="mt-16 hidden grid-flow-dense grid-cols-2 gap-4 [grid-auto-rows:150px] md:grid md:grid-cols-4">
+            {galleryImages.map((image, index) => (
+              <GalleryCard
+                key={index}
+                imageUrl={image.imageUrl}
+                title={image.title}
+                className={image.span}
+                onClick={() => openLightbox(index)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Mobile-only extra spacer to keep dolna część zdjęcia widoczna jak na screenie */}
-      <div className="h-[12vh] md:hidden" aria-hidden />
-
-      {/* Scroll cue */}
-      <div
-        className="pointer-events-none absolute bottom-4 left-1/2 z-20 -translate-x-1/2"
-        aria-hidden
-      >
-        <ChevronsDown className="h-10 w-10 animate-bounce text-white/90" />
-      </div>
-    </section>
+      <FullscreenImageViewer
+        open={lightboxOpen}
+        src={lightboxImage.src}
+        alt={lightboxImage.alt}
+        onClose={() => setLightboxOpen(false)}
+      />
+    </>
   );
 }
 
@@ -2429,7 +2693,7 @@ export function HeroSection() {
         className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 rounded-full p-2 transition-transform duration-200 ease-in-out hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
         aria-label="Przewiń do następnej sekcji"
       >
-        <ChevronsDown className="h-10 w-10 animate-bounce text-foreground/90 motion-reduce:animate-none" />
+        <ChevronsDown className="h-10 w-10 animate-bounce text-foreground/90" />
       </button>
     </section>
   );
@@ -2450,24 +2714,24 @@ import { Home, Trees, Shield, MapPin } from "lucide-react";
 const features = [
   {
     icon: <Trees className="size-6 text-primary-foreground" />,
-    title: "Harmonia z Naturą",
-    description: "Prywatne ogrody i zieleń",
+    title: "Harmonia z naturą",
+    description: "Prywatny ogród to idealne miejsce na relaks z dala od smogu.",
     isHighlighted: true,
   },
   {
     icon: <Home className="size-6 text-secondary-foreground" />,
-    title: "Dla Twojej Wygody",
-    description: "Przemyślany układ",
+    title: "Dla Twojej wygody",
+    description: "Przemyślany układ zapewniający komfort codziennego życia.",
   },
   {
     icon: <Shield className="size-6 text-secondary-foreground" />,
-    title: "Dla Twojego Spokoju",
-    description: "Kameralne osiedle",
+    title: "Dla Twojego spokoju",
+    description: "Kameralne osiedle to bezpieczeństwo i prywatność.",
   },
   {
     icon: <MapPin className="size-6 text-secondary-foreground" />,
-    title: "Dla Twojego Czasu",
-    description: "Blisko miasta",
+    title: "Dla Twojego czasu",
+    description: "Blisko centrum. Oszczędzaj na dojazdach do pracy i szkoły.",
   },
 ];
 
@@ -2542,7 +2806,7 @@ export function InvestmentSection() {
               />
             </div>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Naszą ambicją jest stworzenie osiedla, które nie tylko zachwyca
+              Naszą ambicją było stworzenie osiedla, które nie tylko zachwyca
               architekturą, ale przede wszystkim zapewnia spokój, bezpieczeństwo
               i komfort codziennego życia.
             </p>
@@ -2748,7 +3012,7 @@ export function PlansSection() {
         <div className="mx-auto max-w-7xl px-6 md:px-8">
           <div className="text-left max-w-xl mb-12">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-              Dom zaprojektowany dla Ciebie.
+              Dom zaprojektowany dla Ciebie
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Odkryj przemyślany układ, który łączy otwartą przestrzeń dzienną z
@@ -2757,34 +3021,32 @@ export function PlansSection() {
           </div>
 
           <div className="w-full mb-12">
-            <div className="bg-card/50 rounded-3xl border p-8 shadow">
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-4 md:gap-6">
-                {keyFeatures.map((feature, i) => (
+            <div className="bg-card/50 rounded-3xl border p-8 shadow space-y-8 md:space-y-0 md:grid md:grid-cols-4 md:gap-6">
+              {keyFeatures.map((feature, i) => (
+                <div
+                  key={i}
+                  className="flex flex-row items-center gap-4 md:flex-col md:items-center md:text-center"
+                >
                   <div
-                    key={i}
-                    className="flex flex-row items-center gap-4 md:flex-col md:items-center md:text-center"
+                    className={`p-3 rounded-xl bg-gradient-to-br ${feature.color} text-white shadow-lg flex-shrink-0`}
                   >
-                    <div
-                      className={`p-3 rounded-xl bg-gradient-to-br ${feature.color} text-white shadow-lg flex-shrink-0`}
-                    >
-                      <feature.icon className="h-6 w-6" />
+                    <feature.icon className="h-6 w-6" />
+                  </div>
+                  <div className="md:mt-2">
+                    <div className="font-bold text-lg text-foreground">
+                      {feature.title}{" "}
+                      {feature.value && (
+                        <span className="text-primary text-xl">
+                          {feature.value}
+                        </span>
+                      )}
                     </div>
-                    <div className="md:mt-2">
-                      <div className="font-bold text-lg text-foreground">
-                        {feature.title}{" "}
-                        {feature.value && (
-                          <span className="text-primary text-xl">
-                            {feature.value}
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-muted-foreground text-sm">
-                        {feature.description}
-                      </div>
+                    <div className="text-muted-foreground text-sm">
+                      {feature.description}
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -2897,14 +3159,17 @@ export function PlansSection() {
                     key={view.id}
                     type="button"
                     onClick={() => openLightbox(view)}
-                    className="relative block w-full overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group"
+                    className={cn(
+                      "relative block w-full overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group",
+                      view.aspect
+                    )}
                   >
                     <Image
                       src={view.image}
                       alt={view.alt}
-                      width={800}
-                      height={800}
-                      className="w-full h-auto"
+                      fill
+                      className="object-cover"
+                      sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <Expand className="h-12 w-12 text-white" />
@@ -3142,6 +3407,104 @@ export { Button, buttonVariants };
 
 ```
 
+# components\ui\card.tsx
+
+```tsx
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Card({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-header"
+      className={cn(
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-title"
+      className={cn("leading-none font-semibold", className)}
+      {...props}
+    />
+  )
+}
+
+function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
+  )
+}
+
+function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-action"
+      className={cn(
+        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-content"
+      className={cn("px-6", className)}
+      {...props}
+    />
+  )
+}
+
+function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-footer"
+      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
+      {...props}
+    />
+  )
+}
+
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+}
+
+```
+
 # components\ui\dialog.tsx
 
 ```tsx
@@ -3297,6 +3660,36 @@ export { Input }
 
 ```
 
+# components\ui\label.tsx
+
+```tsx
+"use client"
+
+import * as React from "react"
+import * as LabelPrimitive from "@radix-ui/react-label"
+
+import { cn } from "@/lib/utils"
+
+function Label({
+  className,
+  ...props
+}: React.ComponentProps<typeof LabelPrimitive.Root>) {
+  return (
+    <LabelPrimitive.Root
+      data-slot="label"
+      className={cn(
+        "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Label }
+
+```
+
 # components\ui\sheet.tsx
 
 ```tsx
@@ -3304,7 +3697,6 @@ export { Input }
 
 import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
-import { XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -3435,6 +3827,75 @@ export {
   SheetTitle,
   SheetDescription,
 };
+
+```
+
+# components\ui\slider.tsx
+
+```tsx
+"use client"
+
+import * as React from "react"
+import * as SliderPrimitive from "@radix-ui/react-slider"
+
+import { cn } from "@/lib/utils"
+
+function Slider({
+  className,
+  defaultValue,
+  value,
+  min = 0,
+  max = 100,
+  ...props
+}: React.ComponentProps<typeof SliderPrimitive.Root>) {
+  const _values = React.useMemo(
+    () =>
+      Array.isArray(value)
+        ? value
+        : Array.isArray(defaultValue)
+          ? defaultValue
+          : [min, max],
+    [value, defaultValue, min, max]
+  )
+
+  return (
+    <SliderPrimitive.Root
+      data-slot="slider"
+      defaultValue={defaultValue}
+      value={value}
+      min={min}
+      max={max}
+      className={cn(
+        "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
+        className
+      )}
+      {...props}
+    >
+      <SliderPrimitive.Track
+        data-slot="slider-track"
+        className={cn(
+          "bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5"
+        )}
+      >
+        <SliderPrimitive.Range
+          data-slot="slider-range"
+          className={cn(
+            "bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
+          )}
+        />
+      </SliderPrimitive.Track>
+      {Array.from({ length: _values.length }, (_, index) => (
+        <SliderPrimitive.Thumb
+          data-slot="slider-thumb"
+          key={index}
+          className="border-primary bg-background ring-ring/50 block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
+        />
+      ))}
+    </SliderPrimitive.Root>
+  )
+}
+
+export { Slider }
 
 ```
 
@@ -3740,6 +4201,8 @@ export default nextConfig;
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slider": "^1.3.6",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.13",
     "class-variance-authority": "^0.7.1",
@@ -3747,7 +4210,7 @@ export default nextConfig;
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.22",
-    "lucide-react": "^0.544.0",
+    "lucide-react": "0.544.0",
     "next": "15.5.3",
     "next-themes": "^0.4.6",
     "postcss": "^8.5.6",
