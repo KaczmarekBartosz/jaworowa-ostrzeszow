@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 export function ContactSection() {
   return (
-    // POPRAWKA: Zmieniono tło na bg-background dla spójności
     <section
       id="kontakt"
       className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
@@ -27,13 +26,27 @@ export function ContactSection() {
             <label htmlFor="name" className="sr-only">
               Imię
             </label>
-            <Input id="name" type="text" placeholder="Imię" required />
+            {/* POPRAWKA: Dodano autoComplete="name" */}
+            <Input
+              id="name"
+              type="text"
+              placeholder="Imię"
+              required
+              autoComplete="name"
+            />
           </div>
           <div>
             <label htmlFor="email" className="sr-only">
               E-mail
             </label>
-            <Input id="email" type="email" placeholder="E-mail" required />
+            {/* POPRAWKA: Dodano autoComplete="email" */}
+            <Input
+              id="email"
+              type="email"
+              placeholder="E-mail"
+              required
+              autoComplete="email"
+            />
           </div>
           <div>
             <label htmlFor="message" className="sr-only">
