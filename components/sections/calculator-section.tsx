@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSpring, useTransform } from "framer-motion";
 
 const LOAN_MIN = 200_000;
 const LOAN_MAX = 1_000_000;
@@ -14,6 +15,36 @@ function calculateInstallment(amount: number, years: number, rate: number) {
   const n = years * 12;
   const r = rate / 100 / 12;
   return (amount * r) / (1 - Math.pow(1 + r, -n));
+}
+
+// Komponent do animowanego wyświetlania liczby
+function AnimatedNumber({ value }: { value: number }) {
+  const spring = useSpring(value, {
+    damping: 30,
+    stiffness: 200,
+  });
+
+  const display = useTransform(
+    spring,
+    (current) => Math.round(current * 100) / 100
+  );
+
+  const [displayValue, setDisplayValue] = useState("0,00");
+
+  useEffect(() => {
+    spring.set(value);
+    const unsubscribe = display.on("change", (latest) => {
+      setDisplayValue(
+        latest.toLocaleString("pl-PL", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      );
+    });
+    return () => unsubscribe();
+  }, [value, spring, display]);
+
+  return <>{displayValue}</>;
 }
 
 export function CalculatorSection() {
@@ -105,11 +136,7 @@ export function CalculatorSection() {
                 Wysokość raty
               </span>
               <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground">
-                {installment.toLocaleString("pl-PL", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
-                zł
+                <AnimatedNumber value={installment} /> zł
               </span>
               <span className="block text-xs sm:text-sm text-orange-900/80 font-medium mt-0.5 sm:mt-1">
                 RRSO{" "}

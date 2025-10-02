@@ -70,10 +70,13 @@ const galleryImages = [
 
 export function GallerySection() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [lightboxImage, setLightboxImage] = useState({ src: "", alt: "" });
 
   const openLightbox = (index: number) => {
-    setActiveIndex(index);
+    setLightboxImage({
+      src: galleryImages[index].imageUrl,
+      alt: galleryImages[index].title,
+    });
     setLightboxOpen(true);
   };
 
@@ -121,12 +124,9 @@ export function GallerySection() {
 
       <FullscreenImageViewer
         open={lightboxOpen}
+        src={lightboxImage.src}
+        alt={lightboxImage.alt}
         onClose={() => setLightboxOpen(false)}
-        images={galleryImages.map((img) => ({
-          src: img.imageUrl,
-          alt: img.title,
-        }))}
-        startIndex={activeIndex}
       />
     </>
   );

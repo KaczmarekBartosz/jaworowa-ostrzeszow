@@ -3,149 +3,157 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-
-interface LightboxImage {
-  src: string;
-  alt: string;
-}
+import { X, ZoomIn, ZoomOut } from "lucide-react";
 
 interface FullscreenImageViewerProps {
-  images: LightboxImage[];
-  startIndex?: number;
+  src: string;
+  alt: string;
   open: boolean;
   onClose: () => void;
 }
 
-const variants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? "100%" : "-100%",
-    opacity: 0,
-  }),
-  center: { zIndex: 1, x: 0, opacity: 1 },
-  exit: (direction: number) => ({
-    zIndex: 0,
-    x: direction < 0 ? "100%" : "-100%",
-    opacity: 0,
-  }),
-};
-
-const swipeConfidenceThreshold = 10000;
-const swipePower = (offset: number, velocity: number) =>
-  Math.abs(offset) * velocity;
-
 export function FullscreenImageViewer({
-  images,
-  startIndex = 0,
+  src,
+  alt,
   open,
   onClose,
 }: FullscreenImageViewerProps) {
-  const [[page, direction], setPage] = useState([startIndex, 0]);
-  const imageIndex = ((page % images.length) + images.length) % images.length;
-  const currentImage = images[imageIndex];
-
-  const paginate = (newDirection: number) => {
-    setPage([page + newDirection, newDirection]);
-  };
+  const [scale, setScale] = useState(1);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (open) {
-      setPage([startIndex, 0]);
+      document.body.style.overflow = "hidden";
+      setIsLoaded(false);
+      // Delay dla płynnego fade-in obrazu
+      setTimeout(() => setIsLoaded(true), 50);
+    } else {
+      setScale(1);
     }
-  }, [open, startIndex]);
-
-  useEffect(() => {
-    if (!open) return;
-    const scrollY = window.scrollY;
-    document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
     return () => {
       document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.width = "";
-      window.scrollTo(0, scrollY);
     };
   }, [open]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") paginate(1);
-      if (e.key === "ArrowLeft") paginate(-1);
+      if (e.key === "Escape") {
+        onClose();
+      } else if (e.key === "+" || e.key === "=") {
+        setScale((prev) => Math.min(prev + 0.2, 3));
+      } else if (e.key === "-") {
+        setScale((prev) => Math.max(prev - 0.2, 0.5));
+      }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onClose, paginate]);
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        setScale((prev) => Math.max(0.5, Math.min(3, prev + delta)));
+      }
+    };
+
+    if (open) {
+      window.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("wheel", handleWheel, { passive: false });
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, [onClose, open]);
 
   if (!open) return null;
 
   return createPortal(
-    <AnimatePresence initial={false} custom={direction}>
-      {open && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
-          onClick={onClose}
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/95 p-4 md:p-8"
+      onClick={onClose}
+      aria-label="Podgląd obrazu"
+      style={{
+        backdropFilter: "blur(20px)",
+        animation: "fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+      }}
+    >
+      {/* Kontrolki */}
+      <div className="absolute top-4 right-4 z-20 flex gap-2">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setScale((prev) => Math.min(prev + 0.3, 3));
+          }}
+          className="rounded-xl bg-white/10 p-3 text-white/90 backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+          aria-label="Powiększ"
         >
-          {/* Przycisk ZAMKNIJ jest teraz OSOBNYM elementem na najwyższej warstwie */}
-          <motion.button
-            onClick={onClose}
-            className="absolute top-4 right-4 z-20 rounded-full bg-black/70 p-2 text-white/90 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary"
-            aria-label="Zamknij"
-          >
-            <X className="w-6 h-6" />
-          </motion.button>
+          <ZoomIn className="w-5 h-5" />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setScale((prev) => Math.max(prev - 0.3, 0.5));
+          }}
+          className="rounded-xl bg-white/10 p-3 text-white/90 backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+          aria-label="Pomniejsz"
+        >
+          <ZoomOut className="w-5 h-5" />
+        </button>
+        <button
+          onClick={onClose}
+          className="rounded-xl bg-white/10 p-3 text-white/90 backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110 hover:rotate-90 focus:outline-none focus:ring-2 focus:ring-white/50"
+          aria-label="Zamknij"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
 
-          {/* Kontener do przeciągania, który NIE zawiera przycisku X */}
-          <motion.div
-            key={page}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 },
-            }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={1}
-            onDragEnd={(e, { offset, velocity }) => {
-              e.stopPropagation();
-              const swipe = swipePower(offset.x, velocity.x);
-              if (swipe < -swipeConfidenceThreshold) {
-                paginate(1);
-              } else if (swipe > swipeConfidenceThreshold) {
-                paginate(-1);
-              }
-            }}
-            className="relative w-full h-full flex items-center justify-center p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative w-full h-full max-w-7xl max-h-[90vh]">
-              <Image
-                src={currentImage.src}
-                alt={currentImage.alt}
-                fill
-                className="object-contain"
-                sizes="100vw"
-                priority
-              />
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>,
+      {/* === KLUCZOWE: Wrapper z overflow hidden dla zaokrąglenia === */}
+      <div
+        className="relative max-w-[90vw] max-h-[85vh] w-full h-full"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          borderRadius: "24px",
+          overflow: "hidden",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+          transform: `scale(${scale})`,
+          transition:
+            "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease-out",
+          opacity: isLoaded ? 1 : 0,
+        }}
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-contain"
+          sizes="90vw"
+          priority
+          quality={95}
+          onLoad={() => setIsLoaded(true)}
+        />
+      </div>
+
+      {/* Wskazówka dla użytkownika */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm backdrop-blur-sm bg-black/30 px-4 py-2 rounded-full">
+        Podpowiedź: Użyj Ctrl + scroll lub +/- do zoomowania!
+      </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            backdrop-filter: blur(0px);
+          }
+          to {
+            opacity: 1;
+            backdrop-filter: blur(20px);
+          }
+        }
+      `}</style>
+    </div>,
     document.body
   );
 }

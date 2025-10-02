@@ -4,6 +4,14 @@ import { useState } from "react";
 import Image from "next/image";
 import { Maximize, Sofa, BedDouble, CheckCircle2, Expand } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHead,
+  TableRow,
+} from "@/components/ui/table";
 import { FullscreenImageViewer } from "@/components/common/fullscreen-image-viewer";
 
 const views = [
@@ -89,10 +97,10 @@ const keyFeatures = [
 export function PlansSection() {
   const [activeViewId, setActiveViewId] = useState(views[0].id);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [lightboxImage, setLightboxImage] = useState({ src: "", alt: "" });
 
-  const openLightbox = (index: number) => {
-    setActiveIndex(index);
+  const openLightbox = (view: (typeof views)[0]) => {
+    setLightboxImage({ src: view.image, alt: view.alt });
     setLightboxOpen(true);
   };
 
@@ -107,7 +115,7 @@ export function PlansSection() {
         <div className="mx-auto max-w-7xl px-6 md:px-8">
           <div className="text-left max-w-xl mb-12">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-              Dom zaprojektowany dla Ciebie.
+              Dom zaprojektowany dla Ciebie
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Odkryj przemyślany układ, który łączy otwartą przestrzeń dzienną z
@@ -149,9 +157,7 @@ export function PlansSection() {
             <div className="flex flex-col">
               <button
                 type="button"
-                onClick={() =>
-                  openLightbox(views.findIndex((v) => v.id === activeViewId))
-                }
+                onClick={() => openLightbox(activeView)}
                 className={cn(
                   "relative overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group",
                   activeView.aspect
@@ -251,13 +257,11 @@ export function PlansSection() {
             <div className="space-y-4">
               {views
                 .filter((v) => v.id.includes(activeFloor))
-                .map((view, index) => (
+                .map((view) => (
                   <button
                     key={view.id}
                     type="button"
-                    onClick={() =>
-                      openLightbox(views.findIndex((v) => v.id === view.id))
-                    }
+                    onClick={() => openLightbox(view)}
                     className={cn(
                       "relative block w-full overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group",
                       view.aspect
@@ -295,7 +299,7 @@ export function PlansSection() {
                 <div className="mt-4 pt-4 border-t">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-semibold">
-                      Całkowita powierzchnia
+                      Całkowita powierzchnia użytkowa
                     </span>
                     <span className="text-lg font-bold text-primary">
                       103,30 m²
@@ -309,9 +313,9 @@ export function PlansSection() {
       </section>
       <FullscreenImageViewer
         open={lightboxOpen}
+        src={lightboxImage.src}
+        alt={lightboxImage.alt}
         onClose={() => setLightboxOpen(false)}
-        images={views.map((v) => ({ src: v.image, alt: v.alt }))}
-        startIndex={activeIndex}
       />
     </>
   );
