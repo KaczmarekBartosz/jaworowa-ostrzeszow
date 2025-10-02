@@ -6,6 +6,7 @@ import { GallerySection } from "@/components/sections/gallery-section";
 import { LocationSection } from "@/components/sections/location-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { Footer } from "@/components/layout/footer"; // Poprawiony import
+import { CalculatorSection } from "@/components/sections/calculator-section";
 
 export default function HomePage() {
   return (
@@ -15,6 +16,7 @@ export default function HomePage() {
       <PlansSection />
       <TestimonialsSection />
       <GallerySection />
+      <CalculatorSection />
       <LocationSection />
       <ContactSection />
       <Footer />

@@ -8,24 +8,24 @@ import { Home, Trees, Shield, MapPin } from "lucide-react";
 const features = [
   {
     icon: <Trees className="size-6 text-primary-foreground" />,
-    title: "Harmonia z Naturą",
-    description: "Prywatne ogrody i zieleń",
+    title: "Harmonia z naturą",
+    description: "Prywatny ogród to idealne miejsce na relaks z dala od smogu.",
     isHighlighted: true,
   },
   {
     icon: <Home className="size-6 text-secondary-foreground" />,
-    title: "Dla Twojej Wygody",
-    description: "Przemyślany układ",
+    title: "Dla Twojej wygody",
+    description: "Przemyślany układ zapewniający komfort codziennego życia.",
   },
   {
     icon: <Shield className="size-6 text-secondary-foreground" />,
-    title: "Dla Twojego Spokoju",
-    description: "Kameralne osiedle",
+    title: "Dla Twojego spokoju",
+    description: "Kameralne osiedle to bezpieczeństwo i prywatność.",
   },
   {
     icon: <MapPin className="size-6 text-secondary-foreground" />,
-    title: "Dla Twojego Czasu",
-    description: "Blisko miasta",
+    title: "Dla Twojego czasu",
+    description: "Blisko centrum. Oszczędzaj na dojazdach do pracy i szkoły.",
   },
 ];
 
@@ -100,7 +100,7 @@ export function InvestmentSection() {
               />
             </div>
             <p className="text-lg leading-relaxed text-muted-foreground">
-              Naszą ambicją jest stworzenie osiedla, które nie tylko zachwyca
+              Naszą ambicją było stworzenie osiedla, które nie tylko zachwyca
               architekturą, ale przede wszystkim zapewnia spokój, bezpieczeństwo
               i komfort codziennego życia.
             </p>

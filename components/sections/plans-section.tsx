@@ -107,7 +107,7 @@ export function PlansSection() {
         <div className="mx-auto max-w-7xl px-6 md:px-8">
           <div className="text-left max-w-xl mb-12">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-              Dom zaprojektowany dla Ciebie
+              Dom zaprojektowany dla Ciebie.
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
               Odkryj przemyślany układ, który łączy otwartą przestrzeń dzienną z
@@ -295,7 +295,7 @@ export function PlansSection() {
                 <div className="mt-4 pt-4 border-t">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-semibold">
-                      Całkowita powierzchnia użytkowa
+                      Całkowita powierzchnia
                     </span>
                     <span className="text-lg font-bold text-primary">
                       103,30 m²

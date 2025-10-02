@@ -83,7 +83,7 @@ export function FeatureCard({
         </p>
         <p
           className={cn(
-            "text-xl font-bold",
+            "text-lg font-bold",
             isHighlighted ? "" : "text-foreground"
           )}
         >
