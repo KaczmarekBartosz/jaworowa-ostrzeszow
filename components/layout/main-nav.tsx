@@ -72,6 +72,7 @@ export function MainNav() {
       )}
     >
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between">
+        {/* Mobile Navigation */}
         <div
           className={cn(
             "flex w-full items-center justify-between transition-all duration-300 md:hidden",
@@ -83,7 +84,6 @@ export function MainNav() {
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle size="lg" />
-            {/* POPRAWKA: Dodajemy prop 'modal={false}' */}
             <Sheet open={open} onOpenChange={setOpen} modal={false}>
               <SheetTrigger asChild>
                 <Button
@@ -124,6 +124,7 @@ export function MainNav() {
                     </button>
                   ))}
                 </nav>
+                {/* Przycisk Kontakt TYLKO na mobile - Primary CTA */}
                 <div className="mt-auto pb-4">
                   <Button
                     size="lg"
@@ -138,6 +139,7 @@ export function MainNav() {
           </div>
         </div>
 
+        {/* Desktop Navigation - BEZ przycisku Kontakt */}
         <div className="hidden w-full items-center justify-between rounded-full border bg-card/50 p-2 pl-8 backdrop-blur-sm md:flex">
           <Logo />
           <nav className="flex gap-x-8">
@@ -151,14 +153,9 @@ export function MainNav() {
               </button>
             ))}
           </nav>
-          <div className="flex items-center gap-1">
+          {/* Tylko ThemeToggle - bez przycisku Kontakt */}
+          <div className="flex items-center gap-1 pr-2">
             <ThemeToggle size="lg" />
-            <Button
-              className="rounded-full"
-              onClick={() => handleScrollTo("#kontakt")}
-            >
-              Kontakt
-            </Button>
           </div>
         </div>
       </div>
