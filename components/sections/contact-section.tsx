@@ -12,7 +12,7 @@ export function ContactSection() {
     >
       <div className="mx-auto max-w-3xl text-center px-6 md:px-8">
         <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-          Skont-aktuj się z nami
+          Skontaktuj się z nami
         </h2>
         <p className="mt-4 text-lg text-muted-foreground">
           Masz pytania? Chcesz dowiedzieć się więcej? Wypełnij formularz, a my

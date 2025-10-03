@@ -1,5 +1,6 @@
-import { Trees, Mail, Phone, Instagram, Facebook } from "lucide-react";
+import { Mail, Phone, Instagram, Facebook } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "../ui/button";
 
 export function Footer() {
@@ -14,11 +15,14 @@ export function Footer() {
               className="inline-flex items-center gap-2"
               aria-label="Strona główna"
             >
-              <Trees
-                className="size-7 text-foreground flex-shrink-0"
-                aria-hidden="true"
+              <Image
+                src="/logo.png"
+                alt="Logo Osiedle Dębowy Park"
+                width={120}
+                height={120}
+                className="flex-shrink-0"
               />
-              <span className="text-xl font-bold tracking-tight text-foreground">
+              <span className="text-lg font-semibold tracking-tight text-foreground">
                 Osiedle Dębowy Park
               </span>
             </Link>
