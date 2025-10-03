@@ -1,7 +1,9 @@
+import type { Metadata } from "next"; // Import typu Metadata
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MainNav } from "@/components/layout/main-nav";
+import { Footer } from "@/components/layout/footer"; // Dodany brakujący import Footer
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +15,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
   description:
     "Nowoczesne, kameralne osiedle w Ostrzeszowie. Domy z ogrodem, blisko natury i miasta. Idealna przestrzeń dla Ciebie i Twojej rodziny.",
@@ -40,6 +42,7 @@ export default function RootLayout({
         >
           <MainNav />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
