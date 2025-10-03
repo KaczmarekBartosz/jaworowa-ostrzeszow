@@ -38,7 +38,7 @@ export function InvestmentSection() {
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-3xl">
           <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            Miejsce, w którym zapuścisz korzenie.
+            Miejsce, w którym zapuścisz korzenie
           </h2>
         </div>
       </div>

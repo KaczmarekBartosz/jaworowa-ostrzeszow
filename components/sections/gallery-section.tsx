@@ -1,76 +1,81 @@
 "use client";
-
 import { useState } from "react";
 import { GalleryCard } from "@/components/common/gallery-card";
 import { GalleryStackMobile } from "@/components/common/gallery-stack-mobile";
 import { FullscreenImageViewer } from "@/components/common/fullscreen-image-viewer";
 
 const galleryImages = [
+  // Rząd 1: 1 duży po lewej
   {
     imageUrl: "/galeria/1.jpg",
     title: "Nowoczesny dom z przestronnym podjazdem",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-2",
   },
+  // Rząd 1: 2 małe po prawej (jeden nad drugim)
   {
     imageUrl: "/galeria/2.jpg",
     title: "Elegancka bryła budynku z podjazdem",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/3.jpg",
     title: "Dom idealny dla całej rodziny",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-1",
   },
+  // Rząd 2: 1 duży po prawej (musi być PRZED małymi w kodzie)
+  {
+    imageUrl: "/galeria/6.jpg",
+    title: "Stylowe wejście do domu",
+    span: "md:col-span-1 md:row-span-2",
+  },
+  // Rząd 2: 2 małe po lewej (jeden nad drugim)
   {
     imageUrl: "/galeria/4.jpg",
     title: "Widok z góry na nowoczesną architekturę",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/5.jpg",
     title: "Detal elewacji i duże przeszklenia",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-1",
   },
-  {
-    imageUrl: "/galeria/6.jpg",
-    title: "Stylowe wejście do domu",
-    span: "row-span-2",
-  },
+  // Dodatkowe obrazy (po rozwinięciu) - kontynuacja wzoru
   {
     imageUrl: "/galeria/7.jpg",
     title: "Wizualizacja frontu budynku",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-2",
   },
   {
     imageUrl: "/galeria/8.jpg",
     title: "Osiedle domów z lotu ptaka",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/9.jpg",
     title: "Spójna koncepcja architektoniczna osiedla",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/10.jpg",
     title: "Dom wkomponowany w otoczenie",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-2",
   },
   {
     imageUrl: "/galeria/11.jpg",
     title: "Nowoczesne osiedle w zielonej okolicy",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/12.jpeg",
     title: "Przestronne i słoneczne wnętrze salonu",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-1",
   },
 ];
 
 export function GallerySection() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImage, setLightboxImage] = useState({ src: "", alt: "" });
+  const [showAll, setShowAll] = useState(false);
 
   const openLightbox = (index: number) => {
     setLightboxImage({
@@ -79,6 +84,8 @@ export function GallerySection() {
     });
     setLightboxOpen(true);
   };
+
+  const visibleImages = showAll ? galleryImages : galleryImages.slice(0, 6);
 
   return (
     <>
@@ -98,6 +105,7 @@ export function GallerySection() {
             </p>
           </div>
 
+          {/* Mobile View - zachowany oryginalny układ (wszystkie obrazy) */}
           <div className="mt-10 md:hidden">
             <GalleryStackMobile
               items={galleryImages.map(({ imageUrl, title }) => ({
@@ -108,8 +116,9 @@ export function GallerySection() {
             />
           </div>
 
-          <div className="mt-16 hidden grid-flow-dense grid-cols-2 gap-4 [grid-auto-rows:150px] md:grid md:grid-cols-4">
-            {galleryImages.map((image, index) => (
+          {/* Desktop View - perfekcyjnie zbalansowany asymetryczny układ */}
+          <div className="mt-16 hidden md:grid md:grid-cols-2 md:gap-6 md:[grid-auto-rows:280px]">
+            {visibleImages.map((image, index) => (
               <GalleryCard
                 key={index}
                 imageUrl={image.imageUrl}
@@ -119,6 +128,18 @@ export function GallerySection() {
               />
             ))}
           </div>
+
+          {/* Przycisk "Pokaż więcej" / "Zwiń" - tylko desktop */}
+          {galleryImages.length > 6 && (
+            <div className="mt-10 hidden md:flex md:justify-center">
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="rounded-full bg-foreground px-8 py-3 text-sm font-semibold text-background transition-all hover:bg-foreground/90 hover:scale-105"
+              >
+                {showAll ? "Zwiń" : "Pokaż więcej"}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

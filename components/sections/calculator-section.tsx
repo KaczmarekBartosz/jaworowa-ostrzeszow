@@ -17,7 +17,6 @@ function calculateInstallment(amount: number, years: number, rate: number) {
   return (amount * r) / (1 - Math.pow(1 + r, -n));
 }
 
-// Komponent do animowanego wyświetlania liczby
 function AnimatedNumber({ value }: { value: number }) {
   const spring = useSpring(value, {
     damping: 30,
@@ -71,7 +70,6 @@ export function CalculatorSection() {
       setPhoneError("Podaj prawidłowy 9-cyfrowy numer telefonu");
       return;
     }
-    // Tutaj dodaj logikę wysyłki
     setIsSubmitted(true);
     setTimeout(() => {
       setPhone("");
@@ -81,24 +79,30 @@ export function CalculatorSection() {
 
   return (
     <section id="kalkulator" className="bg-background py-14 md:py-28">
-      <div className="mx-auto max-w-5xl px-4 md:px-8">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div className="max-w-3xl mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+            Finansowanie
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            Sprawdź kalkulator rat kredytowych i dowiedz się, jak łatwo możesz
+            sfinansować swój wymarzony dom.
+          </p>
+        </div>
+
         <div className="bg-card/70 rounded-2xl md:rounded-3xl border shadow-xl md:shadow-2xl overflow-hidden flex flex-col md:flex-row">
-          {/* LEWA kolumna */}
           <div className="flex-1 p-6 sm:p-7 md:p-12">
-            {/* Nagłówek */}
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 tracking-tight leading-tight">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 tracking-tight leading-tight">
               Kalkulator raty kredytowej
-            </h2>
+            </h3>
             <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
               Oblicz przybliżoną miesięczną ratę kredytu hipotecznego.
-              <br className="hidden sm:block" />
-              Wybierz kwotę i okres – lub zostaw numer, a <b>ekspert</b>{" "}
-              dobierze najlepszą ofertę.
+              <br />
+              Wybierz kwotę i okres lub zostaw numer, a nasz <b>ekspert</b>{" "}
+              dobierze najlepszą ofertę dla Ciebie.
             </p>
 
-            {/* Slidery */}
             <div className="space-y-6 sm:space-y-8">
-              {/* Kwota */}
               <div>
                 <label
                   htmlFor="slider-kwota"
@@ -130,7 +134,6 @@ export function CalculatorSection() {
                 </div>
               </div>
 
-              {/* Okres */}
               <div>
                 <label
                   htmlFor="slider-lata"
@@ -164,7 +167,6 @@ export function CalculatorSection() {
             </div>
           </div>
 
-          {/* PRAWA kolumna: wynik + CTA */}
           <div className="bg-card/80 flex-1 flex flex-col justify-center items-center gap-5 sm:gap-6 md:gap-8 p-6 sm:p-7 md:p-12 border-t md:border-t-0 md:border-l">
             <div className="text-center">
               <span className="block text-xs sm:text-sm text-muted-foreground">
@@ -175,7 +177,7 @@ export function CalculatorSection() {
               </span>
               <div className="relative mt-0.5 sm:mt-1">
                 <span
-                  className="block text-xs sm:text-sm text-slate-200/70 font-medium cursor-help"
+                  className="block text-xs sm:text-sm text-foreground/60 font-medium cursor-help"
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
                   onFocus={() => setShowTooltip(true)}
@@ -198,11 +200,10 @@ export function CalculatorSection() {
               </div>
             </div>
 
-            <button className="w-full sm:w-auto bg-primary hover:bg-primary/85 text-primary-foreground font-bold rounded-lg md:rounded-xl px-8 md:px-12 py-2.5 md:py-3 shadow focus:outline-none focus:ring-2 focus:ring-primary transition">
+            <button className="w-full sm:w-auto bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground font-bold rounded-lg md:rounded-full px-8 md:px-12 py-2.5 md:py-3 shadow focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 hover:brightness-110">
               Sprawdź oferty
             </button>
 
-            {/* Ekspert */}
             <div className="w-full flex flex-col items-center pt-1 sm:pt-2">
               <span className="block font-medium text-primary mb-1.5 sm:mb-2 text-sm sm:text-base">
                 Porozmawiaj z ekspertem:

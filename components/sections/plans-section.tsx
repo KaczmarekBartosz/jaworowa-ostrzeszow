@@ -299,7 +299,7 @@ export function PlansSection() {
                 <div className="mt-4 pt-4 border-t">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-semibold">
-                      Całkowita powierzchnia użytkowa
+                      Całkowita powierzchnia
                     </span>
                     <span className="text-lg font-bold text-primary">
                       103,30 m²
