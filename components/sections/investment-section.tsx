@@ -92,7 +92,7 @@ export function InvestmentSection() {
           <div className="space-y-8 flex flex-col">
             <div className="overflow-hidden rounded-3xl">
               <Image
-                src="/galeria/8.jpg"
+                src="/galeria/8_.jpg"
                 alt="Wizualizacja osiedla Domy z Przyszłością z dużą ilością zieleni"
                 width={1200}
                 height={800}
