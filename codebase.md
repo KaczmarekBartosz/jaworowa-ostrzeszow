@@ -221,10 +221,12 @@ This is a binary file of the type: Binary
 # app\layout.tsx
 
 ```tsx
+import type { Metadata } from "next"; // Import typu Metadata
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MainNav } from "@/components/layout/main-nav";
+import { Footer } from "@/components/layout/footer"; // Dodany brakujący import Footer
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -236,10 +238,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
   description:
     "Nowoczesne, kameralne osiedle w Ostrzeszowie. Domy z ogrodem, blisko natury i miasta. Idealna przestrzeń dla Ciebie i Twojej rodziny.",
+  verification: {
+    google: "uxV1BrJ4Jz9YuzYz2IKH14N5fgxsxxoD5JyU1TfjFaU",
+  },
 };
 
 export default function RootLayout({
@@ -260,6 +265,7 @@ export default function RootLayout({
         >
           <MainNav />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
@@ -1634,8 +1640,9 @@ export function ThemeToggle({
 # components\layout\footer.tsx
 
 ```tsx
-import { Trees, Mail, Phone, Instagram, Facebook } from "lucide-react";
+import { Mail, Phone, Instagram, Facebook } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "../ui/button";
 
 export function Footer() {
@@ -1650,11 +1657,14 @@ export function Footer() {
               className="inline-flex items-center gap-2"
               aria-label="Strona główna"
             >
-              <Trees
-                className="size-7 text-foreground flex-shrink-0"
-                aria-hidden="true"
+              <Image
+                src="/logo.png"
+                alt="Logo Osiedle Dębowy Park"
+                width={120}
+                height={120}
+                className="flex-shrink-0"
               />
-              <span className="text-xl font-bold tracking-tight text-foreground">
+              <span className="text-lg font-semibold tracking-tight text-foreground">
                 Osiedle Dębowy Park
               </span>
             </Link>
@@ -1895,6 +1905,7 @@ export function MainNav() {
       )}
     >
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between">
+        {/* Mobile Navigation */}
         <div
           className={cn(
             "flex w-full items-center justify-between transition-all duration-300 md:hidden",
@@ -1906,7 +1917,6 @@ export function MainNav() {
           </div>
           <div className="flex items-center gap-1">
             <ThemeToggle size="lg" />
-            {/* POPRAWKA: Dodajemy prop 'modal={false}' */}
             <Sheet open={open} onOpenChange={setOpen} modal={false}>
               <SheetTrigger asChild>
                 <Button
@@ -1947,6 +1957,7 @@ export function MainNav() {
                     </button>
                   ))}
                 </nav>
+                {/* Przycisk Kontakt TYLKO na mobile - Primary CTA */}
                 <div className="mt-auto pb-4">
                   <Button
                     size="lg"
@@ -1961,6 +1972,7 @@ export function MainNav() {
           </div>
         </div>
 
+        {/* Desktop Navigation - BEZ przycisku Kontakt */}
         <div className="hidden w-full items-center justify-between rounded-full border bg-card/50 p-2 pl-8 backdrop-blur-sm md:flex">
           <Logo />
           <nav className="flex gap-x-8">
@@ -1974,14 +1986,9 @@ export function MainNav() {
               </button>
             ))}
           </nav>
-          <div className="flex items-center gap-1">
+          {/* Tylko ThemeToggle - bez przycisku Kontakt */}
+          <div className="flex items-center gap-1 pr-2">
             <ThemeToggle size="lg" />
-            <Button
-              className="rounded-full"
-              onClick={() => handleScrollTo("#kontakt")}
-            >
-              Kontakt
-            </Button>
           </div>
         </div>
       </div>
@@ -2289,12 +2296,12 @@ export function ContactSection() {
             <label htmlFor="name" className="sr-only">
               Imię
             </label>
-            {/* POPRAWKA: Dodano autoComplete="name" */}
             <Input
               id="name"
               type="text"
               placeholder="Imię"
               required
+              // POPRAWKA: Poprawny atrybut autoComplete
               autoComplete="name"
             />
           </div>
@@ -2302,12 +2309,12 @@ export function ContactSection() {
             <label htmlFor="email" className="sr-only">
               E-mail
             </label>
-            {/* POPRAWKA: Dodano autoComplete="email" */}
             <Input
               id="email"
               type="email"
               placeholder="E-mail"
               required
+              // POPRAWKA: Poprawny atrybut autoComplete
               autoComplete="email"
             />
           </div>
@@ -4177,6 +4184,12 @@ export default eslintConfig;
 
 ```
 
+# googlec6e15254439873d5.html
+
+```html
+google-site-verification: googlec6e15254439873d5.html
+```
+
 # lib\utils.ts
 
 ```ts
@@ -4306,6 +4319,18 @@ This is a binary file of the type: Image
 
 This is a binary file of the type: Image
 
+# public\android-chrome-192x192.png
+
+This is a binary file of the type: Image
+
+# public\android-chrome-512x512.png
+
+This is a binary file of the type: Image
+
+# public\apple-touch-icon.png
+
+This is a binary file of the type: Image
+
 # public\Art.jpg
 
 This is a binary file of the type: Image
@@ -4318,9 +4343,17 @@ This is a binary file of the type: Image
 
 This is a binary file of the type: Image
 
-# public\file.svg
+# public\favicon-16x16.png
 
-This is a file of the type: SVG Image
+This is a binary file of the type: Image
+
+# public\favicon-32x32.png
+
+This is a binary file of the type: Image
+
+# public\favicon.ico
+
+This is a binary file of the type: Binary
 
 # public\galeria\1.jpg
 
@@ -4373,10 +4406,6 @@ This is a binary file of the type: Image
 # public\galeria\jaworowa-wizualizacja-5.jpg
 
 This is a binary file of the type: Image
-
-# public\globe.svg
-
-This is a file of the type: SVG Image
 
 # public\hero_1.png
 
@@ -4478,9 +4507,9 @@ This is a binary file of the type: Image
 
 This is a binary file of the type: Image
 
-# public\next.svg
+# public\logo.png
 
-This is a file of the type: SVG Image
+This is a binary file of the type: Image
 
 # public\plan-parter.png
 
@@ -4489,6 +4518,12 @@ This is a binary file of the type: Image
 # public\plan-pietro.png
 
 This is a binary file of the type: Image
+
+# public\site.webmanifest
+
+```webmanifest
+{"name":"","short_name":"","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+```
 
 # public\underline_2.svg
 
@@ -4515,14 +4550,6 @@ This is a file of the type: SVG Image
 This is a file of the type: SVG Image
 
 # public\underline.svg
-
-This is a file of the type: SVG Image
-
-# public\vercel.svg
-
-This is a file of the type: SVG Image
-
-# public\window.svg
 
 This is a file of the type: SVG Image
 
