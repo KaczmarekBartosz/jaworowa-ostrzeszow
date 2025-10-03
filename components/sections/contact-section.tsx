@@ -12,7 +12,7 @@ export function ContactSection() {
     >
       <div className="mx-auto max-w-3xl text-center px-6 md:px-8">
         <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-          Skontaktuj się z nami
+          Skont-aktuj się z nami
         </h2>
         <p className="mt-4 text-lg text-muted-foreground">
           Masz pytania? Chcesz dowiedzieć się więcej? Wypełnij formularz, a my
@@ -26,12 +26,12 @@ export function ContactSection() {
             <label htmlFor="name" className="sr-only">
               Imię
             </label>
-            {/* POPRAWKA: Dodano autoComplete="name" */}
             <Input
               id="name"
               type="text"
               placeholder="Imię"
               required
+              // POPRAWKA: Poprawny atrybut autoComplete
               autoComplete="name"
             />
           </div>
@@ -39,12 +39,12 @@ export function ContactSection() {
             <label htmlFor="email" className="sr-only">
               E-mail
             </label>
-            {/* POPRAWKA: Dodano autoComplete="email" */}
             <Input
               id="email"
               type="email"
               placeholder="E-mail"
               required
+              // POPRAWKA: Poprawny atrybut autoComplete
               autoComplete="email"
             />
           </div>

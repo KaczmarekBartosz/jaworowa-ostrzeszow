@@ -1642,8 +1642,9 @@ export function Footer() {
   return (
     <footer className="bg-card border-t border-border/50">
       <div className="mx-auto max-w-7xl px-6 py-12 md:px-8 md:py-16">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
-          <div className="lg:col-span-1">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-5 lg:gap-8">
+          {/* Logo i opis - pełna szerokość na mobile, 1 kolumna na desktop */}
+          <div>
             <Link
               href="/"
               className="inline-flex items-center gap-2"
@@ -1657,20 +1658,24 @@ export function Footer() {
                 Osiedle Dębowy Park
               </span>
             </Link>
-            <p className="mt-4 text-muted-foreground max-w-xs">
+            <p className="mt-4 text-muted-foreground max-w-xs text-sm">
               Nowoczesne osiedle domów w zabudowie bliźniaczej, zaprojektowane z
               myślą o komforcie i harmonii z naturą.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-8 lg:col-span-2 md:grid-cols-3">
+
+          {/* Pozostała zawartość - 2 kolumny na mobile */}
+          <div className="grid grid-cols-2 gap-6 lg:contents">
+            {/* Nawigacja */}
             <div>
-              <h3 className="font-semibold text-foreground">Nawigacja</h3>
-              <ul className="mt-4 space-y-2">
+              <h3 className="font-semibold text-foreground text-sm">
+                Nawigacja
+              </h3>
+              <ul className="mt-4 space-y-2.5">
                 <li>
-                  {/* POPRAWKA: Poprawiono 'href' na działający */}
                   <a
                     href="#dlaczego-warto"
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Dlaczego warto?
                   </a>
@@ -1678,7 +1683,7 @@ export function Footer() {
                 <li>
                   <a
                     href="#domy"
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Domy i Plany
                   </a>
@@ -1686,54 +1691,125 @@ export function Footer() {
                 <li>
                   <a
                     href="#galeria"
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Galeria
                   </a>
                 </li>
                 <li>
                   <a
+                    href="#kalkulator"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Finansowanie
+                  </a>
+                </li>
+                <li>
+                  <a
                     href="#lokalizacja"
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Lokalizacja
                   </a>
                 </li>
               </ul>
             </div>
+
+            {/* Kontakt */}
             <div>
-              <h3 className="font-semibold text-foreground">Kontakt</h3>
-              <ul className="mt-4 space-y-2">
-                <li className="flex items-center gap-2">
-                  <Mail className="size-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">
-                    email@przykład.pl
-                  </span>
+              <h3 className="font-semibold text-foreground text-sm">Kontakt</h3>
+              <ul className="mt-4 space-y-3">
+                <li>
+                  <a
+                    href="mailto:info@polmag.org.pl"
+                    className="flex items-start gap-2 text-muted-foreground hover:text-foreground transition-colors group"
+                  >
+                    <Mail className="size-4 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="break-all text-xs">
+                      info@polmag.org.pl
+                    </span>
+                  </a>
                 </li>
-                <li className="flex items-center gap-2">
-                  <Phone className="size-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">+48 123 456 789</span>
+                <li>
+                  <a
+                    href="tel:+48735368476"
+                    className="flex items-start gap-2 text-muted-foreground hover:text-foreground transition-colors group"
+                  >
+                    <Phone className="size-4 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <div>
+                      <div className="text-xs">+48 735 368 476</div>
+                      <div className="text-xs text-muted-foreground/70 mt-0.5">
+                        Sandra Bacik
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="tel:+48625903027"
+                    className="flex items-start gap-2 text-muted-foreground hover:text-foreground transition-colors group"
+                  >
+                    <Phone className="size-4 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="text-xs">+48 62 590 3027</span>
+                  </a>
                 </li>
               </ul>
             </div>
-            <div className="col-span-2 md:col-span-1">
-              <h3 className="font-semibold text-foreground">Social Media</h3>
+
+            {/* Social Media */}
+            <div>
+              <h3 className="font-semibold text-foreground text-sm">
+                Social Media
+              </h3>
               <div className="mt-4 flex gap-2">
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Instagram className="size-5" />
-                  <span className="sr-only">Instagram</span>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full hover:scale-110 transition-transform h-9 w-9"
+                  asChild
+                >
+                  <a href="#" aria-label="Instagram">
+                    <Instagram className="size-4" />
+                  </a>
                 </Button>
-                <Button variant="outline" size="icon" className="rounded-full">
-                  <Facebook className="size-5" />
-                  <span className="sr-only">Facebook</span>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="rounded-full hover:scale-110 transition-transform h-9 w-9"
+                  asChild
+                >
+                  <a href="#" aria-label="Facebook">
+                    <Facebook className="size-4" />
+                  </a>
                 </Button>
+              </div>
+            </div>
+
+            {/* Inwestor */}
+            <div>
+              <h3 className="font-semibold text-foreground text-sm">
+                Inwestor
+              </h3>
+              <div className="mt-2 text-sm text-muted-foreground">
+                <p className="font-medium text-foreground text-xs">
+                  POLMAG s.c.
+                </p>
+                <p className="text-xs mt-1">
+                  ul. Powstańców Wlkp. 31
+                  <br />
+                  63-500 Ostrzeszów
+                </p>
+                <p className="mt-2 text-xs">NIP: 5140337328</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="mt-12 border-t border-border/50 pt-8 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Osiedle Dębowy Park. Wszelkie prawa
-          zastrzeżone.
+
+        <div className="mt-12 border-t border-border/50 pt-8 text-center text-xs md:text-sm text-muted-foreground">
+          <p>
+            © {new Date().getFullYear()} Osiedle Dębowy Park. Wszelkie prawa
+            zastrzeżone.
+          </p>
         </div>
       </div>
     </footer>
@@ -1764,6 +1840,7 @@ const navItems = [
   { href: "#dlaczego-warto", label: "Dlaczego warto?" },
   { href: "#domy", label: "Domy i plany" },
   { href: "#galeria", label: "Galeria" },
+  { href: "#kalkulator", label: "Finansowanie" },
   { href: "#lokalizacja", label: "Lokalizacja" },
   { href: "#kontakt", label: "Kontakt" },
 ];
@@ -1928,7 +2005,7 @@ const LOAN_STEP = 10_000;
 const TERM_MIN = 5;
 const TERM_MAX = 35;
 const TERM_STEP = 1;
-const MOCK_RATE = 8.41; // % – symulacja
+const MOCK_RATE = 8.41;
 
 function calculateInstallment(amount: number, years: number, rate: number) {
   const n = years * 12;
@@ -1936,7 +2013,6 @@ function calculateInstallment(amount: number, years: number, rate: number) {
   return (amount * r) / (1 - Math.pow(1 + r, -n));
 }
 
-// Komponent do animowanego wyświetlania liczby
 function AnimatedNumber({ value }: { value: number }) {
   const spring = useSpring(value, {
     damping: 30,
@@ -1972,13 +2048,10 @@ export function CalculatorSection() {
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
   const installment =
     Math.round(calculateInstallment(amount, years, MOCK_RATE) * 100) / 100;
-  const totalPayment = installment * years * 12;
-  const totalInterest = totalPayment - amount;
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 9);
@@ -1987,47 +2060,45 @@ export function CalculatorSection() {
     setIsSubmitted(false);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (phone.length !== 9) {
       setPhoneError("Podaj prawidłowy 9-cyfrowy numer telefonu");
       return;
     }
-    setIsLoading(true);
-    // Symulacja wysyłki - tutaj dodaj rzeczywistą logikę
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsSubmitted(true);
-    setIsLoading(false);
     setTimeout(() => {
       setPhone("");
       setIsSubmitted(false);
     }, 3000);
   };
 
-  // Oblicz procent dla gradientu slidera
-  const amountPercent = ((amount - LOAN_MIN) / (LOAN_MAX - LOAN_MIN)) * 100;
-  const yearsPercent = ((years - TERM_MIN) / (TERM_MAX - TERM_MIN)) * 100;
-
   return (
     <section id="kalkulator" className="bg-background py-14 md:py-28">
-      <div className="mx-auto max-w-5xl px-4 md:px-8">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div className="max-w-3xl mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+            Finansowanie
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            Sprawdź kalkulator rat kredytowych i dowiedz się, jak łatwo możesz
+            sfinansować swój wymarzony dom.
+          </p>
+        </div>
+
         <div className="bg-card/70 rounded-2xl md:rounded-3xl border shadow-xl md:shadow-2xl overflow-hidden flex flex-col md:flex-row">
-          {/* LEWA kolumna */}
           <div className="flex-1 p-6 sm:p-7 md:p-12">
-            {/* Nagłówek */}
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 tracking-tight leading-tight">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 tracking-tight leading-tight">
               Kalkulator raty kredytowej
-            </h2>
+            </h3>
             <p className="text-muted-foreground text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
               Oblicz przybliżoną miesięczną ratę kredytu hipotecznego.
-              <br className="hidden sm:block" />
-              Wybierz kwotę i okres – lub zostaw numer, a <b>ekspert</b>{" "}
-              dobierze najlepszą ofertę.
+              <br />
+              Wybierz kwotę i okres lub zostaw numer, a nasz <b>ekspert</b>{" "}
+              dobierze najlepszą ofertę dla Ciebie.
             </p>
 
-            {/* Slidery */}
             <div className="space-y-6 sm:space-y-8">
-              {/* Kwota */}
               <div>
                 <label
                   htmlFor="slider-kwota"
@@ -2046,18 +2117,12 @@ export function CalculatorSection() {
                   step={LOAN_STEP}
                   value={amount}
                   onChange={(e) => setAmount(Number(e.target.value))}
-                  className="w-full slider-amount touch-manipulation"
+                  className="w-full accent-primary"
                   aria-label="Wybierz kwotę kredytu"
                   aria-valuemin={LOAN_MIN}
                   aria-valuemax={LOAN_MAX}
                   aria-valuenow={amount}
                   aria-valuetext={`${amount.toLocaleString("pl-PL")} złotych`}
-                  role="slider"
-                  style={
-                    {
-                      "--slider-percent": `${amountPercent}%`,
-                    } as React.CSSProperties
-                  }
                 />
                 <div className="mt-1.5 flex justify-between text-[11px] sm:text-xs text-muted-foreground">
                   <span>{LOAN_MIN.toLocaleString("pl-PL")} zł</span>
@@ -2065,7 +2130,6 @@ export function CalculatorSection() {
                 </div>
               </div>
 
-              {/* Okres */}
               <div>
                 <label
                   htmlFor="slider-lata"
@@ -2084,18 +2148,12 @@ export function CalculatorSection() {
                   step={TERM_STEP}
                   value={years}
                   onChange={(e) => setYears(Number(e.target.value))}
-                  className="w-full slider-years touch-manipulation"
+                  className="w-full accent-primary"
                   aria-label="Wybierz okres kredytowania"
                   aria-valuemin={TERM_MIN}
                   aria-valuemax={TERM_MAX}
                   aria-valuenow={years}
                   aria-valuetext={`${years} lat`}
-                  role="slider"
-                  style={
-                    {
-                      "--slider-percent": `${yearsPercent}%`,
-                    } as React.CSSProperties
-                  }
                 />
                 <div className="mt-1.5 flex justify-between text-[11px] sm:text-xs text-muted-foreground">
                   <span>{TERM_MIN} lat</span>
@@ -2105,25 +2163,23 @@ export function CalculatorSection() {
             </div>
           </div>
 
-          {/* PRAWA kolumna: wynik + CTA */}
           <div className="bg-card/80 flex-1 flex flex-col justify-center items-center gap-5 sm:gap-6 md:gap-8 p-6 sm:p-7 md:p-12 border-t md:border-t-0 md:border-l">
             <div className="text-center">
               <span className="block text-xs sm:text-sm text-muted-foreground">
-                Wysokość raty
+                Miesięczna rata
               </span>
               <span className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground tabular-nums">
                 <AnimatedNumber value={installment} /> zł
               </span>
-              <div className="relative inline-block mt-0.5 sm:mt-1">
+              <div className="relative mt-0.5 sm:mt-1">
                 <span
-                  className="block text-xs sm:text-sm text-orange-900/80 dark:text-orange-100/80 font-medium cursor-help underline decoration-dotted"
+                  className="block text-xs sm:text-sm text-foreground/60 font-medium cursor-help"
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
                   onFocus={() => setShowTooltip(true)}
                   onBlur={() => setShowTooltip(false)}
                   tabIndex={0}
-                  role="tooltip"
-                  aria-label="Rzeczywista Roczna Stopa Oprocentowania"
+                  aria-label="Rzeczywista roczna stopa oprocentowania"
                 >
                   RRSO{" "}
                   {MOCK_RATE.toLocaleString("pl-PL", {
@@ -2133,34 +2189,17 @@ export function CalculatorSection() {
                 </span>
                 {showTooltip && (
                   <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-foreground text-background text-xs rounded-lg whitespace-nowrap shadow-lg z-10 pointer-events-none">
-                    Rzeczywista Roczna Stopa Oprocentowania
+                    Rzeczywista roczna stopa oprocentowania
                     <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-foreground" />
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Dodatkowe informacje */}
-            <div className="text-center text-xs sm:text-sm text-muted-foreground space-y-1 w-full border-t border-b border-border/50 py-3">
-              <p>
-                Całkowita kwota do spłaty:{" "}
-                <strong className="text-foreground">
-                  {Math.round(totalPayment).toLocaleString("pl-PL")} zł
-                </strong>
-              </p>
-              <p>
-                Koszt odsetek:{" "}
-                <strong className="text-orange-600">
-                  {Math.round(totalInterest).toLocaleString("pl-PL")} zł
-                </strong>
-              </p>
-            </div>
-
-            <button className="w-full sm:w-auto bg-primary hover:bg-primary/85 text-primary-foreground font-bold rounded-lg md:rounded-xl px-8 md:px-12 py-2.5 md:py-3 shadow focus:outline-none focus:ring-2 focus:ring-primary transition min-h-[44px] touch-manipulation">
+            <button className="w-full sm:w-auto bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground font-bold rounded-lg md:rounded-full px-8 md:px-12 py-2.5 md:py-3 shadow focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 hover:brightness-110">
               Sprawdź oferty
             </button>
 
-            {/* Ekspert */}
             <div className="w-full flex flex-col items-center pt-1 sm:pt-2">
               <span className="block font-medium text-primary mb-1.5 sm:mb-2 text-sm sm:text-base">
                 Porozmawiaj z ekspertem:
@@ -2175,52 +2214,33 @@ export function CalculatorSection() {
                     value={phone}
                     onChange={handlePhoneChange}
                     placeholder="telefon (9 cyfr)"
-                    className={`w-full rounded-lg border p-2.5 sm:p-3 text-base sm:text-lg transition-colors min-h-[44px] touch-manipulation ${
-                      phoneError
-                        ? "border-red-500 focus:ring-red-500 focus:ring-2 outline-none"
-                        : "focus:ring-2 focus:ring-primary outline-none"
+                    className={`w-full rounded-lg border p-2.5 sm:p-3 text-base sm:text-lg transition-colors ${
+                      phoneError ? "border-red-500" : ""
                     }`}
                     aria-invalid={phoneError ? "true" : "false"}
-                    aria-describedby={
-                      phoneError
-                        ? "phone-error"
-                        : isSubmitted
-                        ? "phone-success"
-                        : undefined
-                    }
+                    aria-describedby={phoneError ? "phone-error" : undefined}
                   />
                   {phoneError && (
                     <p
                       id="phone-error"
-                      className="text-xs text-red-600 mt-1 text-left"
+                      className="text-xs text-red-500 mt-1"
                       role="alert"
                     >
                       {phoneError}
                     </p>
                   )}
                   {isSubmitted && (
-                    <p
-                      id="phone-success"
-                      className="text-xs text-green-600 mt-1 text-left"
-                      role="status"
-                    >
+                    <p className="text-xs text-green-600 mt-1" role="status">
                       ✓ Dziękujemy! Skontaktujemy się wkrótce
                     </p>
                   )}
                 </div>
                 <button
                   type="submit"
-                  disabled={phone.length !== 9 || isLoading}
-                  className="bg-orange-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 font-bold rounded-lg hover:bg-orange-500 transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[44px] min-w-[80px] touch-manipulation"
+                  disabled={phone.length !== 9}
+                  className="bg-orange-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 font-bold rounded-lg hover:bg-orange-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isLoading ? (
-                    <>
-                      <span className="animate-spin">⏳</span>
-                      <span className="hidden sm:inline">Wysyłam...</span>
-                    </>
-                  ) : (
-                    "Wyślij"
-                  )}
+                  Wyślij
                 </button>
               </form>
             </div>
@@ -2232,78 +2252,6 @@ export function CalculatorSection() {
           </div>
         </div>
       </div>
-
-      {/* Style dla custom sliderów */}
-      <style jsx>{`
-        input[type="range"] {
-          -webkit-appearance: none;
-          appearance: none;
-          height: 8px;
-          background: linear-gradient(
-            to right,
-            hsl(var(--primary)) 0%,
-            hsl(var(--primary)) var(--slider-percent),
-            hsl(var(--muted)) var(--slider-percent),
-            hsl(var(--muted)) 100%
-          );
-          border-radius: 5px;
-          outline: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 20px;
-          height: 20px;
-          background: hsl(var(--primary));
-          cursor: pointer;
-          border-radius: 50%;
-          border: 3px solid hsl(var(--background));
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-          transition: transform 0.1s ease;
-        }
-
-        input[type="range"]::-webkit-slider-thumb:hover {
-          transform: scale(1.2);
-        }
-
-        input[type="range"]::-webkit-slider-thumb:active {
-          transform: scale(1.1);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-          width: 20px;
-          height: 20px;
-          background: hsl(var(--primary));
-          cursor: pointer;
-          border-radius: 50%;
-          border: 3px solid hsl(var(--background));
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-          transition: transform 0.1s ease;
-        }
-
-        input[type="range"]::-moz-range-thumb:hover {
-          transform: scale(1.2);
-        }
-
-        input[type="range"]::-moz-range-thumb:active {
-          transform: scale(1.1);
-        }
-
-        input[type="range"]:focus {
-          outline: 2px solid hsl(var(--primary));
-          outline-offset: 2px;
-        }
-
-        input[type="range"]:focus:not(:focus-visible) {
-          outline: none;
-        }
-
-        input[type="range"]:focus-visible {
-          outline: 2px solid hsl(var(--primary));
-          outline-offset: 2px;
-        }
-      `}</style>
     </section>
   );
 }
@@ -2395,78 +2343,83 @@ export function ContactSection() {
 
 ```tsx
 "use client";
-
 import { useState } from "react";
 import { GalleryCard } from "@/components/common/gallery-card";
 import { GalleryStackMobile } from "@/components/common/gallery-stack-mobile";
 import { FullscreenImageViewer } from "@/components/common/fullscreen-image-viewer";
 
 const galleryImages = [
+  // Rząd 1: 1 duży po lewej
   {
     imageUrl: "/galeria/1.jpg",
     title: "Nowoczesny dom z przestronnym podjazdem",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-2",
   },
+  // Rząd 1: 2 małe po prawej (jeden nad drugim)
   {
     imageUrl: "/galeria/2.jpg",
     title: "Elegancka bryła budynku z podjazdem",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/3.jpg",
     title: "Dom idealny dla całej rodziny",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-1",
   },
+  // Rząd 2: 1 duży po prawej (musi być PRZED małymi w kodzie)
+  {
+    imageUrl: "/galeria/6.jpg",
+    title: "Stylowe wejście do domu",
+    span: "md:col-span-1 md:row-span-2",
+  },
+  // Rząd 2: 2 małe po lewej (jeden nad drugim)
   {
     imageUrl: "/galeria/4.jpg",
     title: "Widok z góry na nowoczesną architekturę",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/5.jpg",
     title: "Detal elewacji i duże przeszklenia",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-1",
   },
-  {
-    imageUrl: "/galeria/6.jpg",
-    title: "Stylowe wejście do domu",
-    span: "row-span-2",
-  },
+  // Dodatkowe obrazy (po rozwinięciu) - kontynuacja wzoru
   {
     imageUrl: "/galeria/7.jpg",
     title: "Wizualizacja frontu budynku",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-2",
   },
   {
     imageUrl: "/galeria/8.jpg",
     title: "Osiedle domów z lotu ptaka",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/9.jpg",
     title: "Spójna koncepcja architektoniczna osiedla",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/10.jpg",
     title: "Dom wkomponowany w otoczenie",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-2",
   },
   {
     imageUrl: "/galeria/11.jpg",
     title: "Nowoczesne osiedle w zielonej okolicy",
-    span: "row-span-3",
+    span: "md:col-span-1 md:row-span-1",
   },
   {
     imageUrl: "/galeria/12.jpeg",
     title: "Przestronne i słoneczne wnętrze salonu",
-    span: "row-span-2",
+    span: "md:col-span-1 md:row-span-1",
   },
 ];
 
 export function GallerySection() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImage, setLightboxImage] = useState({ src: "", alt: "" });
+  const [showAll, setShowAll] = useState(false);
 
   const openLightbox = (index: number) => {
     setLightboxImage({
@@ -2475,6 +2428,8 @@ export function GallerySection() {
     });
     setLightboxOpen(true);
   };
+
+  const visibleImages = showAll ? galleryImages : galleryImages.slice(0, 6);
 
   return (
     <>
@@ -2494,6 +2449,7 @@ export function GallerySection() {
             </p>
           </div>
 
+          {/* Mobile View - zachowany oryginalny układ (wszystkie obrazy) */}
           <div className="mt-10 md:hidden">
             <GalleryStackMobile
               items={galleryImages.map(({ imageUrl, title }) => ({
@@ -2504,8 +2460,9 @@ export function GallerySection() {
             />
           </div>
 
-          <div className="mt-16 hidden grid-flow-dense grid-cols-2 gap-4 [grid-auto-rows:150px] md:grid md:grid-cols-4">
-            {galleryImages.map((image, index) => (
+          {/* Desktop View - perfekcyjnie zbalansowany asymetryczny układ */}
+          <div className="mt-16 hidden md:grid md:grid-cols-2 md:gap-6 md:[grid-auto-rows:280px]">
+            {visibleImages.map((image, index) => (
               <GalleryCard
                 key={index}
                 imageUrl={image.imageUrl}
@@ -2515,6 +2472,18 @@ export function GallerySection() {
               />
             ))}
           </div>
+
+          {/* Przycisk "Pokaż więcej" / "Zwiń" - tylko desktop */}
+          {galleryImages.length > 6 && (
+            <div className="mt-10 hidden md:flex md:justify-center">
+              <button
+                onClick={() => setShowAll(!showAll)}
+                className="rounded-full bg-foreground px-8 py-3 text-sm font-semibold text-background transition-all hover:bg-foreground/90 hover:scale-105"
+              >
+                {showAll ? "Zwiń" : "Pokaż więcej"}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -2744,7 +2713,7 @@ export function InvestmentSection() {
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="max-w-3xl">
           <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            Miejsce, w którym zapuścisz korzenie.
+            Miejsce, w którym zapuścisz korzenie
           </h2>
         </div>
       </div>
@@ -2822,7 +2791,15 @@ export function InvestmentSection() {
 # components\sections\location-section.tsx
 
 ```tsx
-import { MapPin, School, ShoppingCart, Trees } from "lucide-react";
+"use client";
+import {
+  MapPin,
+  School,
+  ShoppingCart,
+  Trees,
+  ExternalLink,
+} from "lucide-react";
+import { useState } from "react";
 
 const locationFeatures = [
   { icon: ShoppingCart, text: "Sklepy i usługi na wyciągnięcie ręki" },
@@ -2831,13 +2808,23 @@ const locationFeatures = [
 ];
 
 export function LocationSection() {
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const handleOpenInMaps = () => {
+    window.open(
+      "https://www.google.com/maps/place/Jaworowa,+63-500+Ostrzesz%C3%B3w/@51.4811059,17.9398807,17z",
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
+
   return (
     <section
       id="lokalizacja"
       className="bg-background py-20 md:py-32 scroll-mt-24 md:scroll-mt-32"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-8">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-x-16">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-x-16">
           <div className="flex flex-col justify-center">
             <h2 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
               Spokojna i zielona część Ostrzeszowa
@@ -2848,29 +2835,64 @@ export function LocationSection() {
               miasta, szkołami, sklepami i punktami usługowymi. To miejsce,
               gdzie codzienna wygoda spotyka się z ciszą i naturą.
             </p>
+
             <ul className="mt-8 space-y-4">
               {locationFeatures.map((feature, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  {/* === OSTATECZNA POPRAWKA: Używamy zmiennych CSS dla gradientu === */}
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] flex-shrink-0">
-                    <feature.icon className="h-5 w-5 text-primary-foreground" />
+                <li key={index} className="flex items-center gap-4 group">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] flex-shrink-0 shadow-sm transition-transform group-hover:scale-110">
+                    <feature.icon className="h-6 w-6 text-primary-foreground" />
                   </div>
-                  <span className="text-foreground/80">{feature.text}</span>
+                  <span className="text-base text-foreground/90 font-medium">
+                    {feature.text}
+                  </span>
                 </li>
               ))}
             </ul>
-            <div className="mt-8 flex items-center gap-3 rounded-2xl bg-card/50 p-4 border">
-              <MapPin className="h-8 w-8 text-foreground/80 flex-shrink-0" />
-              <div>
-                <p className="font-bold">Adres inwestycji:</p>
-                <p className="text-muted-foreground">
+
+            <div className="mt-10 flex items-start gap-4 rounded-2xl bg-card/50 p-5 border shadow-sm hover:shadow-md transition-shadow">
+              <MapPin className="h-8 w-8 text-foreground/80 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <p className="font-bold text-foreground text-base">
+                  Adres inwestycji:
+                </p>
+                <p className="text-muted-foreground mt-1">
                   ul. Jaworowa, 63-500 Ostrzeszów
                 </p>
+                <button
+                  onClick={handleOpenInMaps}
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-colors group/link"
+                >
+                  Otwórz w Google Maps
+                  <ExternalLink className="h-4 w-4 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
+                </button>
               </div>
             </div>
           </div>
-          <div className="w-full h-[30rem] md:h-full overflow-hidden rounded-3xl">
+
+          <div className="relative w-full h-[30rem] lg:h-full overflow-hidden rounded-3xl shadow-lg group/map">
+            {!mapLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-muted animate-pulse">
+                <div className="text-center">
+                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Ładowanie mapy...
+                  </p>
+                </div>
+              </div>
+            )}
             <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.77000570884!2d17.93988067710376!3d51.48110591322285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ab63738128e09%3A0x1d5f1348ca433291!2sJaworowa%2C%2063-500%20Ostrzesz%C3%B3w!5e0!3m2!1spl!2spl!4v1727289650085!5m2!1spl!2spl"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Mapa lokalizacji inwestycji"
+              onLoad={() => setMapLoaded(true)}
+              className="transition-opacity duration-300"
+            ></iframe>{" "}
+            {/* <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.77000570884!2d17.93988067710376!3d51.48110591322285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ab63738128e09%3A0x1d5f1348ca433291!2sJaworowa%2C%2063-500%20Ostrzesz%C3%B3w!5e0!3m2!1spl!2spl!4v1727289650085!5m2!1spl!2spl&styles=roadmap|element:geometry|stylers:color=0x242f3e&styles=roadmap|element:labels.text.fill|stylers:color=0x746855&styles=roadmap|element:labels.text.stroke|stylers:color=0x242f3e&styles=water|element:geometry|stylers:color=0x17263c&styles=water|element:labels.text.fill|stylers:color=0x515c6d&styles=water|element:labels.text.stroke|stylers:color=0x17263c"
               width="100%"
               height="100%"
@@ -2882,7 +2904,14 @@ export function LocationSection() {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Mapa lokalizacji inwestycji"
-            ></iframe>
+              onLoad={() => setMapLoaded(true)}
+              className="transition-opacity duration-300"
+            ></iframe> */}
+            {/* Overlay wskazówka na desktop */}
+            <div className="absolute bottom-4 right-4 hidden lg:flex items-center gap-2 bg-background/90 backdrop-blur-sm px-4 py-2 rounded-full text-xs text-muted-foreground opacity-0 group-hover/map:opacity-100 transition-opacity shadow-lg">
+              <MapPin className="h-3 w-3" />
+              Kliknij aby zobaczyć więcej
+            </div>
           </div>
         </div>
       </div>
@@ -3196,7 +3225,7 @@ export function PlansSection() {
                 <div className="mt-4 pt-4 border-t">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-semibold">
-                      Całkowita powierzchnia użytkowa
+                      Całkowita powierzchnia
                     </span>
                     <span className="text-lg font-bold text-primary">
                       103,30 m²
