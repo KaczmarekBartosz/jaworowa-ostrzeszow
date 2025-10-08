@@ -54,7 +54,7 @@ export function HeroSection() {
           playsInline
           className="absolute inset-0 h-full w-full object-cover"
         >
-          <source src="/DebowyPark_Animacja.mp4" type="video/mp4" />
+          <source src="/CC_Hero.mp4" type="video/mp4" />
           {/* Fallback image gdyby video się nie załadowało */}
           <Image
             src="/hero.jpg"
