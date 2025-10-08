@@ -94,31 +94,19 @@ export function Footer() {
                   >
                     <Mail className="size-4 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
                     <span className="break-all text-xs">
-                      info@polmag.org.pl
+                      office@polmag.org.pl
                     </span>
                   </a>
                 </li>
                 <li>
                   <a
-                    href="tel:+48735368476"
+                    href="tel:+48698470685"
                     className="flex items-start gap-2 text-muted-foreground hover:text-foreground transition-colors group"
                   >
                     <Phone className="size-4 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
                     <div>
-                      <div className="text-xs">+48 735 368 476</div>
-                      <div className="text-xs text-muted-foreground/70 mt-0.5">
-                        Sandra Bacik
-                      </div>
+                      <div className="text-xs">+48 698 470 685</div>
                     </div>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="tel:+48625903027"
-                    className="flex items-start gap-2 text-muted-foreground hover:text-foreground transition-colors group"
-                  >
-                    <Phone className="size-4 mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                    <span className="text-xs">+48 62 590 3027</span>
                   </a>
                 </li>
               </ul>
