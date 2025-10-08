@@ -54,7 +54,14 @@ export function HeroSection() {
           playsInline
           className="absolute inset-0 h-full w-full object-cover"
         >
+<<<<<<< HEAD
           <source src="/CC_Hero.mp4" type="video/mp4" />
+=======
+          <source
+            src="/Debowypark-Ostrzeszow-Hero-Video-720p.mp4"
+            type="video/mp4"
+          />
+>>>>>>> 8136048c05a870e327dc974d2c85bc04e2565092
           {/* Fallback image gdyby video się nie załadowało */}
           <Image
             src="/hero.jpg"
@@ -62,7 +69,7 @@ export function HeroSection() {
             fill
             className="object-cover object-center"
             sizes="100vw"
-            quality={100}
+            quality={80}
           />
         </video>
 
