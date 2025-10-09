@@ -315,7 +315,7 @@ export function InvestmentSection() {
                 <p className="mt-4 md:mt-6 text-base md:text-lg leading-relaxed text-muted-foreground">
                   Osiedle Dębowy Park powstaje w miejscu, gdzie codzienna wygoda
                   spotyka się z ciszą i naturą. Wszystko, czego potrzebujesz na
-                  co dzień — w zasięgu ręki.
+                  co dzień w zasięgu ręki.
                 </p>
 
                 <address className="not-italic mt-8 md:mt-12">
@@ -363,16 +363,16 @@ export function InvestmentSection() {
                   </div>
                 )}
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.77000570884!2d17.93988067710376!3d51.48110591322285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ab63738128e09%3A0x1d5f1348ca433291!2sJaworowa%2C%2063-500%20Ostrzesz%C3%B3w!5e0!3m2!1spl!2spl!4v1727289650085!5m2!1spl!2spl"
+                  src="https://www.google.com/maps/d/embed?mid=1rWfhJnRT8uuwSWEM19BzFwRclaqZJ5o&ehbc=2E312F&noprof=1&z=17"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Mapa – ul. Jaworowa 63-500 Ostrzeszów"
+                  title="Mapa inwestycji Osiedle Dębowy Park"
                   onLoad={() => setMapLoaded(true)}
-                  className={`transition-opacity duration-500 ${
+                  className={`absolute inset-0 top-[-58px] h-[calc(100%+58px)] transition-opacity duration-500 ${
                     mapLoaded ? "opacity-100" : "opacity-0"
                   }`}
                 />
