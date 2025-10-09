@@ -106,7 +106,7 @@ export function AttractionCard({
 
       {/* Bottom content */}
       <div className="absolute inset-x-5 bottom-5 text-white">
-        <h4 className="text-xl font-bold leading-tight tracking-tight drop-shadow-lg">
+        <h4 className="text-lg font-bold leading-tight tracking-tight drop-shadow-lg">
           {title}
         </h4>
         <p className="mt-2 text-sm leading-relaxed drop-shadow-md line-clamp-2">

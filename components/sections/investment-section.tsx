@@ -84,7 +84,7 @@ const ATTRACTIONS: Attraction[] = [
   {
     title: "Kobyla Góra",
     distance: "10 km",
-    description: "Bór sosnowy, plaża, sporty wodne i gastronomia.",
+    description: "Bór sosnowy, plaża, sporty wodne i restauracje.",
     imageUrl: "/KobylaGora-optimized.jpg",
     location: "Kobyla Góra, Poland",
   },
@@ -238,29 +238,27 @@ export function InvestmentSection() {
               Park łączymy te ponadczasowe wartości z nowoczesnymi technologiami
               budownictwa, tworząc solidne fundamenty dla Twojej przyszłości.
             </p>
-            <figure className="mt-auto overflow-hidden rounded-3xl">
+            <figure className="relative overflow-hidden rounded-3xl aspect-[4/3]">
               <Image
                 src="/investment-image.png"
                 alt="Wizualizacja fasady domu — nowoczesna bryła w świetle dziennym"
-                width={1200}
-                height={800}
+                fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 decoding="async"
-                className="transition-transform duration-300 hover:scale-105"
+                className="object-cover transition-transform duration-300 hover:scale-105"
               />
             </figure>
           </div>
 
           <div className="flex flex-col space-y-8">
-            <figure className="overflow-hidden rounded-3xl">
+            <figure className="relative overflow-hidden rounded-3xl aspect-[4/3]">
               <Image
                 src="/galeria/8_5.jpg"
                 alt="Wizualizacja osiedla Dębowy Park z dużą ilością zieleni"
-                width={1200}
-                height={800}
+                fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 decoding="async"
-                className="transition-transform duration-300 hover:scale-105"
+                className="object-cover transition-transform duration-300 hover:scale-105"
               />
             </figure>
             <p className="text-lg leading-relaxed text-muted-foreground">
