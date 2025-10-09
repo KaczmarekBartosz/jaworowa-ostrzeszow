@@ -50,18 +50,18 @@ export function Footer() {
                 </li>
                 <li>
                   <a
-                    href="#domy"
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    Domy i plany
-                  </a>
-                </li>
-                <li>
-                  <a
                     href="#galeria"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Galeria
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#domy"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Domy i plany
                   </a>
                 </li>
                 <li>

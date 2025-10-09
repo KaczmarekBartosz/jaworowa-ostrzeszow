@@ -1794,6 +1794,229 @@ Ulepszenia:
 
 ---
 
+---
+
+## 📝 Hotfix - Korekta Design System - 2025-10-09 (Noc)
+
+### 🎯 Cel Hotfixa
+Poprawienie niespójności wprowadzonych w poprzedniej sesji - przywrócenie oryginalnego design system projektu i dostosowanie nawigacji do nowej kolejności sekcji.
+
+---
+
+### 🔧 Wprowadzone Poprawki
+
+#### 1. **Przywrócenie Oryginalnych Przycisków w Calculator Section**
+
+**Problem:**
+- Przyciski zostały zmienione na emerald gradient z cieniem zielonym
+- Niespójność z resztą projektu (brak cieni na innych przyciskach)
+- Przycisk "Wyślij" był mniejszy niż pole input telefonu
+
+**Rozwiązanie:**
+```tsx
+// PRZYWRÓCONO
+<button className="bg-gradient-to-br from-[var(--gradient-from)]
+                   to-[var(--gradient-to)] text-primary-foreground ...">
+  Sprawdź oferty
+</button>
+<button className="bg-orange-600 text-white ...">
+  Wyślij
+</button>
+```
+
+**Plik:** `components/sections/calculator-section.tsx`
+**Usunięto:** import Button component
+
+**Dlaczego:**
+- ✅ Gradient bez cienia (zgodny z design system)
+- ✅ Użycie zmiennych CSS `--gradient-from` / `--gradient-to`
+- ✅ Przycisk "Wyślij" z oryginalnym orange-600
+- ✅ Właściwy rozmiar przycisków
+
+---
+
+#### 2. **Poprawienie Przycisku Gallery - Usunięcie Cienia Zielonego**
+
+**Problem:**
+- Przycisk "Pokaż więcej" miał hardcoded emerald gradient z cieniem `shadow-emerald-500/25`
+- Niespójność z design system (wszystkie przyciski bez kolorowych cieni)
+
+**Rozwiązanie:**
+```tsx
+// PRZED - hardcoded emerald + cień zielony
+className="bg-gradient-to-r from-emerald-500 to-green-600
+           shadow-lg shadow-emerald-500/25 hover:scale-105"
+
+// PO - zmienne CSS + bez cienia + bez scale
+className="bg-gradient-to-br from-[var(--gradient-from)]
+           to-[var(--gradient-to)] text-primary-foreground
+           hover:opacity-90"
+```
+
+**Plik:** `components/sections/gallery-section.tsx`
+
+**Dlaczego:**
+- ✅ Użycie zmiennych CSS (spójność z button.tsx)
+- ✅ Bez kolorowego cienia (jak wszystkie inne przyciski)
+- ✅ Bez efektu scale na hover (user feedback)
+- ✅ Tylko opacity na hover (subtelny efekt)
+
+---
+
+#### 3. **Usunięcie Modułu CTA z Plans Section**
+
+**Problem:**
+- Dodany moduł CTA kompletnie nie pasował do designu sekcji
+- Redundantny (użytkownik ma już nawigację i inne CTA)
+
+**Rozwiązanie:**
+- Usunięto cały blok CTA (~30 linii)
+- Usunięto niepotrzebny import `Button`
+
+**Plik:** `components/sections/plans-section.tsx`
+
+**Dlaczego:**
+- ✅ Sekcja Plans nie potrzebuje CTA (ma szczegóły techniczne)
+- ✅ Czystszy design
+- ✅ Naturalny flow: Plans → scroll → Calculator → Testimonials
+
+---
+
+#### 4. **Dostosowanie Nawigacji do Nowej Kolejności Sekcji**
+
+**Problem:**
+- Nawigacja nie odpowiadała kolejności sekcji na stronie
+- Kolejność: Investment → Gallery → Plans → Calculator → Testimonials → Contact
+- Nawigacja: Investment → Plans → Gallery → Calculator → Contact
+
+**Rozwiązanie:**
+```tsx
+// PRZED
+{ href: "#dlaczego-warto", label: "O inwestycji" },
+{ href: "#domy", label: "Domy i plany" },
+{ href: "#galeria", label: "Galeria" },
+{ href: "#kalkulator", label: "Finansowanie" },
+{ href: "#kontakt", label: "Kontakt" },
+
+// PO - zgodne z kolejnością sekcji
+{ href: "#dlaczego-warto", label: "O inwestycji" },
+{ href: "#galeria", label: "Galeria" },           // ⬆️
+{ href: "#domy", label: "Domy i plany" },         // ⬇️
+{ href: "#kalkulator", label: "Finansowanie" },
+{ href: "#kontakt", label: "Kontakt" },
+```
+
+**Pliki:**
+- `components/layout/main-nav.tsx`
+- `components/layout/footer.tsx`
+
+**Dlaczego:**
+- ✅ Nawigacja odzwierciedla rzeczywisty flow użytkownika
+- ✅ Spójność między menu głównym a stopką
+- ✅ Logiczne scroll: O inwestycji → Zobacz galerię → Plany → Finanse → Kontakt
+
+---
+
+### 📊 Statystyki Hotfixa
+
+**Pliki zmienione:**
+- `components/sections/calculator-section.tsx` (przywrócono oryginalny design)
+- `components/sections/gallery-section.tsx` (zmienne CSS + bez cienia + bez scale)
+- `components/sections/plans-section.tsx` (usunięto CTA moduł)
+- `components/layout/main-nav.tsx` (zamiana kolejności: Gallery ↔ Plans)
+- `components/layout/footer.tsx` (zamiana kolejności: Gallery ↔ Plans)
+
+**Łączne:**
+- **5 plików** zmodyfikowanych
+- **~40 linii** usuniętych (CTA moduł + niepotrzebne importy)
+- **~5 linii** zmienionych (kolejność nawigacji)
+- **Build size:** 70.5 kB ✅ (−0.3 kB vs poprzednia wersja)
+- **0 błędów kompilacji** ✅
+
+---
+
+### 🎨 Design System - Potwierdzenie
+
+#### Właściwy Pattern Przycisków
+```css
+/* Primary CTA - gradient z zmiennych CSS (BEZ cienia kolorowego) */
+bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)]
+text-primary-foreground
+hover:opacity-90
+
+/* Secondary CTA - outline */
+variant="outline"
+
+/* Tertiary - solid color (np. orange dla akcji formularza) */
+bg-orange-600
+hover:bg-orange-500
+```
+
+#### Zmienne CSS (globals.css)
+```css
+/* Light mode */
+--gradient-from: #34d399; /* emerald-400 */
+--gradient-to: #065f46;   /* emerald-800 */
+
+/* Dark mode */
+--gradient-from: #1b855e;
+--gradient-to: #034d38;
+```
+
+---
+
+### 💡 Learned Lessons - Hotfix
+
+#### 1. **Zawsze Sprawdzaj Istniejący Design System**
+**Błąd:** Wprowadzenie hardcoded kolorów zamiast użycia zmiennych CSS.
+**Lekcja:** Przed zmianami sprawdź `button.tsx` i `globals.css`.
+
+#### 2. **Nie Wszystkie Sekcje Potrzebują CTA**
+**Błąd:** Dodanie CTA modułu do Plans Section (zbędne).
+**Lekcja:** CTA tylko tam gdzie logicznie pasuje do user journey.
+
+#### 3. **Nawigacja = Mapa Strony**
+**Odkrycie:** Kolejność linków w nawigacji powinna odzwierciedlać rzeczywisty flow na stronie.
+**Rozwiązanie:** Gallery przed Plans (zgodnie z kolejnością sekcji).
+
+#### 4. **User Feedback > Własne Założenia**
+**Feedback użytkownika:**
+- "Przyciski CTA nie korespondują z designem"
+- "Sekcja CTA pod planami kompletnie mi się nie podoba"
+- "Wcześniejszy design przycisków był lepszy"
+
+**Akcja:** Natychmiastowe przywrócenie oryginalnego design system.
+
+---
+
+### 🎯 Osiągnięte Cele - Hotfix
+
+✅ **Calculator Buttons:** Przywrócono oryginalny design (gradient + orange)
+✅ **Gallery Button:** Zmienne CSS, bez cienia, bez scale hover
+✅ **Plans Section:** Usunięto redundantny CTA moduł
+✅ **Navigation:** Dostosowano kolejność do flow sekcji (Gallery przed Plans)
+✅ **Footer:** Spójność z główną nawigacją
+✅ **Build Success:** 70.5 kB, 0 errors
+✅ **Design System:** 100% spójność - wszystkie przyciski używają zmiennych CSS
+
+---
+
+### 📋 User Journey po Hotfixie
+
+```
+1. Hero → przyciąga uwagę
+2. Investment → dlaczego to miejsce jest wyjątkowe
+3. Gallery → wizualna inspiracja (emocje)
+4. Plans → szczegóły techniczne (logika)
+5. Calculator → możliwości finansowe (decyzja)
+6. Testimonials → walidacja społeczna (zaufanie)
+7. Contact → akcja (konwersja)
+```
+
+**Nawigacja (menu + footer) odzwierciedla ten flow** ✅
+
+---
+
 **Dokument utworzony:** 2025-10-09
-**Ostatnia aktualizacja:** 2025-10-09 (późny wieczór)
-**Wersja:** 1.3.0
+**Ostatnia aktualizacja:** 2025-10-09 (noc - hotfix)
+**Wersja:** 1.3.1

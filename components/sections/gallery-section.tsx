@@ -134,7 +134,7 @@ export function GallerySection() {
             <div className="mt-10 hidden md:flex md:justify-center">
               <button
                 onClick={() => setShowAll(!showAll)}
-                className="rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/25 px-8 py-3 text-sm font-semibold transition-all hover:scale-105"
+                className="rounded-full bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground px-8 py-3 text-sm font-semibold transition-all hover:opacity-90"
               >
                 {showAll ? "Zwiń" : "Pokaż więcej"}
               </button>

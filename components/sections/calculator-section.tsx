@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useSpring, useTransform } from "framer-motion";
-import { Button } from "@/components/ui/button";
 
 const LOAN_MIN = 200_000;
 const LOAN_MAX = 1_000_000;
@@ -201,14 +200,9 @@ export function CalculatorSection() {
               </div>
             </div>
 
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto rounded-lg md:rounded-full"
-              asChild
-            >
-              <a href="#kontakt">Sprawdź oferty</a>
-            </Button>
+            <button className="w-full sm:w-auto bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground font-bold rounded-lg md:rounded-full px-8 md:px-12 py-2.5 md:py-3 shadow focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 hover:brightness-110">
+              Sprawdź oferty
+            </button>
 
             <div className="w-full flex flex-col items-center pt-1 sm:pt-2">
               <span className="block font-medium text-primary mb-1.5 sm:mb-2 text-sm sm:text-base">
@@ -245,14 +239,13 @@ export function CalculatorSection() {
                     </p>
                   )}
                 </div>
-                <Button
+                <button
                   type="submit"
-                  size="lg"
                   disabled={phone.length !== 9}
-                  className="bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/25 px-5 sm:px-6 py-2.5 sm:py-3 font-bold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-orange-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 font-bold rounded-lg hover:bg-orange-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Wyślij
-                </Button>
+                </button>
               </form>
             </div>
 

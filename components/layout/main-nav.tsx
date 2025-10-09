@@ -15,8 +15,8 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "#dlaczego-warto", label: "O inwestycji" },
-  { href: "#domy", label: "Domy i plany" },
   { href: "#galeria", label: "Galeria" },
+  { href: "#domy", label: "Domy i plany" },
   { href: "#kalkulator", label: "Finansowanie" },
   { href: "#kontakt", label: "Kontakt" },
 ];
