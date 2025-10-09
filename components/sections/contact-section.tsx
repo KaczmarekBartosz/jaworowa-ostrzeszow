@@ -19,7 +19,7 @@ export function ContactSection() {
           Skontaktuj się z nami
         </h2>
         <p className="mt-4 text-lg text-muted-foreground">
-          Masz pytania? Zadzwoń lub napisz — odpowiemy najszybciej, jak to
+          Masz pytania? Zadzwoń lub napisz, a my odpowiemy najszybciej, jak to
           możliwe.
         </p>
       </div>
