@@ -54,6 +54,7 @@ export function AttractionCard({
       }}
       aria-label={`Zobacz ${title} w Google Maps`}
     >
+      {/* Base image */}
       <Image
         src={imageUrl}
         alt={`${title} — ${distance} od osiedla`}
@@ -63,6 +64,26 @@ export function AttractionCard({
         priority={priority}
         className="object-cover object-left transition-transform duration-300 group-hover:scale-105"
       />
+
+      {/* Blurred bottom layer */}
+      <div className="absolute inset-0 overflow-hidden">
+        <Image
+          src={imageUrl}
+          alt=""
+          fill
+          aria-hidden="true"
+          sizes="(min-width:1280px) 25vw, (min-width:768px) 50vw, 100vw"
+          priority={priority}
+          className="object-cover object-left blur-sm transition-transform duration-300 group-hover:scale-105"
+          style={{
+            maskImage:
+              "linear-gradient(to top, black 0%, black 15%, transparent 50%)",
+            WebkitMaskImage:
+              "linear-gradient(to top, black 0%, black 15%, transparent 50%)",
+          }}
+        />
+      </div>
+
       <div
         className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/0 via-30% to-transparent"
         aria-hidden="true"
