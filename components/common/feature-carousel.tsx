@@ -54,7 +54,7 @@ export function FeatureCarousel({ children }: FeatureCarouselProps) {
           {React.Children.map(children, (child, index) => (
             <div
               key={index}
-              className="flex-shrink-0 flex-grow-0 basis-4/5 pl-4 first:pl-6 last:pr-6 md:basis-auto md:p-0"
+              className="flex-shrink-0 flex-grow-0 w-[80%] aspect-[4/3] pl-4 first:pl-6 last:pr-6 md:w-auto md:aspect-auto md:basis-auto md:p-0"
             >
               {child}
             </div>

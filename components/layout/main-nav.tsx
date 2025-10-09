@@ -14,11 +14,10 @@ import { ThemeToggle } from "@/components/common/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "#dlaczego-warto", label: "Dlaczego warto?" },
-  { href: "#domy", label: "Domy i plany" },
+  { href: "#dlaczego-warto", label: "Inwestycja" },
+  { href: "#domy", label: "Domy" },
   { href: "#galeria", label: "Galeria" },
   { href: "#kalkulator", label: "Finansowanie" },
-  { href: "#lokalizacja", label: "Lokalizacja" },
   { href: "#kontakt", label: "Kontakt" },
 ];
 

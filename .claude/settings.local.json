@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(dir \"C:\\Users\\NicoN\\Desktop\\NewCoding\\DebowyPark\\jaworowa-ostrzeszow\\public\" /b)",
+      "Bash(npm run dev:*)",
+      "Bash(npm run lint)",
+      "Bash(git config:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

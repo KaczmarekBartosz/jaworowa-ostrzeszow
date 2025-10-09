@@ -78,13 +78,13 @@ export function CalculatorSection() {
   };
 
   return (
-    <section id="kalkulator" className="bg-background py-14 md:py-28">
+    <section id="kalkulator" className="bg-background py-20 md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
-        <div className="max-w-3xl mb-12">
+        <div className="max-w-3xl mb-12 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
             Finansowanie
           </h2>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+          <p className="mt-4 md:mt-6 text-lg leading-relaxed text-muted-foreground">
             Sprawdź kalkulator rat kredytowych i dowiedz się, jak łatwo możesz
             sfinansować swój wymarzony dom.
           </p>

@@ -71,20 +71,20 @@ export function FeatureCard({
       </div>
 
       <div className={contentClasses}>
-        <p
+        <h3
           className={cn(
-            "mt-4 text-sm",
-            isHighlighted
-              ? "text-primary-foreground/80"
-              : "text-muted-foreground"
+            "mt-4 text-xl font-bold leading-tight tracking-tight",
+            isHighlighted ? "text-primary-foreground" : "text-foreground"
           )}
         >
           {title}
-        </p>
+        </h3>
         <p
           className={cn(
-            "text-lg font-bold",
-            isHighlighted ? "" : "text-foreground"
+            "mt-2 text-sm leading-relaxed",
+            isHighlighted
+              ? "text-primary-foreground/85"
+              : "text-muted-foreground"
           )}
         >
           {description}
