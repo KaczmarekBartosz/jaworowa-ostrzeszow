@@ -10,7 +10,8 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nKompletna optymalizacja sekcji lokalizacji i UX\n\n- Dodano interaktywne karty atrakcji turystycznych z integracją Google Maps\n- Implementacja karuzeli mobile z karuzelą Embla i chevron navigation\n- Przycisk \"Wyznacz trasę\" dla każdej atrakcji (Google Maps Directions API)\n- Klikalność kart prowadząca do lokalizacji w Google Maps\n- Zoptymalizowano gradient overlay dla lepszej widoczności zdjęć\n- Hover effects inspirowane galerią (scale-105 na zdjęciach)\n- Ujednolicono hierarchię nagłówków (h2: text-4xl md:text-5xl, h3: text-3xl md:text-4xl)\n- Standaryzacja paddingu sekcji (py-20 md:py-32)\n- Spójne marginesy w całym projekcie\n- Dodano domeny zewnętrznych obrazów do next.config.ts\n- Poprawiono aspect ratio kart (4/3 mobile, 4/5 desktop)\n- AttractionCard: nowy dedykowany komponent z accessibility\n- Naprawiono błąd typu JSX.Element → React.ReactElement\n- Line-clamp-2 dla opisów (mobile i desktop)\n- Optymalizacja obrazów: KobylaGora-optimized.jpg\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git push:*)",
       "Bash(git commit:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(git diff:*)"
     ],
     "deny": [],
     "ask": []

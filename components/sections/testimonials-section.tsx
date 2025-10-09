@@ -79,7 +79,7 @@ export function TestimonialsSection() {
         <div className="mx-auto mt-8 flex max-w-7xl justify-end gap-2 px-6">
           <Button
             size="icon"
-            className="rounded-full h-12 w-12"
+            className="rounded-xl h-12 w-12"
             onClick={scrollPrev}
           >
             <ChevronLeft className="size-6" />
@@ -87,7 +87,7 @@ export function TestimonialsSection() {
           </Button>
           <Button
             size="icon"
-            className="rounded-full h-12 w-12"
+            className="rounded-xl h-12 w-12"
             onClick={scrollNext}
           >
             <ChevronRight className="size-6" />

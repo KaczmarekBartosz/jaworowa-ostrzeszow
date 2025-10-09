@@ -438,7 +438,7 @@ export function InvestmentSection() {
         <div className="mx-auto max-w-7xl px-6 md:px-8 mt-16 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
           <a
             href="#galeria"
-            className="inline-flex items-center justify-center rounded-xl bg-foreground px-5 py-3 text-background font-medium hover:opacity-90 transition-opacity"
+            className="inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] text-primary-foreground px-5 py-3 font-medium hover:opacity-90 transition-opacity"
           >
             Zobacz galerię wizualizacji
           </a>

@@ -85,7 +85,7 @@ export function ContactSection() {
 
           {/* Główne CTA - jednoznaczne przyciski akcji */}
           <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <Button asChild size="lg" className="rounded-full">
+            <Button asChild size="lg" className="rounded-xl">
               <a href="tel:+48698470685">
                 <Phone className="mr-2 h-4 w-4" aria-hidden="true" />
                 Zadzwoń teraz
@@ -95,7 +95,7 @@ export function ContactSection() {
               asChild
               size="lg"
               variant="outline"
-              className="rounded-full"
+              className="rounded-xl"
             >
               <a href="mailto:office@polmag.org.pl">
                 <Mail className="mr-2 h-4 w-4" aria-hidden="true" />
