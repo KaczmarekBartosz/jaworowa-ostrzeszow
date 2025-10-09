@@ -437,10 +437,10 @@ export function InvestmentSection() {
         {/* CTA na końcu */}
         <div className="mx-auto max-w-7xl px-6 md:px-8 mt-16 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
           <a
-            href="#domy"
+            href="#galeria"
             className="inline-flex items-center justify-center rounded-xl bg-foreground px-5 py-3 text-background font-medium hover:opacity-90 transition-opacity"
           >
-            Zobacz dostępne domy
+            Zobacz galerię wizualizacji
           </a>
           <a
             href="#kontakt"

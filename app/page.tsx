@@ -11,10 +11,10 @@ export default function HomePage() {
     <main>
       <HeroSection />
       <InvestmentSection /> {/* Teraz zawiera lokalizację */}
-      <PlansSection />
-      <TestimonialsSection />
       <GallerySection />
+      <PlansSection />
       <CalculatorSection />
+      <TestimonialsSection />
       <ContactSection />
     </main>
   );

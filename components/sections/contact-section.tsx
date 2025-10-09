@@ -83,17 +83,8 @@ export function ContactSection() {
             </div>
           </div>
 
-          {/* Separator „lub" */}
-          <div className="my-6 flex items-center gap-4">
-            <div className="h-px w-full bg-border" aria-hidden="true" />
-            <span className="text-xs uppercase tracking-wider text-muted-foreground">
-              lub
-            </span>
-            <div className="h-px w-full bg-border" aria-hidden="true" />
-          </div>
-
           {/* Główne CTA - jednoznaczne przyciski akcji */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Button asChild size="lg" className="rounded-full">
               <a href="tel:+48698470685">
                 <Phone className="mr-2 h-4 w-4" aria-hidden="true" />

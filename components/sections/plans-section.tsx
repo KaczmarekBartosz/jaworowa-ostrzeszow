@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Maximize, Sofa, BedDouble, CheckCircle2, Expand } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FullscreenImageViewer } from "@/components/common/fullscreen-image-viewer";
+import { Button } from "@/components/ui/button";
 
 const views = [
   {
@@ -288,6 +289,36 @@ export function PlansSection() {
                     </span>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA - Umów się na wizytę */}
+          <div className="mx-auto mt-16 max-w-2xl text-center">
+            <div className="rounded-3xl border bg-card/50 p-8 backdrop-blur-sm">
+              <h3 className="text-2xl font-bold text-foreground md:text-3xl">
+                Chcesz zobaczyć osiedle na żywo?
+              </h3>
+              <p className="mt-3 text-muted-foreground">
+                Zapraszamy na prezentację domów modelowych. Skontaktuj się z
+                nami, aby umówić dogodny termin wizyty.
+              </p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                <Button
+                  size="lg"
+                  className="rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/25"
+                  asChild
+                >
+                  <a href="#kontakt">Umów wizytę</a>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="rounded-full"
+                  asChild
+                >
+                  <a href="#galeria">Zobacz wizualizacje</a>
+                </Button>
               </div>
             </div>
           </div>
