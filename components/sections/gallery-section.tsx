@@ -46,12 +46,12 @@ const galleryImages = [
     span: "md:col-span-1 md:row-span-2",
   },
   {
-    imageUrl: "/galeria/8.jpg",
+    imageUrl: "/galeria/8-plot.jpg",
     title: "Osiedle domów z lotu ptaka",
     span: "md:col-span-1 md:row-span-1",
   },
   {
-    imageUrl: "/galeria/9.jpg",
+    imageUrl: "/galeria/9-plot.jpg",
     title: "Spójna koncepcja architektoniczna osiedla",
     span: "md:col-span-1 md:row-span-1",
   },
@@ -60,11 +60,11 @@ const galleryImages = [
     title: "Dom wkomponowany w otoczenie",
     span: "md:col-span-1 md:row-span-2",
   },
-  {
-    imageUrl: "/galeria/11.jpg",
-    title: "Nowoczesne osiedle w zielonej okolicy",
-    span: "md:col-span-1 md:row-span-1",
-  },
+  // {
+  //   imageUrl: "/galeria/11.jpg",
+  //   title: "Nowoczesne osiedle w zielonej okolicy",
+  //   span: "md:col-span-1 md:row-span-1",
+  // },
   {
     imageUrl: "/galeria/12.jpeg",
     title: "Przestronne i słoneczne wnętrze salonu",
