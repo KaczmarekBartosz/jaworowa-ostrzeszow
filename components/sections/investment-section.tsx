@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { FeatureCard } from "@/components/common/feature-card";
 import { FeatureCarousel } from "@/components/common/feature-carousel";
 import { AttractionCard } from "@/components/common/attraction-card";
+import { LocationIcon } from "@/components/common/location-icon";
 import {
   Home,
   Shield,
@@ -14,6 +15,13 @@ import {
   ExternalLink,
   Leaf,
   Trees,
+  Heart,
+  Waves,
+  GraduationCap,
+  Building,
+  UtensilsCrossed,
+  Package,
+  Clock,
 } from "lucide-react";
 
 /* =========================
@@ -37,6 +45,12 @@ type Attraction = {
 type LocationFeature = {
   icon: React.ComponentType<{ className?: string }>;
   text: string;
+};
+
+type DailyFeature = {
+  icon: React.ReactElement;
+  title: string;
+  distance: string;
 };
 
 /* =========================
@@ -69,14 +83,14 @@ const FEATURES: FeatureItem[] = [
 const ATTRACTIONS: Attraction[] = [
   {
     title: "Kobyla Góra",
-    distance: "15 km",
+    distance: "10 km",
     description: "Bór sosnowy, plaża, sporty wodne i gastronomia.",
     imageUrl: "/KobylaGora-optimized.jpg",
     location: "Kobyla Góra, Poland",
   },
   {
     title: "Antonin",
-    distance: "12 km",
+    distance: "11 km",
     description: "Staw Szperek, plaża, las i aktywny wypoczynek.",
     imageUrl:
       "https://antonin.com.pl/wp-content/uploads/2019/12/65645315_2597886776908589_4682238110463950848_o.jpg",
@@ -106,6 +120,49 @@ const LOCATION_FEATURES: LocationFeature[] = [
   { icon: Trees, text: "Parki, las i ścieżki na rodzinne spacery" },
 ] as const;
 
+const DAILY_FEATURES: DailyFeature[] = [
+  {
+    icon: <ShoppingCart className="w-full h-full" strokeWidth={1.5} />,
+    title: "Market",
+    distance: "3 min",
+  },
+  {
+    icon: <UtensilsCrossed className="w-full h-full" strokeWidth={1.5} />,
+    title: "Restauracja",
+    distance: "4 min",
+  },
+  {
+    icon: <Trees className="w-full h-full" strokeWidth={1.5} />,
+    title: "Las",
+    distance: "1 min",
+  },
+  {
+    icon: <Package className="w-full h-full" strokeWidth={1.5} />,
+    title: "Paczkomat",
+    distance: "4 min",
+  },
+  {
+    icon: <Heart className="w-full h-full" strokeWidth={1.5} />,
+    title: "Apteka",
+    distance: "4 min",
+  },
+  {
+    icon: <Building className="w-full h-full" strokeWidth={1.5} />,
+    title: "Centrum",
+    distance: "5 min",
+  },
+  {
+    icon: <Waves className="w-full h-full" strokeWidth={1.5} />,
+    title: "Basen",
+    distance: "6 min",
+  },
+  {
+    icon: <GraduationCap className="w-full h-full" strokeWidth={1.5} />,
+    title: "Szkoła",
+    distance: "6 min",
+  },
+] as const;
+
 /* =========================
    Component
 ========================= */
@@ -115,6 +172,7 @@ export function InvestmentSection() {
   const features = useMemo(() => FEATURES, []);
   const touristAttractions = useMemo(() => ATTRACTIONS, []);
   const locationFeatures = useMemo(() => LOCATION_FEATURES, []);
+  const dailyFeatures = useMemo(() => DAILY_FEATURES, []);
 
   const handleOpenInMaps = () => {
     window.open(
@@ -215,7 +273,115 @@ export function InvestmentSection() {
 
       {/* LOKALIZACJA — jeden spójny blok */}
       <div id="lokalizacja" aria-labelledby="location-heading">
-        {/* Uroki regionu */}
+        {/* ========================================
+    SEKCJA 2: Zalety lokalizacji
+    ======================================== */}
+        <div className="mt-20 md:mt-32">
+          {/* Nagłówek + Grid ikon */}
+          <div className="mx-auto max-w-7xl px-6 md:px-8">
+            <div className="max-w-3xl mb-12 md:mb-16">
+              <h3
+                id="location-heading"
+                className="text-3xl md:text-4xl font-bold tracking-tight text-foreground"
+              >
+                Zalety naszej lokalizacji
+              </h3>
+              <p className="mt-4 md:mt-6 text-base leading-relaxed text-muted-foreground">
+                Codzienne udogodnienia w zasięgu krótkiego spaceru
+              </p>
+            </div>
+
+            {/* Grid 8 ikon */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-6 lg:gap-8 mb-16 md:mb-20">
+              {dailyFeatures.map(({ icon, title, distance }) => (
+                <LocationIcon
+                  key={title}
+                  icon={icon}
+                  title={title}
+                  distance={distance}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* 2-kolumnowy układ: opis + adres (lewo) | mapa (prawo) */}
+          <div className="mx-auto max-w-7xl px-6 md:px-8">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-x-16">
+              {/* Lewa kolumna: nagłówek + opis + adres */}
+              <div className="flex flex-col justify-center">
+                <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+                  Spokojna i zielona część Ostrzeszowa
+                </h3>
+                <p className="mt-4 md:mt-6 text-base md:text-lg leading-relaxed text-muted-foreground">
+                  Osiedle Dębowy Park powstaje w miejscu, gdzie codzienna wygoda
+                  spotyka się z ciszą i naturą. Wszystko, czego potrzebujesz na
+                  co dzień — w zasięgu ręki.
+                </p>
+
+                <address className="not-italic mt-8 md:mt-12">
+                  <div className="flex items-start gap-4 rounded-2xl bg-card/50 p-5 border backdrop-blur-sm transition-colors duration-300 hover:bg-card/80">
+                    <MapPin
+                      className="h-8 w-8 text-foreground/80 flex-shrink-0 mt-1"
+                      aria-hidden="true"
+                    />
+                    <div className="flex-1">
+                      <p className="font-bold text-foreground text-base">
+                        Adres inwestycji:
+                      </p>
+                      <p className="text-muted-foreground mt-1">
+                        ul. Jaworowa, 63-500 Ostrzeszów
+                      </p>
+                      <button
+                        onClick={handleOpenInMaps}
+                        className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+                      >
+                        Otwórz w Google Maps
+                        <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                        <span className="sr-only">
+                          {" "}
+                          (otwiera w nowej karcie)
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </address>
+              </div>
+
+              {/* Prawa kolumna: mapa */}
+              <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-3xl border bg-card/50">
+                {!mapLoaded && (
+                  <div
+                    className="absolute inset-0 flex items-center justify-center bg-muted"
+                    aria-hidden="true"
+                  >
+                    <div className="text-center">
+                      <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent" />
+                      <p className="mt-3 text-sm text-muted-foreground">
+                        Ładowanie mapy…
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.77000570884!2d17.93988067710376!3d51.48110591322285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ab63738128e09%3A0x1d5f1348ca433291!2sJaworowa%2C%2063-500%20Ostrzesz%C3%B3w!5e0!3m2!1spl!2spl!4v1727289650085!5m2!1spl!2spl"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Mapa – ul. Jaworowa 63-500 Ostrzeszów"
+                  onLoad={() => setMapLoaded(true)}
+                  className={`transition-opacity duration-500 ${
+                    mapLoaded ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* SEKCJA 3: Uroki regionu */}
         <div className="mt-16 md:mt-24" aria-labelledby="sights-heading">
           {/* Nagłówek */}
           <div className="mx-auto max-w-7xl px-6 md:px-8">
@@ -270,101 +436,8 @@ export function InvestmentSection() {
           </div>
         </div>
 
-        {/* Opis lokalizacji + mapa */}
-        <div
-          className="mx-auto max-w-7xl px-6 md:px-8 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-x-16 mt-16 md:mt-20"
-          aria-labelledby="location-heading"
-        >
-          {/* Lewa kolumna: tytuł + lead + 3 cechy + adres */}
-          <div className="flex flex-col justify-center">
-            <h3
-              id="location-heading"
-              className="text-3xl md:text-4xl font-bold tracking-tight text-foreground"
-            >
-              Spokojna i zielona część Ostrzeszowa
-            </h3>
-            <p className="mt-4 md:mt-6 text-base leading-relaxed text-muted-foreground">
-              Osiedle Dębowy Park powstaje w miejscu, gdzie codzienna wygoda
-              spotyka się z ciszą i naturą. Blisko centrum, szkół, sklepów i
-              punktów usługowych.
-            </p>
-
-            <ul className="mt-8 md:mt-12 space-y-4">
-              {locationFeatures.map(({ icon: Icon, text }) => (
-                <li key={text} className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--gradient-from)] to-[var(--gradient-to)] flex-shrink-0">
-                    <Icon
-                      className="h-6 w-6 text-primary-foreground"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <span className="text-base text-foreground/90 font-medium">
-                    {text}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            <address className="not-italic">
-              <div className="flex items-start gap-4 rounded-2xl bg-card/50 p-5 border backdrop-blur-sm transition-colors duration-300 hover:bg-card/80 mt-12">
-                <MapPin
-                  className="h-8 w-8 text-foreground/80 flex-shrink-0 mt-1"
-                  aria-hidden="true"
-                />
-                <div className="flex-1">
-                  <p className="font-bold text-foreground text-base">
-                    Adres inwestycji:
-                  </p>
-                  <p className="text-muted-foreground mt-1">
-                    ul. Jaworowa, 63-500 Ostrzeszów
-                  </p>
-                  <button
-                    onClick={handleOpenInMaps}
-                    className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-                  >
-                    Otwórz w Google Maps
-                    <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                    <span className="sr-only"> (otwiera w nowej karcie)</span>
-                  </button>
-                </div>
-              </div>
-            </address>
-          </div>
-
-          {/* Prawa kolumna: mapa z płynnym wejściem */}
-          <div className="relative w-full h-[400px] lg:h-[600px] overflow-hidden rounded-3xl border bg-card/50">
-            {!mapLoaded && (
-              <div
-                className="absolute inset-0 flex items-center justify-center bg-muted"
-                aria-hidden="true"
-              >
-                <div className="text-center">
-                  <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent" />
-                  <p className="mt-3 text-sm text-muted-foreground">
-                    Ładowanie mapy…
-                  </p>
-                </div>
-              </div>
-            )}
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2484.77000570884!2d17.93988067710376!3d51.48110591322285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x471ab63738128e09%3A0x1d5f1348ca433291!2sJaworowa%2C%2063-500%20Ostrzesz%C3%B3w!5e1!3m2!1spl!2spl!4v1727289650085!5m2!1spl!2spl"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Mapa – ul. Jaworowa 63-500 Ostrzeszów"
-              onLoad={() => setMapLoaded(true)}
-              className={`transition-opacity duration-500 ${
-                mapLoaded ? "opacity-100" : "opacity-0"
-              }`}
-            />
-          </div>
-        </div>
-
-        {/* CTA pod mapą */}
-        <div className="mx-auto max-w-7xl px-6 md:px-8 mt-16 flex flex-col gap-3 sm:flex-row sm:items-center">
+        {/* CTA na końcu */}
+        <div className="mx-auto max-w-7xl px-6 md:px-8 mt-16 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
           <a
             href="#domy"
             className="inline-flex items-center justify-center rounded-xl bg-foreground px-5 py-3 text-background font-medium hover:opacity-90 transition-opacity"
