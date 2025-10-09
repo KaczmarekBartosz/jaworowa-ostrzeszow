@@ -901,6 +901,441 @@ Projekt prywatny - Osiedle Dębowy Park, Ostrzeszów.
 
 ---
 
+## 📝 Sesja Optymalizacji UX - 2025-10-09 (Wieczór)
+
+### 🎯 Cele Sesji
+1. Optymalizacja sekcji Plans - ujednolicenie aspect ratio obrazów
+2. Rozbudowa sekcji Contact o blok szybkiego kontaktu
+3. Ujednolicenie nawigacji i footera
+4. Dodanie credits projektanta w stopce
+5. Uproszczenie kontaktu - usunięcie redundantnego formularza
+
+---
+
+### 🔧 Zmiany Wprowadzone
+
+#### 1. **Optymalizacja Plans Section - Stały Aspect Ratio**
+
+**Problem:**
+- Kontener głównego obrazu zmieniał rozmiar przy przełączaniu widoków
+- Wizualizacje 3D: `aspect-[4/3]` (szersze)
+- Rzuty 2D: `aspect-square` (kwadrat)
+- Dynamiczny `activeView.aspect` powodował "skakanie" UI
+
+**Rozwiązanie:**
+```tsx
+// PRZED - dynamiczny aspect ratio
+className={cn("... group", activeView.aspect)}
+<Image className="object-cover" />
+
+// PO - stały kontener + object-contain
+className="... group aspect-[4/3]"
+<Image className="object-contain" />
+```
+
+**Pliki zmienione:**
+- `components/sections/plans-section.tsx` (linie 161, 262)
+- Usunięto właściwość `aspect` z tablicy `views`
+- Usunięto nieużywane importy `Table` components
+
+**Dlaczego:**
+- ✅ Brak "skakania" kontenera między widokami
+- ✅ `object-contain` pokazuje pełne rzuty architektoniczne bez przycinania
+- ✅ Wszystkie detale techniczne widoczne (ważne dla planów)
+- ✅ Spójność z resztą projektu
+
+---
+
+#### 2. **Rozbudowa Contact Section - Blok Szybkiego Kontaktu**
+
+**Kontekst:**
+Sekcja kontaktu miała tylko formularz. Dodano blok bezpośredniego kontaktu dla szybszej konwersji.
+
+**Struktura (wersja iteracyjna):**
+
+**Iteracja 1 (z powielaniem):**
+```
+Karty info (telefon + email) + małe przyciski wewnątrz
+↓
+Separator "lub"
+↓
+Duże przyciski CTA (duplikacja!)
+```
+
+**Iteracja 2 - FINALNA (bez powielania):**
+```
+Informacyjne karty (telefon + email) - tylko linki
+↓
+Separator "lub"
+↓
+Główne CTA (2 duże przyciski)
+```
+
+**Implementacja:**
+```tsx
+{/* Informacyjne karty - bez przycisków wewnątrz */}
+<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+  {/* Telefon */}
+  <div className="rounded-2xl border bg-background/60 p-5 md:p-6">
+    <div className="flex items-start gap-3">
+      <div className="... bg-gradient-to-br from-emerald-500 to-green-600">
+        <Phone className="h-5 w-5" />
+      </div>
+      <div>
+        <h3>Zadzwoń do nas</h3>
+        <a href="tel:+48698470685">+48 698 470 685</a>
+        <div className="flex items-center gap-1.5">
+          <Clock className="h-3.5 w-3.5" />
+          <span>Pon–Pt: 9:00–17:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {/* Email - analogicznie */}
+</div>
+
+{/* Separator "lub" */}
+<div className="my-6 flex items-center gap-4">
+  <div className="h-px w-full bg-border" />
+  <span>lub</span>
+  <div className="h-px w-full bg-border" />
+</div>
+
+{/* Główne CTA */}
+<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+  <Button size="lg" className="rounded-full">
+    <Phone /> Zadzwoń teraz
+  </Button>
+  <Button size="lg" variant="outline">
+    <Mail /> Napisz wiadomość
+  </Button>
+</div>
+```
+
+**Design Features:**
+- Gradienty ikon: emerald (telefon), indigo (email)
+- Karty: `rounded-2xl`, `border`, `bg-background/60`
+- Klikalny kontener: `bg-card/50`, `rounded-3xl`, `backdrop-blur-sm`
+- Separator z tekstem "lub" (uppercase, tracking-wider)
+- Duże przyciski CTA (primary + outline)
+
+**Plik:** `components/sections/contact-section.tsx`
+
+**Dlaczego:**
+- ✅ Jasna hierarchia: info → akcja
+- ✅ Brak redundancji przycisków
+- ✅ Użytkownik może skopiować dane kontaktowe
+- ✅ Wzorzec Apple: informacyjne karty + wyraźne CTA
+
+---
+
+#### 3. **Usunięcie Formularza Kontaktowego**
+
+**Problem:**
+- Użytkownik miał 3 sposoby kontaktu (karty info + CTA + formularz)
+- Formularz bez backendu (action="#") = martwa funkcjonalność
+- Bezpośredni kontakt (tel/email) jest szybszy i prostszy
+- Formularz wymaga większego wysiłku od użytkownika
+
+**Rozwiązanie:**
+```tsx
+// PRZED - 3 sposoby kontaktu
+Karty info → CTA → Formularz (redundancja!)
+
+// PO - 2 sposoby, bezpośrednie
+Karty info (klikalne linki) → CTA (duże przyciski)
+```
+
+**Uproszczony tekst lead:**
+```tsx
+// PRZED
+"Masz pytania? Wypełnij formularz lub wybierz szybki kontakt —
+oddzwonimy / odpiszemy najszybciej, jak to możliwe."
+
+// PO
+"Masz pytania? Zadzwoń lub napisz — odpowiemy najszybciej,
+jak to możliwe."
+```
+
+**Usunięte:**
+- ~70 linii kodu formularza
+- Nieużywane importy: `Input`, `Textarea`
+- Pola: name, email, message
+- Tekst RODO/zgody
+
+**Dlaczego:**
+- ✅ Zero friction - natychmiastowy kontakt
+- ✅ Brak "martwej" funkcjonalności
+- ✅ Krótsza sekcja - szybsza konwersja
+- ✅ Wzorzec premium brands (Apple, Tesla): direct contact
+- ✅ Mobile-friendly - bezpośrednie połączenie jednym kliknięciem
+
+---
+
+#### 4. **Ujednolicenie Nawigacji i Footera**
+
+**Problem:**
+Różne nazwy sekcji w głównej nawigacji i footerze:
+
+```
+Main Nav:   Inwestycja | Domy | Galeria | Finansowanie | Kontakt
+Footer:     Dlaczego warto? | Domy i Plany | Galeria |
+            Finansowanie | Lokalizacja
+```
+
+**Rozwiązanie:**
+Ujednolicono nazwy w obu miejscach:
+
+```
+Main Nav + Footer:
+- O inwestycji    → #dlaczego-warto
+- Domy i plany    → #domy
+- Galeria         → #galeria
+- Finansowanie    → #kalkulator
+- Kontakt         → #kontakt
+```
+
+**Pliki zmienione:**
+- `components/layout/main-nav.tsx` (linia 17-21)
+- `components/layout/footer.tsx` (linia 43-82)
+
+**Zmiany szczegółowe:**
+- "Inwestycja" → "O inwestycji"
+- "Domy" → "Domy i plany"
+- Usunięto "Lokalizacja" z footera (nie było w main nav)
+- Dodano "Kontakt" do footera (brakowało)
+
+**Dlaczego:**
+- ✅ Spójność między nawigacją a footerem
+- ✅ Lepsze nazwy odzwierciedlające treść sekcji
+- ✅ Ułatwiona nawigacja dla użytkowników
+- ✅ Profesjonalny wygląd
+
+---
+
+#### 5. **Credits Projektanta w Footerze**
+
+**Dodano w stopce:**
+```tsx
+<div className="mt-12 border-t border-border/50 pt-8 text-center
+     text-xs md:text-sm text-muted-foreground space-y-2">
+  <p>© {new Date().getFullYear()} Osiedle Dębowy Park.
+     Wszelkie prawa zastrzeżone.</p>
+  <p>
+    Projekt i realizacja:{" "}
+    <a href="mailto:bartosz.kaczmarek@icloud.com"
+       className="text-foreground hover:text-primary
+                  transition-colors font-medium">
+      Bartosz Kaczmarek
+    </a>
+  </p>
+</div>
+```
+
+**Design:**
+- Link do maila: `bartosz.kaczmarek@icloud.com`
+- Hover effect: `hover:text-primary`
+- Font medium dla wyróżnienia
+- Centrowany, pod copyright
+
+**Plik:** `components/layout/footer.tsx` (linia 164-178)
+
+**Dlaczego:**
+- ✅ Profesjonalne credits
+- ✅ Portfolio visibility dla developera
+- ✅ Łatwy kontakt z twórcą strony
+
+---
+
+### 📊 Statystyki Zmian
+
+**Pliki zmienione:**
+- `components/sections/plans-section.tsx` (-15 linii, -3 warnings ESLint)
+- `components/sections/contact-section.tsx` (-92 linii, uproszczenie)
+- `components/layout/main-nav.tsx` (+2 linijki, zmiana nazw)
+- `components/layout/footer.tsx` (+9 linii, credits + zmiana nazw)
+
+**Łączne:**
+- **4 pliki** zmodyfikowane
+- **~100 linii** kodu usuniętych (uproszczenie)
+- **Build size:** 71.3 kB (główna strona, +0.4 kB)
+- **0 błędów kompilacji** ✅
+- **Czas buildu:** ~12s ✅
+
+---
+
+### 🎨 Design Patterns Zastosowane
+
+#### 1. **Informacyjne Karty (Contact)**
+```css
+Wrapper:      bg-card/50 rounded-3xl backdrop-blur-sm
+Karty:        bg-background/60 rounded-2xl border
+Icons:        gradient (emerald/indigo) + shadow
+Typography:   font-semibold (h3), font-bold (linki)
+```
+
+#### 2. **Separator z Tekstem**
+```tsx
+<div className="my-6 flex items-center gap-4">
+  <div className="h-px w-full bg-border" />
+  <span className="text-xs uppercase tracking-wider">lub</span>
+  <div className="h-px w-full bg-border" />
+</div>
+```
+
+#### 3. **Duże Przyciski CTA**
+```css
+Size:         size="lg"
+Border:       rounded-full
+Grid:         grid-cols-1 sm:grid-cols-2
+Variants:     primary + outline
+Icons:        h-4 w-4, mr-2
+```
+
+---
+
+### 🔄 Workflow Decyzyjny
+
+#### Problem: Powielanie przycisków w Contact
+```
+User: "Coś mi nadal w niej nie pasuje... wydaje mi się,
+       że nie powinienem powielać przycisków napisz/zadzwoń"
+
+Claude: Przeanalizował kod → zaproponował 2 opcje:
+  1. Informacyjne karty + pojedyncze CTA (REKOMENDOWANE)
+  2. Klikalane karty CTA bez dolnych przycisków
+
+User: "Zaimplementuj wersję 1"
+
+Claude: Usunął przyciski z kart → pozostawił tylko CTA na dole
+```
+
+#### Problem: Sens formularza kontaktowego
+```
+User: "Jest sens w takim razie trzymać jeszcze formularz
+       'szybkiego kontaktu' skoro użytkownik ma wybór
+       pomiędzy telefonem a mailem obecnie?"
+
+Claude: Przeanalizował sytuację → zaproponował 3 opcje:
+  1. Usuń formularz całkowicie (REKOMENDOWANE)
+  2. Zostaw z uzasadnieniem ("wolisz formularz?")
+  3. Zamień na newsletter/zapisy
+
+Argumenty za usunięciem:
+  - Już 2 kanały kontaktu (tel + email)
+  - Formularz bez backendu = złe UX
+  - Strona deweloperska = szybki kontakt ważniejszy
+  - Wzorzec premium brands: direct contact
+
+User: "Zaimplementuj opcję pierwszą"
+
+Claude: Usunął formularz + uproszcił tekst lead
+```
+
+---
+
+### 💡 Learned Lessons - Sesja Wieczorna
+
+#### 1. **Object-contain dla Dokumentacji Technicznej**
+**Odkrycie:** Rzuty architektoniczne wymagają `object-contain`, nie `object-cover`.
+```tsx
+// Dla wizualizacji estetycznych
+<Image className="object-cover" />
+
+// Dla planów/schematów technicznych
+<Image className="object-contain" />
+```
+
+#### 2. **Zasada "Nie Powielaj CTA"**
+**Problem:** Użytkownik ma zbyt wiele opcji → paralysis by choice.
+**Rozwiązanie:** Jedno miejsce decyzji:
+- Informacja (read-only karty)
+- Separator (wizualna pauza)
+- Akcja (wyraźne CTA)
+
+#### 3. **Zero Friction Contact**
+**Wzorzec:** Premium brands preferują bezpośredni kontakt nad formularzami.
+```
+Formularz:        3 pola → walidacja → backend → odpowiedź (24-48h)
+Direct contact:   1 klik → natychmiastowe połączenie/email
+```
+
+#### 4. **Konsekwencja w Nazewnictwie**
+**Lesson:** Nazwy sekcji muszą być identyczne w:
+- Main navigation
+- Mobile navigation
+- Footer
+- URL anchors (#id)
+
+---
+
+### 🎯 Osiągnięte Cele - Sesja Wieczorna
+
+✅ **Plans Section:** Stały aspect ratio, brak "skakania" UI
+✅ **Contact Section:** Blok szybkiego kontaktu z gradient icons
+✅ **Nawigacja:** Ujednolicone nazwy w nav + footer
+✅ **Footer:** Credits projektanta z linkiem mailto:
+✅ **UX Simplification:** Usunięto redundantny formularz
+✅ **Code Quality:** -100 linii kodu, usunięto nieużywane importy
+✅ **Build Success:** 0 błędów, 71.3 kB bundle size
+
+---
+
+### 📈 Porównanie Przed/Po - Contact Section
+
+#### PRZED (problematyczne):
+```
+Struktura:
+  Nagłówek + lead (długi tekst o formularzu)
+  ↓
+  Karty info + małe przyciski wewnątrz (powielanie)
+  ↓
+  Separator "lub"
+  ↓
+  Duże przyciski CTA (duplikacja!)
+  ↓
+  Formularz 3-polowy bez backendu (martwa funkcjonalność)
+
+Problemy:
+  ❌ 3 sposoby kontaktu dla tych samych kanałów
+  ❌ Powielanie przycisków
+  ❌ Długa sekcja (dużo scrollowania)
+  ❌ Formularz bez działającego backendu
+  ❌ Choice paralysis (zbyt wiele opcji)
+```
+
+#### PO (optymalne):
+```
+Struktura:
+  Nagłówek + lead (krótki, jasny)
+  ↓
+  Informacyjne karty (telefon + email) - klikalne linki
+  ↓
+  Separator "lub"
+  ↓
+  Główne CTA (2 duże przyciski)
+
+Zalety:
+  ✅ Jasna hierarchia: info → akcja
+  ✅ Zero redundancji
+  ✅ Krótka sekcja - lepsza konwersja
+  ✅ Wszystkie funkcje działają (tel:/mailto:)
+  ✅ Wzorzec Apple: minimalizm + direct contact
+  ✅ Mobile-first: natychmiastowe połączenie
+```
+
+---
+
+## 🔗 Linki i Referencje - Aktualizacja
+
+- **Commit (plans optimization):** TBD
+- **Commit (contact + nav):** TBD
+- **Email projektanta:** bartosz.kaczmarek@icloud.com
+- **Apple Human Interface Guidelines:** https://developer.apple.com/design/human-interface-guidelines/
+- **Google Material Design (Contact patterns):** https://m3.material.io/
+
+---
+
 **Dokument utworzony:** 2025-10-09
-**Ostatnia aktualizacja:** 2025-10-09
-**Wersja:** 1.1.0
+**Ostatnia aktualizacja:** 2025-10-09 (wieczór)
+**Wersja:** 1.2.0

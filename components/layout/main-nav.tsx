@@ -14,8 +14,8 @@ import { ThemeToggle } from "@/components/common/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "#dlaczego-warto", label: "Inwestycja" },
-  { href: "#domy", label: "Domy" },
+  { href: "#dlaczego-warto", label: "O inwestycji" },
+  { href: "#domy", label: "Domy i plany" },
   { href: "#galeria", label: "Galeria" },
   { href: "#kalkulator", label: "Finansowanie" },
   { href: "#kontakt", label: "Kontakt" },

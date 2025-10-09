@@ -4,14 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { Maximize, Sofa, BedDouble, CheckCircle2, Expand } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableHead,
-  TableRow,
-} from "@/components/ui/table";
 import { FullscreenImageViewer } from "@/components/common/fullscreen-image-viewer";
 
 const views = [
@@ -20,28 +12,24 @@ const views = [
     label: "Parter - Wizualizacja 3D",
     image: "/wiz-parter-3d.jpeg",
     alt: "Wizualizacja 3D parteru domu",
-    aspect: "aspect-[4/3]",
   },
   {
     id: "parter-2d",
     label: "Parter - Plan 2D",
     image: "/plan-parter.png",
     alt: "Rzut architektoniczny parteru domu",
-    aspect: "aspect-square",
   },
   {
     id: "pietro-3d",
     label: "Piętro - Wizualizacja 3D",
     image: "/wiz-pietro-3d.jpeg",
     alt: "Wizualizacja 3D piętra domu",
-    aspect: "aspect-[4/3]",
   },
   {
     id: "pietro-2d",
     label: "Piętro - Plan 2D",
     image: "/plan-pietro.png",
     alt: "Rzut architektoniczny piętra domu",
-    aspect: "aspect-square",
   },
 ];
 
@@ -158,16 +146,13 @@ export function PlansSection() {
               <button
                 type="button"
                 onClick={() => openLightbox(activeView)}
-                className={cn(
-                  "relative overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group",
-                  activeView.aspect
-                )}
+                className="relative overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group aspect-[4/3]"
               >
                 <Image
                   src={activeView.image}
                   alt={activeView.alt}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <Expand className="h-16 w-16 text-white" />
@@ -262,16 +247,13 @@ export function PlansSection() {
                     key={view.id}
                     type="button"
                     onClick={() => openLightbox(view)}
-                    className={cn(
-                      "relative block w-full overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group",
-                      view.aspect
-                    )}
+                    className="relative block w-full overflow-hidden rounded-3xl border bg-card/50 cursor-pointer group aspect-[4/3]"
                   >
                     <Image
                       src={view.image}
                       alt={view.alt}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                       sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

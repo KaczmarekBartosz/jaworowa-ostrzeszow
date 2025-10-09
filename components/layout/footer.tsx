@@ -45,7 +45,7 @@ export function Footer() {
                     href="#dlaczego-warto"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Dlaczego warto?
+                    O inwestycji
                   </a>
                 </li>
                 <li>
@@ -53,7 +53,7 @@ export function Footer() {
                     href="#domy"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Domy i Plany
+                    Domy i plany
                   </a>
                 </li>
                 <li>
@@ -74,10 +74,10 @@ export function Footer() {
                 </li>
                 <li>
                   <a
-                    href="#lokalizacja"
+                    href="#kontakt"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Lokalizacja
+                    Kontakt
                   </a>
                 </li>
               </ul>
@@ -161,10 +161,19 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-border/50 pt-8 text-center text-xs md:text-sm text-muted-foreground">
+        <div className="mt-12 border-t border-border/50 pt-8 text-center text-xs md:text-sm text-muted-foreground space-y-2">
           <p>
             © {new Date().getFullYear()} Osiedle Dębowy Park. Wszelkie prawa
             zastrzeżone.
+          </p>
+          <p>
+            Projekt i realizacja:{" "}
+            <a
+              href="mailto:bartosz.kaczmarek@icloud.com"
+              className="text-foreground hover:text-primary transition-colors font-medium"
+            >
+              Bartosz Kaczmarek
+            </a>
           </p>
         </div>
       </div>
