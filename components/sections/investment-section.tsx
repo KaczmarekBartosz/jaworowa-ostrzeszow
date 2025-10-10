@@ -262,18 +262,25 @@ export function InvestmentSection() {
           </div>
 
           <div className="flex flex-col space-y-8">
-            <figure
-              className="relative overflow-hidden rounded-3xl aspect-[4/3] cursor-pointer group"
-              onClick={() => openLightbox("/galeria/8-post-render-3v5.jpg", "Wizualizacja osiedla Dębowy Park z dużą ilością zieleni")}
-            >
-              <Image
-                src="/galeria/8-post-render-3v5.jpg"
-                alt="Wizualizacja osiedla Dębowy Park z dużą ilością zieleni"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                decoding="async"
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-              />
+            <figure className="relative overflow-hidden rounded-3xl aspect-[4/3] bg-muted">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls
+                className="w-full h-full object-cover"
+              >
+                <source src="/video/Video_1_optimized.mp4" type="video/mp4" />
+                {/* Fallback - obraz statyczny gdyby video się nie załadowało */}
+                <Image
+                  src="/galeria/8-post-render-3v5.jpg"
+                  alt="Wizualizacja osiedla Dębowy Park z dużą ilością zieleni"
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </video>
             </figure>
             <p className="text-lg leading-relaxed text-muted-foreground">
               Naszą ambicją było stworzenie osiedla, które zachwyca architekturą

@@ -55,7 +55,7 @@ export function HeroSection() {
           className="absolute inset-0 h-full w-full object-cover"
         >
           <source
-            src="/Debowypark-Ostrzeszow-Hero-Video-720p.mp4"
+            src="/Debowypark-Ostrzeszow-Hero-Video-Ultra-Optimized.mp4"
             type="video/mp4"
           />
           {/* Fallback image gdyby video się nie załadowało */}
@@ -303,7 +303,7 @@ export function HeroSection() {
       <button
         type="button"
         onClick={() => onScroll("dlaczego-warto")}
-        className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 rounded-full p-2 transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        className="absolute bottom-2 left-1/2 z-20 -translate-x-1/2 rounded-full p-2 transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
         aria-label="Przewiń do następnej sekcji"
       >
         <ChevronsDown className="h-10 w-10 animate-bounce text-foreground/90" />
