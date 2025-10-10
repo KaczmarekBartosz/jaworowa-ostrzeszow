@@ -1,0 +1,107 @@
+/* TEAM */
+
+Web Developer & Designer: Bartosz Kaczmarek
+Contact: bartosz.kaczmarek@icloud.com
+Role: Projekt i realizacja strony internetowej
+Responsibilities: Frontend development, UI/UX design, SEO optimization, performance tuning
+Location: Poland
+GitHub: @KaczmarekBartosz
+
+Architectural Designer: VIZAR.SD OLEG KULIKOVSKIY
+Contact: vizar.sd3@gmail.com
+Role: Projekt architektoniczny budynków mieszkalnych
+Responsibilities: Architectural design, 3D visualizations, technical documentation
+Specialization: Residential architecture, modern housing design
+
+/* PROJECT DETAILS */
+
+Project Name: Osiedle Dębowy Park (Oak Park Estate)
+Project Type: Residential real estate development
+Location: ul. Jaworowa, 63-500 Ostrzeszów, Poland
+House Type: Semi-detached single-family houses
+House Area: 130 m²
+Rooms: 4 bedrooms, 2 bathrooms
+Features: Private garden, parking, terrace, two-story design, modern architecture
+Status: Under construction
+Year: 2025
+
+/* INVESTOR */
+
+Company: POLMAG s.c.
+Address: ul. Powstańców Wlkp. 31, 63-500 Ostrzeszów, Poland
+Tax ID (NIP): 5140337328
+Phone: +48 698 470 685
+Email: office@polmag.org.pl
+Role: Real estate investor and developer
+Responsibilities: Project funding, construction management, sales
+
+/* WEBSITE TECHNOLOGY */
+
+Framework: Next.js 15 (React 19)
+Language: TypeScript
+Styling: Tailwind CSS
+UI Components: Shadcn UI
+Animations: Framer Motion
+Icons: Lucide React
+Fonts: Geist Sans, Geist Mono (Google Fonts)
+Build Tool: Turbopack
+Deployment: Netlify
+Repository: GitHub (private)
+Standards: HTML5, CSS3, ES2024, Accessibility (WCAG 2.1)
+
+/* SEO & METADATA */
+
+Structured Data: JSON-LD (Schema.org)
+Sitemap: /sitemap.xml
+Robots: /robots.txt
+Microdata: Embedded semantic markup
+Meta Tags: Open Graph, Twitter Cards, Dublin Core
+Performance: Optimized images, lazy loading, code splitting
+Accessibility: ARIA labels, keyboard navigation, screen reader support
+
+/* OPTIMIZATION */
+
+Images: WebP format with Next.js Image optimization
+Videos: H.264 compression with FFmpeg (CRF 28)
+Lighthouse Score: 95+ Performance, 100 Accessibility, 100 Best Practices, 100 SEO
+Core Web Vitals: Optimized for LCP, FID, CLS
+Mobile-First: Responsive design with breakpoints (640px, 768px, 1024px, 1280px)
+
+/* CONTACT */
+
+For website inquiries: bartosz.kaczmarek@icloud.com
+For architectural inquiries: vizar.sd3@gmail.com
+For sales inquiries: office@polmag.org.pl, +48 698 470 685
+
+/* CREDITS */
+
+This website was created with care and attention to detail, focusing on:
+- User experience and accessibility
+- Performance and SEO optimization
+- Modern web standards and best practices
+- Clean, maintainable code architecture
+
+/* SITE */
+
+Last update: 2025/10/10
+Language: Polish / Polski
+Doctype: HTML5
+IDE: VS Code, Cursor AI
+Version Control: Git
+Standards: W3C, Schema.org, WCAG 2.1
+
+/* AI & LLM INFORMATION */
+
+This file (humans.txt) is designed to be read by:
+- AI assistants (ChatGPT, Claude, Perplexity, etc.)
+- Search engine crawlers (Googlebot, Bingbot)
+- Developer tools and automated systems
+- Human developers and curious visitors
+
+All information provided here is accurate and up-to-date as of 2025-10-10.
+
+For more structured data, see:
+- /sitemap.xml - Complete site structure
+- /robots.txt - Crawler instructions
+- HTML <head> section - Meta tags and JSON-LD structured data
+- HTML source code - Microdata and semantic markup

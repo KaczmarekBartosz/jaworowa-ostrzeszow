@@ -190,6 +190,57 @@ export function StructuredData() {
     },
   };
 
+  // ===== CREATIVE WORK SCHEMA (Website as Creative Work) =====
+  const creativeWork = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: "Osiedle Dębowy Park - Website",
+    description: "Official website for Osiedle Dębowy Park residential development",
+    url: SITE_URL,
+    inLanguage: "pl-PL",
+    dateCreated: "2025",
+    datePublished: "2025",
+    author: [
+      {
+        "@type": "Person",
+        name: "Bartosz Kaczmarek",
+        email: "bartosz.kaczmarek@icloud.com",
+        jobTitle: "Web Developer & Designer",
+      },
+      {
+        "@type": "Person",
+        name: "VIZAR.SD OLEG KULIKOVSKIY",
+        email: "vizar.sd3@gmail.com",
+        jobTitle: "Architectural Designer & Visualization Specialist",
+      },
+    ],
+    creator: [
+      {
+        "@type": "Person",
+        name: "Bartosz Kaczmarek",
+        email: "bartosz.kaczmarek@icloud.com",
+      },
+      {
+        "@type": "Person",
+        name: "VIZAR.SD OLEG KULIKOVSKIY",
+        email: "vizar.sd3@gmail.com",
+      },
+    ],
+    publisher: {
+      "@type": "Organization",
+      name: "POLMAG s.c.",
+      email: "office@polmag.org.pl",
+      telephone: "+48698470685",
+    },
+    copyrightHolder: {
+      "@type": "Organization",
+      name: "POLMAG s.c.",
+    },
+    copyrightYear: 2025,
+    keywords:
+      "nieruchomości, domy na sprzedaż, osiedle mieszkaniowe, Ostrzeszów, zabudowa bliźniacza, deweloper, projekt architektoniczny, wizualizacje 3D, strona internetowa, web design, POLMAG, VIZAR.SD, Bartosz Kaczmarek",
+  };
+
   // ===== LOCAL BUSINESS SCHEMA (dodatkowy) =====
   const localBusiness = {
     "@context": "https://schema.org",
@@ -237,6 +288,12 @@ export function StructuredData() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
+      />
+
+      {/* Creative Work (Website as Creative Work) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(creativeWork) }}
       />
 
       {/* Breadcrumb */}

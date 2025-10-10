@@ -8,6 +8,9 @@ import { MetadataRoute } from "next";
  * Dostępny pod: /robots.txt
  *
  * Instrukcje dla crawlerów (Google, Bing, etc.) co mogą indeksować.
+ *
+ * For complete team and project information, see: /humans.txt
+ * For structured data and metadata, see: HTML <head> section
  */
 export default function robots(): MetadataRoute.Robots {
   // Domena produkcyjna
