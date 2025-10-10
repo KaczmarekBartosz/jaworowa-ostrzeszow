@@ -46,7 +46,7 @@ const galleryImages = [
     span: "md:col-span-1 md:row-span-2",
   },
   {
-    imageUrl: "/galeria/8-plot.jpg",
+    imageUrl: "/galeria/8-post-render-3v5.jpg",
     title: "Osiedle domów z lotu ptaka",
     span: "md:col-span-1 md:row-span-1",
   },

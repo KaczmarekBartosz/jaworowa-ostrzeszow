@@ -253,7 +253,7 @@ export function InvestmentSection() {
           <div className="flex flex-col space-y-8">
             <figure className="relative overflow-hidden rounded-3xl aspect-[4/3]">
               <Image
-                src="/8-plot.jpg"
+                src="/galeria/8-post-render-3v5.jpg"
                 alt="Wizualizacja osiedla Dębowy Park z dużą ilością zieleni"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
