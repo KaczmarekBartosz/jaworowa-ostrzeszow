@@ -145,6 +145,51 @@ export function StructuredData() {
     ],
   };
 
+  // ===== WEBSITE SCHEMA =====
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Osiedle Dębowy Park",
+    url: SITE_URL,
+    description:
+      "Nowoczesne, kameralne osiedle w Ostrzeszowie. Domy z ogrodem, blisko natury i miasta.",
+    inLanguage: "pl-PL",
+    author: {
+      "@type": "Person",
+      name: "Bartosz Kaczmarek",
+      email: "bartosz.kaczmarek@icloud.com",
+      jobTitle: "Web Developer & Designer",
+    },
+    creator: {
+      "@type": "Person",
+      name: "Bartosz Kaczmarek",
+      email: "bartosz.kaczmarek@icloud.com",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "POLMAG s.c.",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "ul. Powstańców Wlkp. 31",
+        addressLocality: "Ostrzeszów",
+        postalCode: "63-500",
+        addressCountry: "PL",
+      },
+      telephone: "+48698470685",
+      taxID: "5140337328",
+    },
+    about: {
+      "@type": "RealEstateProject",
+      name: "Osiedle Dębowy Park",
+      architect: {
+        "@type": "Person",
+        name: "VIZAR.SD OLEG KULIKOVSKIY",
+        email: "vizar.sd3@gmail.com",
+        jobTitle: "Architectural Designer",
+      },
+    },
+  };
+
   // ===== LOCAL BUSINESS SCHEMA (dodatkowy) =====
   const localBusiness = {
     "@context": "https://schema.org",
@@ -186,6 +231,12 @@ export function StructuredData() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
+      />
+
+      {/* Website with Author & Creator */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
       />
 
       {/* Breadcrumb */}

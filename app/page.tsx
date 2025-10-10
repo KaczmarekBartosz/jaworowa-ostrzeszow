@@ -5,10 +5,12 @@ import { TestimonialsSection } from "@/components/sections/testimonials-section"
 import { GallerySection } from "@/components/sections/gallery-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { CalculatorSection } from "@/components/sections/calculator-section";
+import { HiddenProjectInfo } from "@/components/seo/hidden-project-info";
 
 export default function HomePage() {
   return (
     <main>
+      <HiddenProjectInfo />
       <HeroSection />
       <InvestmentSection /> {/* Teraz zawiera lokalizację */}
       <GallerySection />
