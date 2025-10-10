@@ -6,6 +6,7 @@ import { FeatureCard } from "@/components/common/feature-card";
 import { FeatureCarousel } from "@/components/common/feature-carousel";
 import { AttractionCard } from "@/components/common/attraction-card";
 import { LocationIcon } from "@/components/common/location-icon";
+import { FullscreenImageViewer } from "@/components/common/fullscreen-image-viewer";
 import {
   Home,
   Shield,
@@ -168,6 +169,8 @@ const DAILY_FEATURES: DailyFeature[] = [
 ========================= */
 export function InvestmentSection() {
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState({ src: "", alt: "" });
 
   const features = useMemo(() => FEATURES, []);
   const touristAttractions = useMemo(() => ATTRACTIONS, []);
@@ -180,6 +183,11 @@ export function InvestmentSection() {
       "_blank",
       "noopener,noreferrer"
     );
+  };
+
+  const openLightbox = (src: string, alt: string) => {
+    setLightboxImage({ src, alt });
+    setLightboxOpen(true);
   };
 
   return (
@@ -238,27 +246,33 @@ export function InvestmentSection() {
               Park łączymy te ponadczasowe wartości z nowoczesnymi technologiami
               budownictwa, tworząc solidne fundamenty dla Twojej przyszłości.
             </p>
-            <figure className="relative overflow-hidden rounded-3xl aspect-[4/3]">
+            <figure
+              className="relative overflow-hidden rounded-3xl aspect-[4/3] cursor-pointer group"
+              onClick={() => openLightbox("/investment-image.png", "Wizualizacja fasady domu — nowoczesna bryła w świetle dziennym")}
+            >
               <Image
                 src="/investment-image.png"
                 alt="Wizualizacja fasady domu — nowoczesna bryła w świetle dziennym"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 decoding="async"
-                className="object-cover transition-transform duration-300 hover:scale-105"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </figure>
           </div>
 
           <div className="flex flex-col space-y-8">
-            <figure className="relative overflow-hidden rounded-3xl aspect-[4/3]">
+            <figure
+              className="relative overflow-hidden rounded-3xl aspect-[4/3] cursor-pointer group"
+              onClick={() => openLightbox("/galeria/8-post-render-3v5.jpg", "Wizualizacja osiedla Dębowy Park z dużą ilością zieleni")}
+            >
               <Image
                 src="/galeria/8-post-render-3v5.jpg"
                 alt="Wizualizacja osiedla Dębowy Park z dużą ilością zieleni"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 decoding="async"
-                className="object-cover transition-transform duration-300 hover:scale-105"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </figure>
             <p className="text-lg leading-relaxed text-muted-foreground">
@@ -270,7 +284,7 @@ export function InvestmentSection() {
       </div>
 
       {/* LOKALIZACJA — jeden spójny blok */}
-      <div id="lokalizacja" aria-labelledby="location-heading">
+      <div id="lokalizacja" aria-labelledby="location-heading" className="scroll-mt-24 md:scroll-mt-32">
         {/* ========================================
     SEKCJA 2: Zalety lokalizacji
     ======================================== */}
@@ -450,6 +464,13 @@ export function InvestmentSection() {
           </a>
         </div>
       </div>
+
+      <FullscreenImageViewer
+        open={lightboxOpen}
+        src={lightboxImage.src}
+        alt={lightboxImage.alt}
+        onClose={() => setLightboxOpen(false)}
+      />
     </section>
   );
 }

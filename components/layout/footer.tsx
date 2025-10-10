@@ -50,6 +50,14 @@ export function Footer() {
                 </li>
                 <li>
                   <a
+                    href="#lokalizacja"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Lokalizacja
+                  </a>
+                </li>
+                <li>
+                  <a
                     href="#galeria"
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
