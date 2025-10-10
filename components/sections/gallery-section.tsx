@@ -51,7 +51,7 @@ const galleryImages = [
     span: "md:col-span-1 md:row-span-1",
   },
   {
-    imageUrl: "/galeria/9-plot.jpg",
+    imageUrl: "/galeria/9-plot-v2.jpg",
     title: "Spójna koncepcja architektoniczna osiedla",
     span: "md:col-span-1 md:row-span-1",
   },
