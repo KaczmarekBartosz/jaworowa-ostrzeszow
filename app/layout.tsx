@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { MainNav } from "@/components/layout/main-nav";
-import { Footer } from "@/components/layout/footer"; // Dodany brakujący import Footer
+import { Footer } from "@/components/layout/footer";
+import { StructuredData } from "@/components/seo/structured-data";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pl" suppressHydrationWarning className="scroll-smooth">
+      <head>
+        <StructuredData />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
