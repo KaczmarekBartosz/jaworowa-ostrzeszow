@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
+  title: "Osiedle Dębowy Park – Nowe domy z ogrodem | Ostrzeszów",
   description:
     "🌳 Odkryj Osiedle Dębowy Park w Ostrzeszowie! Zamieszkaj w nowoczesnym domu z ogrodem, w otoczeniu zieleni i spokoju. Idealne dla Twojej rodziny. Sprawdź dostępne domy i umów się na prezentację!",
   authors: [
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     locale: "pl_PL",
     url: "https://debowypark-ostrzeszow.pl",
     siteName: "Osiedle Dębowy Park",
-    title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
+    title: "Osiedle Dębowy Park – Nowe domy z ogrodem | Ostrzeszów",
     description:
       "🌳 Odkryj Osiedle Dębowy Park w Ostrzeszowie! Zamieszkaj w nowoczesnym domu z ogrodem, w otoczeniu zieleni i spokoju. Idealne dla Twojej rodziny.",
     images: [
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
   // Twitter Cards
   twitter: {
     card: "summary_large_image",
-    title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
+    title: "Osiedle Dębowy Park – Nowe domy z ogrodem | Ostrzeszów",
     description:
       "🌳 Odkryj Osiedle Dębowy Park w Ostrzeszowie! Zamieszkaj w nowoczesnym domu z ogrodem, w otoczeniu zieleni i spokoju.",
     images: ["https://debowypark-ostrzeszow.pl/og-image.jpg"],
@@ -95,7 +95,7 @@ export const metadata: Metadata = {
   // Dublin Core + Custom Meta Tags
   other: {
     // Dublin Core Metadata (Academic/Library Standard)
-    "DC.title": "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
+    "DC.title": "Osiedle Dębowy Park – Nowe domy z ogrodem | Ostrzeszów",
     "DC.creator": "Bartosz Kaczmarek",
     "DC.subject": "Real Estate, Residential Development, Housing",
     "DC.description":
