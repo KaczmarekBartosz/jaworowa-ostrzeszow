@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
   description:
-    "Nowoczesne, kameralne osiedle w Ostrzeszowie. Domy z ogrodem, blisko natury i miasta. Idealna przestrzeń dla Ciebie i Twojej rodziny.",
+    "🌳 Odkryj Osiedle Dębowy Park w Ostrzeszowie! Zamieszkaj w nowoczesnym domu z ogrodem, w otoczeniu zieleni i spokoju. Idealne dla Twojej rodziny. Sprawdź dostępne domy i umów się na prezentację!",
   authors: [
     {
       name: "Bartosz Kaczmarek",
@@ -44,6 +44,24 @@ export const metadata: Metadata = {
     "projekt architektoniczny VIZAR.SD",
     "strona internetowa Bartosz Kaczmarek",
   ],
+  // Canonical URL (unikanie duplicate content)
+  alternates: {
+    canonical: "https://debowypark-ostrzeszow.pl",
+  },
+  // Robots configuration (pełna kontrola nad indeksowaniem)
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  // Kategoria strony
+  category: "Real Estate",
   // Open Graph (Facebook, LinkedIn, Perplexity)
   openGraph: {
     type: "website",
@@ -52,7 +70,7 @@ export const metadata: Metadata = {
     siteName: "Osiedle Dębowy Park",
     title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
     description:
-      "Nowoczesne, kameralne osiedle w Ostrzeszowie. Domy z ogrodem, blisko natury i miasta.",
+      "🌳 Odkryj Osiedle Dębowy Park w Ostrzeszowie! Zamieszkaj w nowoczesnym domu z ogrodem, w otoczeniu zieleni i spokoju. Idealne dla Twojej rodziny.",
     images: [
       {
         url: "https://debowypark-ostrzeszow.pl/og-image.jpg",
@@ -67,7 +85,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Osiedle Dębowy Park – Nowe domy w Ostrzeszowie",
     description:
-      "Nowoczesne, kameralne osiedle w Ostrzeszowie. Domy z ogrodem, blisko natury i miasta.",
+      "🌳 Odkryj Osiedle Dębowy Park w Ostrzeszowie! Zamieszkaj w nowoczesnym domu z ogrodem, w otoczeniu zieleni i spokoju.",
     images: ["https://debowypark-ostrzeszow.pl/og-image.jpg"],
     creator: "@BartoszKaczmarek",
   },
