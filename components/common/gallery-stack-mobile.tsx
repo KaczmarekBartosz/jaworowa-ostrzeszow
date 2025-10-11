@@ -75,7 +75,11 @@ export function GalleryStackMobile({
       setTimeout(() => setDidDrag(false), 120);
     }
     if (Math.abs(swipeStrength) > THRESHOLD) {
-      swipeStrength > 0 ? prev() : next();
+      if (swipeStrength > 0) {
+        prev();
+      } else {
+        next();
+      }
       x.set(0);
     } else {
       x.set(0);

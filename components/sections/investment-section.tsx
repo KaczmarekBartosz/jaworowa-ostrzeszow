@@ -11,7 +11,6 @@ import {
   Home,
   Shield,
   MapPin,
-  School,
   ShoppingCart,
   ExternalLink,
   Leaf,
@@ -22,7 +21,6 @@ import {
   Building,
   UtensilsCrossed,
   Package,
-  Clock,
 } from "lucide-react";
 
 /* =========================
@@ -41,11 +39,6 @@ type Attraction = {
   description: string;
   imageUrl: string;
   location: string; // Google Maps search query or place name
-};
-
-type LocationFeature = {
-  icon: React.ComponentType<{ className?: string }>;
-  text: string;
 };
 
 type DailyFeature = {
@@ -115,12 +108,6 @@ const ATTRACTIONS: Attraction[] = [
   },
 ] as const;
 
-const LOCATION_FEATURES: LocationFeature[] = [
-  { icon: ShoppingCart, text: "Sklepy, apteka i usługi kilka minut od domu" },
-  { icon: School, text: "Szkoły i przedszkola w zasięgu krótkiego dojazdu" },
-  { icon: Trees, text: "Parki, las i ścieżki na rodzinne spacery" },
-] as const;
-
 const DAILY_FEATURES: DailyFeature[] = [
   {
     icon: <ShoppingCart className="w-full h-full" strokeWidth={1.5} />,
@@ -174,7 +161,6 @@ export function InvestmentSection() {
 
   const features = useMemo(() => FEATURES, []);
   const touristAttractions = useMemo(() => ATTRACTIONS, []);
-  const locationFeatures = useMemo(() => LOCATION_FEATURES, []);
   const dailyFeatures = useMemo(() => DAILY_FEATURES, []);
 
   const handleOpenInMaps = () => {
