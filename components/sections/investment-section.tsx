@@ -60,7 +60,7 @@ const FEATURES: FeatureItem[] = [
   {
     icon: <Leaf className="size-6 text-secondary-foreground" />,
     title: "Energooszczędność i niskie koszty",
-    description: "Wysoka klasa, pompa ciepła i rekuperacja w standardzie.",
+    description: "Klimatyzacja i ogrzewanie podłogowe w standardzie. Kanalizacja i gaz.",
   },
   {
     icon: <Shield className="size-6 text-secondary-foreground" />,
